@@ -35,9 +35,8 @@ function App() {
           <WalletStatus />
            <BrowserRouter>
             <Routes>
-                <Route path="/campaigns" index element={<Campaigns/>} />
+                <Route path="/" index element={<Campaigns/>} />
                 <Route path="/campaign/create" index element={<CreateCampaign/>} />
-                
             </Routes>
           </BrowserRouter>          
         </Container>

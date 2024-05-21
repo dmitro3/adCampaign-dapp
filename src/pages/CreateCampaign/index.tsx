@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery, } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { API_URL, CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from '../../common/config';
+import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from '../../common/config';
 import { createCampaign } from '../../common/services/api.services';
-import { generateCampaignUrl, generateRandomAlphaNumeric } from '../../common/helpers';
+import { generateCampaignUrl } from '../../common/helpers';
 
 const CreateCampaign = () => {
     const [transactionFinshed, setTransactionFinished] = useState(false);
@@ -21,8 +21,6 @@ const CreateCampaign = () => {
         startDate:'',
         endDate: '',
     })
-
-    
 
     const account  = useCurrentAccount() as {address: string};
     const suiObject = useSuiClientQuery('getCoins', 
@@ -117,7 +115,7 @@ const CreateCampaign = () => {
       },[suiObject?.data?.data])
 
 
-    return(
+    return maxCoinValueAddress ? (
         <main>
             coin - {maxCoinValueAddress}
             <form>
@@ -156,7 +154,7 @@ const CreateCampaign = () => {
         <p>To see updated details navigate to campaigns section</p>
       </div>}
 		</main>
-    )
+    ) : (<p>please connect wallet</p>)
 }
 
 export default CreateCampaign;

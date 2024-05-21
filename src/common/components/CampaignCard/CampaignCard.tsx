@@ -8,12 +8,46 @@ import { CAMPAIGN_PACKAGE_ID } from "../../config";
 const CampaignCard = ({campaign}:any) => {
    const [twitterProfile, setTwitterProfile] = useState('');
     const account  = useCurrentAccount() as {address: string};
-    // const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
+    const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
     const [campaignUrl, setCampaignUrl] = useState('')
     const [participate, setParticipate] = useState(false);
 
     const handleParticipate = () => {
         setParticipate(prev=>!prev)
+    }
+
+    const handleEndCampaign = () => {
+        return new Promise<void>((resolve, reject) => {
+            const txb = new TransactionBlock();
+            txb.moveCall({
+                    arguments: [
+                        txb.object(campaign.campaignInfoAddress)
+                    ],
+                    target: `${CAMPAIGN_PACKAGE_ID}::campaign_fund::end_campaign`,
+                });
+              signAndExecute(
+                {
+                  transactionBlock: txb,
+                  options: {
+                    showEffects: true,
+                  },
+                },
+                {
+                  onSuccess: async (tx:any) => {
+                    resolve('response--->',tx.effects?.created[0]?.reference?.objectId)  
+                  },
+                  onError:(error)=>{
+                        reject(error)
+                      console.log('error--->',error)
+                  },
+                  onSettled:(data)=>{
+                      console.log('data--->', data)
+                      alert(data?.effects?.status)
+                  }
+                },
+              );
+            }
+        )
     }
 
     // const handleCreateAffiliateProfile = async () => {
@@ -177,7 +211,7 @@ const CampaignCard = ({campaign}:any) => {
                 <p>endDate - {campaign.endDate}</p>
                 <p>Original URl - {campaign.originalUrl}</p>
                 <button style={{margin: 10, width: 100}} onClick={handleParticipate}>participate</button>
-                
+                <button style={{margin: 10, width: 100}} onClick={handleEndCampaign}>End cgn..</button>
                 {
                   participate && (
                   <>
@@ -194,7 +228,6 @@ const CampaignCard = ({campaign}:any) => {
                   </>
                   )
                 }
-            
             </section>
          
         </>
