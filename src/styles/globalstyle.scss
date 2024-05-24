@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root{
+  background-color: #141516;
+}
+.main-container{
+  max-width: 1140px;
+}
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+.justify-space-around {
+  justify-content: space-around;
+}
+.justify-space-evenly {
+  justify-content: space-evenly;
+}
+
+@media screen and (max-width: 768px) {
+  .maincontainer{
+     display: grid;
+  }
+
+ }
+
+.align-center {
+  align-items: center;
+}
+
+
+
+
+// .button-blue {
+//   background-color: #1e90ff;
+//   color: white;
+// }
+// .button-white {
+//   background-color:white;
+//   color:#141516;
+// }
+// .button-black {
+//   background-color: #141516;
+//   color: white;
+//   border: 1px solid #fff; 
+// }
+
+
+.button-blue:hover {
+  background-color: #1c86ee;
+}
+.gap-8 {
+  gap: 8px;
+}
+
+.gap-16 {
+  gap: 16px;
+}
+
+// .font-mulish {
+//   font-family: 'Mulish', sans-serif;
+// }
+
+// .font-montserrat {
+//   font-family: 'Montserrat', sans-serif;
+// }
+
+.font-weight-400 {
+  font-weight: 400;
+}
+
+.font-weight-600 {
+  font-weight: 600;
+}
+
+.font-weight-700 {
+  font-weight: 700;
+}
+
+.font-size-16 {
+  font-size: 16px;
+}
+
+.font-size-48 {
+  font-size: 48px;
+}
+.font-size-49 {
+  font-size: 49px;
+}
+
+.bg-dark {
+  background-color: #141516;
+}
+
+.bg-white {
+  background-color: #fff;
+  color: #141516;
+}
+
+// .bg-blue {
+//   background-color: #006AFF;
+// }
+.bg-footer{
+  background-color: #F7F9FA;
+}
+.text-white {
+  color: #fff;
+}
+.text-black {
+  color: #141516;
+}
+
+
+.py-4 {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.m-4 {
+  margin: 16px;
+}
+.m-2 {
+  margin: 8px;
+}
+.mb-80{
+  margin-bottom: 80px;
+
+}
+.mx-4 {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.my-16 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.mt-8 {
+  margin-top: 68px;
+}
+
+.mb-40 {
+  margin-bottom: 40px;
+}
+.text-center {
+  text-align: center;
+}
+.text-start {
+  text-align: start;
+}
+
+// .w-70{
+//   width: 82%;
+//   margin-left: 9%;
+//   margin-top: -14px;
+//   margin-bottom: 140px;
+// }
+
+
+
+
+
+@media (max-width: 748px) {
+  .grid-col-st {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .grid-col-rev {
+    display: flex;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2-md {
+    grid-template-columns: 1fr !important;
+    gap: 25px !important;
+  }}
+.mobdisplay-none {
+  @media screen and (max-width: 768px) {
+    display: none !important;
+    
+  }
+}

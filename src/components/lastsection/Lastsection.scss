@@ -1,0 +1,102 @@
+@import "../../styles/mixin.scss";
+
+// .lastsection{
+
+  .grid-container {
+    @include grid-container(2, 6rem);
+  }
+  
+  @media screen and (max-width: 768px) {
+    .arrow {
+      justify-content: center;
+    }
+  }
+  
+  .margin-bottom-200 {
+    margin-bottom: 200px;
+  }
+  
+  .page-container {
+    margin: 20px;
+  }
+  
+  
+  .image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  
+  
+  .main-image {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  
+  .last-section-paragraph {
+    margin-bottom: 10px;
+  }
+  
+  .last-section-buttons {
+    margin-top: 40px;
+    margin-bottom: 80px;
+  }
+  
+  
+  .views-modal {
+    position: absolute;
+    top: -20px;
+    left: -30px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .views-modal2 {
+    position: absolute;
+    top: -20px;
+    right: -30px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .header-section {
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+  
+  
+  .arrow img {
+    padding: 6px;
+    margin-left: 10px;
+  }
+  
+  .view-option {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .view-option.active {
+    background-color: #e0e7ff;
+  }
+  
+  .view-option span {
+    font-family: 'Mulish', sans-serif;
+    font-size: 16px;
+  }
+// }
