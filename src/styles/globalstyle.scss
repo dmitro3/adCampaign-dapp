@@ -2,7 +2,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
 
-
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -88,6 +88,9 @@
 .font-weight-700 {
   font-weight: 700;
 }
+.font-weight-800 {
+  font-weight: 800;
+}
 
 .font-size-16 {
   font-size: 16px;
@@ -122,6 +125,9 @@
   color: #141516;
 }
 
+.font-card{
+  font-family: 'Manrope';
+}
 
 .py-4 {
   padding-top: 16px;

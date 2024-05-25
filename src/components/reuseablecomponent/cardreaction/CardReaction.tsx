@@ -6,8 +6,8 @@ interface CardReactionProps {
 }
 export default function CardReaction({ src, alt }: CardReactionProps) {
     return (
-        <div className="card-reaction">
+        <button className="card-reaction">
             <img src={src} alt={alt} />
-        </div>
+        </button>
     );
 }

@@ -1,4 +1,5 @@
 import './CardPrice.css'; 
+import Button from '../button/button'
 
 interface CardPriceProps {
     currentPrice: number;
@@ -11,7 +12,7 @@ export default function CardPrice({ currentPrice, totalPrice }: CardPriceProps) 
                 <span className="font-size-24">${currentPrice}</span>
                 <span className="font-size-16"> / ${totalPrice}</span>
             </div>
-            <a className='text-decoration-none'href="#">Earn Now</a>
+            <Button title="Earn Now" color="white"/>
         </div>
     );
 }
