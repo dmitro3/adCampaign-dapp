@@ -25,7 +25,7 @@ const Lastsection = () => {
                         imageSrc="./public/img01.png"
                         imageAlt="Monetize your way"
                     >
-                        <InfoBadge />
+                        <InfoBadge type='text'/>
                     </GridSection>
                     <GridSection
                         title="Optimized for growth"
@@ -34,7 +34,7 @@ const Lastsection = () => {
                         imageAlt="Optimized for growth"
                         reverse={true}
                     >
-                        <InfoBadge />
+                        <InfoBadge type='img'/>
                     </GridSection>
                     <section className="lastsec text-center my-16">
                         <h2 className="font-size-48 font-weight-700 font-montserrat">Start your campaign today</h2>
