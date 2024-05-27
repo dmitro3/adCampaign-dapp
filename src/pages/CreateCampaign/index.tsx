@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery, } from '@mysten/dapp-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from '../../common/config';
 import { createCampaign } from '../../common/services/api.services';
-import { generateCampaignUrl } from '../../common/helpers';
+import { CAMPAIGN_STATUS } from '../../common/constants';
+import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from '../../common/config';
 
 const CreateCampaign = () => {
     const [transactionFinshed, setTransactionFinished] = useState(false);
@@ -11,14 +12,12 @@ const CreateCampaign = () => {
     const [maxCoinValueAddress, setMaxCoinValueAddress] = useState('');
 
     const [formInputs, setFormInputs] = useState({
-        campaignName: '',
         companyName:'',
         category: '',
         originalUrl: '',
-        campaignUrl:'',
         cpc:'',
         campaignBudget:'',
-        startDate:'',
+        startDate: moment().unix(),
         endDate: '',
     })
 
@@ -43,23 +42,21 @@ const CreateCampaign = () => {
 
     const create = () => {
       try{
-          formInputs.campaignUrl = generateCampaignUrl();
          console.log('formInputs--->',formInputs);
         const txb = new TransactionBlock();
         txb.moveCall({
           arguments: [
-                      txb.pure.string(formInputs.campaignName), 
+                      txb.object(CAMPAIGN_CONFIG),
                       txb.pure.string(formInputs.companyName),
                       txb.pure.string(formInputs.category),
                       txb.pure.string(formInputs.originalUrl),
-                      txb.pure.string(formInputs.campaignUrl),
                       txb.object(maxCoinValueAddress),
                       txb.pure.u64(parseInt(formInputs.campaignBudget)),
                       txb.pure.u64(parseInt(formInputs.cpc)),
-                      txb.pure.u64(parseInt(formInputs.startDate)),
+                      txb.pure.u64(parseInt(formInputs.startDate.toString())),
                       txb.pure.u64(parseInt(formInputs.endDate)),
+                      txb.pure.u64(CAMPAIGN_STATUS.ONGOING),
                       txb.pure.address(account.address),
-                      txb.object(CAMPAIGN_CONFIG)
                     ],
           target: `${CAMPAIGN_PACKAGE_ID}::campaign_fund::create_campaign`,
         });
@@ -80,6 +77,7 @@ const CreateCampaign = () => {
                 campaignInfoAddress: getCampaignObjectAddress(tx.effects?.created || []) || '',
                 packageAddress: CAMPAIGN_PACKAGE_ID,
                 campaignConfig:CAMPAIGN_CONFIG,
+                status: CAMPAIGN_STATUS.ONGOING,
               });
               alert("success")
               setTransactionFinished(true)
@@ -118,10 +116,7 @@ const CreateCampaign = () => {
     return maxCoinValueAddress ? (
         <main>
             coin - {maxCoinValueAddress}
-            <form>
-                <p>Campaign Name</p>
-                <input placeholder='Name' onChange={(e)=>setFormInputs({...formInputs, campaignName: e.target.value})}/>
-                
+            <form>                
                 <p>Company Name</p>
                 <input placeholder='Name' onChange={(e)=>setFormInputs({...formInputs, companyName: e.target.value})}/>
                 
@@ -136,9 +131,6 @@ const CreateCampaign = () => {
                 
                 <p>Cost per click (CPC )</p>
                 <input placeholder='0' type='number' onChange={(e)=>setFormInputs({...formInputs, cpc: e.target.value})} />
-                
-                <p>Start Date</p>
-                <input placeholder='0' type='number' onChange={(e)=>setFormInputs({...formInputs, startDate: e.target.value})} />
                 
                 <p>End Date</p>
                 <input placeholder='0' type='number' onChange={(e)=>setFormInputs({...formInputs, endDate: e.target.value})} />
