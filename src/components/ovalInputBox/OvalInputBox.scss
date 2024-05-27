@@ -1,0 +1,27 @@
+.oval-input-box-container{
+  display: flex;
+  border: 1px solid var(--clr-crayola);
+  border-radius: 100vw;
+  height: 48px;
+  width: 367px;
+  margin: 10px 0px;
+  background-color: var(--clr-white);
+
+  input{
+    border: none;
+    width: 100%;
+    border-radius: 100vw;
+    padding: 16px;
+    
+  }
+
+  .end-icon{
+    padding: 10px;
+    align-self: center;
+  }
+
+
+  *:focus {
+    outline: none;
+}
+}

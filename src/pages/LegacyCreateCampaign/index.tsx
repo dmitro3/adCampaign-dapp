@@ -5,7 +5,7 @@ import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from '../../common/config';
 import { createCampaign } from '../../common/services/api.services';
 import { generateCampaignUrl } from '../../common/helpers';
 
-const CreateCampaign = () => {
+const LegacyCreateCampaign = () => {
     const [transactionFinshed, setTransactionFinished] = useState(false);
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
     const [maxCoinValueAddress, setMaxCoinValueAddress] = useState('');
@@ -157,4 +157,4 @@ const CreateCampaign = () => {
     ) : (<p>please connect wallet</p>)
 }
 
-export default CreateCampaign;
+export default LegacyCreateCampaign;

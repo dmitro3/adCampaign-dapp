@@ -10,8 +10,26 @@
 }
 
 #root{
-  background-color: #141516;
+
+  --fs-16: 16px;
+  --fs-32: 32px;
+
+  --fw-800: 800;
+
+  --lh-24: 24px;
+
+  --clr-black: #000000;
+  --clr-charcoal: #22222A;
+  --clr-crayola: #AEB4C2;
+  --clr-cultured: #F5F6FA;
+  --clr-white: #FFFFFF;
 }
+
+.sub-container{
+  margin: auto;
+  max-width: 1140px;
+}
+
 .main-container{
   max-width: 1140px;
 }

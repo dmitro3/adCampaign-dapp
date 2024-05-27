@@ -1,0 +1,13 @@
+.create-campaign-container{
+    background-color: var(--clr-cultured);
+    height: 100vh;
+    .heading{
+        font-size: var(--fs-32);
+        font-weight: var(--fw-800);
+    }
+
+    .sub-heading{
+        font-size: var(--fs-16);
+        line-height: var(--lh-24);
+    }
+}

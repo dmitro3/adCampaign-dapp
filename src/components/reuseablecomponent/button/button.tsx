@@ -1,13 +1,8 @@
 import './button.css'
-interface ButtonProps {
-    title: string;
-    color: 'white' | 'blue' | 'black';
-    onClick?: () => void;
-  }
-  
-  const Button: React.FC<ButtonProps> = ({ title, color, onClick }) => {
+
+  const Button = ({ title, color, width, height ,onClick }: any) => {
     return (
-      <button className={`button-${color}`} onClick={onClick}>
+      <button className={`button-${color}`} style={{width: width, height: height}} onClick={onClick}>
         {title}
       </button>
     );
