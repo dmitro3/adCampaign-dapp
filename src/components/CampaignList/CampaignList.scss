@@ -1,0 +1,70 @@
+@import "../../styles/mixin.scss";
+.campaign-list-container{
+
+    .campaign-list {
+        @include grid-container-cards(3, 10px, 0.2fr);
+        
+    }
+    
+    @media screen and (max-width: 1337px) {
+        .campaign-list {
+            @include grid-container-cards(2, 10px, 0.2fr);
+            justify-content: center;
+        }
+        .campaign-subtext{
+            margin-right: 0px !important;
+        }
+        
+    }
+    @media screen and (max-width: 880px) {
+        .campaign-list {
+            @include grid-container-cards(1, 10px, 0.2fr);
+            justify-content: center;
+        }
+        .card{
+            width: 470px;
+            height: 480px;
+        }
+        .campaign-header{
+            display: block !important;
+        }
+        .campaignlistcontainer{
+            width: fit-content !important;
+        }
+        .filter-container{
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .campaign-subtext{
+            display: flex;
+            justify-content: center;
+        }
+    }
+    @media  screen and (max-width: 410px){
+    
+        
+    }
+    .campaign-start-text{
+        width: 48%;
+    }
+    
+   
+    .campaign-subtext{
+        margin-right:150px;
+    }
+    .card-container{
+        max-width:1500px;
+    }
+
+    .campaign-list {
+        width: 80%;
+        margin: 30px auto;
+        
+    }
+    button:hover{
+        cursor: pointer;
+    }
+        
+
+}    

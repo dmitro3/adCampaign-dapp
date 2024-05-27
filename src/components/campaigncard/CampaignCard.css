@@ -5,16 +5,31 @@
 }
 
 .card {
-  width: 300px;
+  width: 392px;
   height:444px;
   border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  font-family: Arial, sans-serif;
-  background-color: #fff;
   position: relative;
 }
+.add-money{
+  width: 124px;
+  justify-content: end;
+  margin-bottom: 10px;
+  position: absolute;
+  bottom: 86%;
+  margin-left: 3%;
+  border-radius: 50px;
+  border: 1px solid #E4E6E8;
+  padding: 6px 3px ;
+}
 
+.add-money button{
+  padding: 0px;
+  margin-right: 14px;
+  border:none;
+  cursor: pointer;
+}
 .card-image {
   position: relative;
   width: 100%;
@@ -32,10 +47,7 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  color: orange;
-  background-color: white;
   padding: 5px 10px;
-  font-size: 14px;
   border-radius: 50px;
   width: 30%;
 }
@@ -44,29 +56,24 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .card-content {
   padding: 20px;
   position: relative;
     border-radius: 30px;
-    background-color: #fff;
     top: -25px;
 }
 
 .card-stats {
-  color: #888;
-  font-size: 14px;
-  width: 90%;
-  display: flex;
+  width: 80%;
   justify-content: end;
   margin-bottom: 10px;
   position: absolute;
-  bottom: 90%;
-  margin-right: 10%;
+  bottom: 86%;
+  margin-left: 14%;
+
 }
 
 .card-content h3 {
@@ -76,44 +83,20 @@
 }
 
 .card-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #888;
   margin-bottom: 30px;
   width:80%;
 }
 
-.card-price {
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 10px;
-}
 .button-white{
-  font-size: 14px;
   padding: 11px 24px;
 }
-.card-price span:first-child {
-  font-weight: bold;
-}
+
 .no-of-clicks{
   border-radius: 50px;
   width: 40%;
   margin-right: 10%;
 }
-.earn-now-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
 
-.earn-now-btn:hover {
-  background-color: #0056b3;
-}
+
+
+

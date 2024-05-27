@@ -1,42 +1,44 @@
-
-
-.contact-info {
-    text-align: center;
-}
-
-.form-container {
-    display: grid;
-    gap: 10px;
-}
-.main-container {
-    margin-left: '10%';
-     margin-top: '80px';
-}
-form {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-}
-.btn{
-    width: 115px;
-}
-input[type="text"],
-input[type="email"],
-textarea {
-    width: 15rem;
-    background-color:white;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-@media screen and (max-width: 768px) {
-   form{
+.footer-container{
     margin-top: 30px;
-   }
-    .contact-info{
-        display: none;
+    .contact-info {
+        text-align: center;
+    }
+    
+    .form-container {
+        display: grid;
+        gap: 10px;
+    }
+    .main-container {
+        margin-left: '10%';
+         margin-top: '80px';
+    }
+    form {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .btn{
+        width: 115px;
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        width: 15rem;
+        background-color:white;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    
+    @media screen and (max-width: 768px) {
+       form{
+        margin-top: 30px;
+       }
+        .contact-info{
+            display: none;
+        }
     }
 }
+
 
