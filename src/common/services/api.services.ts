@@ -1,4 +1,4 @@
-import { API_URL } from "../config";
+import { API_URL, CLOUDINARY_CLOUD_NAME } from "../config";
 
 export const createAffiliate = async (contents: any) => {
   const config = {
@@ -60,4 +60,15 @@ export const fetchCampaigns = async () => {
   const response = await fetch(`${API_URL}/ad/campaigns`, config)
   const data = response.json();
   return data;
+}
+
+export const uploadImage = async (image: any) => {
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,{
+    method: 'POST',
+    body: image
+  })
+  const imageData = await response.json() as any;
+  console.log('imageData.url---->',imageData);
+  const imageURL = imageData.url.toString();
+  return imageURL;
 }
