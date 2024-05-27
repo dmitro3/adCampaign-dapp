@@ -1,4 +1,4 @@
-import ContactForm from '../ContactForm/ContactForm';
+import ContactForm from '../contactform/ContactForm';
 import './Footer.css';
 
 function Footer() {
