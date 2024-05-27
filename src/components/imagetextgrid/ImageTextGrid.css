@@ -1,0 +1,17 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6rem;
+}
+
+.order-1 {
+    order: 1;
+}
+
+.order-2 {
+    order: 2;
+}
+
+.grid-col-rev {
+    grid-auto-flow: dense;
+}
