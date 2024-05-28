@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './SearchBar.css';
+import { ConnectButton } from '@mysten/dapp-kit';
+import './SearchBar.scss';
 
 const SearchBar: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -23,8 +24,7 @@ const SearchBar: React.FC = () => {
             <div className="profile-pic flex align-center">
                 <img src="/profile.png" alt="profile" className="profile-image" />
                 <div className="profile-info">
-                    <p className="profile-name">Profile Name</p>
-                    <p className="profile-role">Role</p>
+                <ConnectButton/>
                 </div>
             </div>
         </div>

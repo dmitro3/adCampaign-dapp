@@ -2,13 +2,13 @@
 .campaign-list-container{
 
     .campaign-list {
-        @include grid-container-cards(3, 10px, 0.2fr);
+        @include grid-container-cards(3, 50px, 0.2fr);
         
     }
     
     @media screen and (max-width: 1337px) {
         .campaign-list {
-            @include grid-container-cards(2, 10px, 0.2fr);
+            @include grid-container-cards(2, 12px, 0.2fr);
             justify-content: center;
         }
         .campaign-subtext{
@@ -18,7 +18,7 @@
     }
     @media screen and (max-width: 880px) {
         .campaign-list {
-            @include grid-container-cards(1, 10px, 0.2fr);
+            @include grid-container-cards(1, 12px, 0.2fr);
             justify-content: center;
         }
         .card{

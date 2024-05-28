@@ -17,3 +17,20 @@ export const generateRandomAlphaNumeric = (): string => {
 export const generateCampaignUrl = () => {
     return API_URL+'/'+ generateRandomAlphaNumeric()
   }
+
+
+export const getMaxBalanceObjectAddress = (balanceArr:any[]) => {
+    let highestBalance = '0000000000';
+    let highestBalanaceAddress = '';
+    balanceArr.forEach(({coinObjectId, balance}:{coinObjectId:string, balance:string})=>{
+        if(parseInt(balance) > parseInt(highestBalance)){
+            highestBalance = balance;
+            highestBalanaceAddress = coinObjectId
+        }
+    })
+    return highestBalanaceAddress
+}
+
+export const shortnerAddress = (address:string) : string => {
+  return address.slice(0,5) +'...'+ address.slice(-5)
+}
