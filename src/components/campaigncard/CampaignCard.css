@@ -12,7 +12,7 @@
 
 .card {
   width: 392px;
-  min-height: 444px;
+  min-height: 490px;
   border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -23,28 +23,21 @@
 width: min-content !important;
 }
 
-.bg-white {
-  background-color: white;
+.campaign-card-container {
+  position: relative;
 }
 
-.flex {
-  display: flex;
+.popup-wrapper {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
 }
 
-.ff-tertiary {
-  font-family: 'YourFontFamily', sans-serif; /* Replace with your font family */
-}
-
-.font-color-yellow-orange {
-  color: #FFA500; /* Adjust to your specific color */
-}
-
-.font-weight-700 {
-  font-weight: 700;
-}
-
-.justify-center {
-  justify-content: center;
+.card {
+  position: relative;
+  z-index: 1;
 }
 
 .add-money{
