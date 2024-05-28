@@ -117,9 +117,7 @@ export default function CampaignList() {
         <div className='campaign-list-container'>
 
         <div className='campaignlistcontainer bg-white text-black'>
-            <div>
             <SearchBar />
-            </div>
             <div className='card-container'>
                 <div className='mt-68 flex justify-space-around align-center'>
                     <div className='campaign-start-text '>

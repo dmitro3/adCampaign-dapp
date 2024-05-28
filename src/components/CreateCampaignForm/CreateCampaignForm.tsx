@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import moment from 'moment';
 import toast, { Toaster } from 'react-hot-toast';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { ConnectButton, useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery } from '@mysten/dapp-kit';
 import OvalInputBox from "../ovalInputBox/OvalInputBox";
 import CustomButton from '../CustomButton/CustomButton';
 import { createCampaign, uploadImage } from '../../common/services/api.services';
@@ -37,17 +37,14 @@ const CreateCampaignForm = () => {
         image.append("cloud_name", CLOUDINARY_CLOUD_NAME);
         image.append("upload_preset", UPLOAD_PRESET);
         const imageUrl = await uploadImage(image)
-        console.log('--->', imageUrl)
         setImageUrl(imageUrl as any)
     }
 
     const createCampaignInSUI = (formInputs:any) => {
         try{
-            console.log('maxCoinValueAddress---->',maxCoinValueAddress, '----->',account.address)
             formInputs.startDate = moment().unix();
             formInputs.endDate = '1716993333';
             formInputs.banner = imageUrl;
-            console.log('formInputs--->',formInputs);
            const txb = new TransactionBlock();
            txb.moveCall({
              arguments: [
@@ -121,7 +118,6 @@ const CreateCampaignForm = () => {
     
     return(
         <>
-            <ConnectButton />
             <Formik
             initialValues={createCampaignInitialValues}
             validate={values => {
