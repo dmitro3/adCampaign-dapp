@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchCampaigns } from "../../common/services/api.services";
-import CampaignCard from '../CampaignCard/CampaignCard';
+import CampaignCard from '../campaigncard/CampaignCard';
 import Filters from '../filters/Filters';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import SearchBar from '../searchbar/SearchBar';
