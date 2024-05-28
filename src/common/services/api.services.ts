@@ -16,6 +16,22 @@ export const createAffiliate = async (contents: any) => {
   return data;
 }
 
+export const fetchAffiliatesByCampaignId = async (contents: any) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    //   Authorization: token,
+    },
+    method: "POST",
+    body: JSON.stringify({ 
+        ...contents
+     }),
+  }
+  const response = await fetch(`${API_URL}/ad/affiliate/id`, config);
+  const data = await response.json();
+  return data;
+  
+}
 
 export const fetchAffiliateProfile = async (contents: any) => {
   const config = {

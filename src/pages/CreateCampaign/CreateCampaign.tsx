@@ -3,7 +3,6 @@ import SearchBar from '../../components/searchbar/SearchBar';
 import './CreateCampaign.scss'
 
 const CreateCampaign = () => {
-
     return (
         <main className="create-campaign-container">
           <SearchBar />

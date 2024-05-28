@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchCampaigns } from "../../common/services/api.services";
 import CampaignCard from '../campaigncard/CampaignCard';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import Filters from '../filters/Filters';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import SearchBar from '../searchbar/SearchBar';
@@ -35,6 +35,7 @@ const formatDate = (epoch: number) => {
 const ITEMS_PER_PAGE = 20;
 
 export default function CampaignList() {
+    const account  = useCurrentAccount() as {address: string};
     const [data, setData] = useState([]);
 
     const getData = async () => {
@@ -144,6 +145,7 @@ export default function CampaignList() {
                 <div className="campaign-list">
                     {paginatedCampaigns.map((campaign, index) => (
                         <CampaignCard
+                            width={'card-width-392'}
                             key={index}
                             imageSrc={campaign.imageSrc}
                             label={campaign.label}
@@ -157,7 +159,7 @@ export default function CampaignList() {
                             dislikes={campaign.dislikes}
                             startDate={campaign.startDate}
                             endDate={campaign.endDate}
-                            walletAddress={campaign.walletAddress}
+                            walletAddress={account.address}
                             description={campaign.description}
                             url={campaign.url}
                             campaignInfoAddress={campaign.campaignInfoAddress}

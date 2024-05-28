@@ -31,6 +31,7 @@ interface CampaignCardProps {
     description: string;
     url: string;
     campaignInfoAddress: string;
+    width?: string,
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = ({
@@ -48,9 +49,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     walletAddress,
     description,
     url,
-    campaignInfoAddress
+    campaignInfoAddress,
+    width,
 }) => {
-    const account  = useCurrentAccount() as {address: string};
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
 
     const [loading, setLoading] = useState(false);
@@ -154,7 +155,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         }
     };
 
-    const handleSubmit = async () => {
+    const handleAffiliateCreationURL = async () => {
         try {
             setLoading(true);
             setError(false);
@@ -164,7 +165,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             const response = await createAffiliate({
                 originalUrl: url,
                 campaignUrl,
-                walletAddress: account.address,
+                walletAddress,
                 campaignInfoAddress: campaignInfoAddress,
                 profileAddress: affiliateProfile,
                 expirationTime: endDate,
@@ -183,7 +184,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     };
 
     return (
-        <div className={`card bg-white ff-tertiary ${ViewMore ? 'View-more' : ''}`}>
+        <div className={`card bg-white ff-tertiary ${width} ${ViewMore ? 'View-more' : ''}`}>
             <Toaster />
             <div className="card-image">
                 <img src={imageSrc} alt="Card Image" />
@@ -198,27 +199,30 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <div className="card-content bg-white">
                 <div className='flex'>
                     <p className='add-money bg-white flex font-size-14'>
-                        <CustomButton title="$ Add Money" onClick={handleAddCoins} color='#4880FF' backgroundColor='white' className='add-money-btn' />
+                        <CustomButton title="$ Add Money" onClick={handleAddCoins} color='#4880FF' backgroundColor='white' className='add-money-button' />
                     </p>
-                    <CardStats src='./star.png' clicks={clicks} />
+                    <CardStats>
+                        <img src={'./star.png'} alt={'star'} />
+                        <span>{clicks} Clicks</span>    
+                    </CardStats>
                 </div>
                 <div className='titleStyles'>
                     <h3 className='ff-tertiary font-weight-800'>{title}</h3>
                     <AddressURL address={campaignInfoAddress}  />
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
-                    <CardIconLabel src="./duration.png" text={`${daysLeft} days left`} />
-                    <CardIconLabel src="./user.png" text={`$${costPerClick} per click`} />
+                    <CardIconLabel src="./duration.png" text={<span>{ `${daysLeft} days left`}</span>} alt="duration" />
+                    <CardIconLabel src="./user.png" text={<span>{`$${costPerClick} per click`}</span>} alt="user"/>
                 </div>
-                <CardPrice onClick={handleSubmit} currentPrice={currentPrice} totalPrice={totalPrice} />
+                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currentPrice} totalPrice={totalPrice} />
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                     { campaignUrl && <a href={campaignUrl} target="_blank" rel="noopener noreferrer">Campaign URL</a>}
                 </div>
-                {ViewMore && (
-                     <p>Description: {description}</p>
+                { ViewMore && (
+                     <p className='text-gray'>Description: {description}</p>
                 )}
-                <CustomButton border="none" backgroundColor="white" color='black' title={ViewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
+                <CustomButton border="none" backgroundColor="white" color='black'  extraStyles='text-gray' title={ViewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
             </div>
         </div>
     );

@@ -1,15 +1,13 @@
-import './CardStats.css'
+import './CardStats.scss'
 interface CardStatsProps {
-    clicks: number;
-    src: string;
-
+    children: React.ReactNode
 }
-export default function CardStats({ clicks,src }: CardStatsProps) {
+
+export default function CardStats({children}: CardStatsProps) {
     return (
         <div className="card-stats font-size-14 flex text-gray">
-            <div className="flex justify-space-around align-center no-of-clicks bg-white">
-                <img src={src} alt={src} />
-                <span>{clicks} Clicks</span>
+            <div className="flex justify-space-around align-center no-of-clicks bg-white dimension-styles">
+               {children}
             </div>
         </div>
     );

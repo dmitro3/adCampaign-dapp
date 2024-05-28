@@ -1,4 +1,7 @@
 .share-btn{
-    width: 22%;
-    border: none;
+    width: 104px;
+    background-color: var(--clr-gray-100) !important;
+    border: 1px solid var(--clr-gray-300);
+    border-radius: 100vw;
+    padding: 10px;
 }

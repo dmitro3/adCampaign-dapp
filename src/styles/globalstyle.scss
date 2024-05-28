@@ -17,8 +17,10 @@
   --fs-32: 32px;
 
   --fw-800: 800;
+  --fw-700: 700;
 
   --lh-24: 24px;
+  --lh-44px: 44px;
 
   --clr-black: #000000;
   --clr-charcoal: #22222A;
@@ -26,6 +28,8 @@
   --clr-cultured: #F5F6FA;
   --clr-white: #FFFFFF;
   --clr-gray-500: #737373;
+  --clr-gray-300: #E4E6E8;
+  --clr-gray-100: #F2F4F6;
   --clr-light-gray: #CACACA;
 }
 
@@ -39,6 +43,10 @@
 }
 .flex {
   display: flex;
+}
+
+.flex-reverse{
+  flex-direction: row-reverse;
 }
 
 .flex-column {
@@ -89,6 +97,11 @@
   gap: 16px;
 }
 
+
+.height-100{
+  height: 100%;
+}
+
 .ff-primary{
   font-family: 'Mulish', sans-serif;
 }
@@ -127,6 +140,9 @@
   font-size: 48px;
 }
 .font-size-24 {
+  font-size: 24px;
+}
+.font-size-28 {
   font-size: 24px;
 }
 .font-size-49 {
