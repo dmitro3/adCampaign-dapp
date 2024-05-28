@@ -32,45 +32,51 @@ const formatDate = (epoch: number) => {
     const date = new Date(epoch * 1000);
     return date.toLocaleDateString('en-US');
 };
+
 const ITEMS_PER_PAGE = 20;
 
 export default function CampaignList() {
     const account  = useCurrentAccount() as {address: string};
     const [data, setData] = useState([]);
-
-    const getData = async () => {
-        const response = await fetchCampaigns();
-        const transformedData = response.map((campaign: any) => ({
-            imageSrc: campaign.banner,
-            label: campaign.category,
-            clicks: 0,
-            title: campaign.companyName,
-            daysLeft: Math.ceil((campaign.endDate - campaign.startDate) / (60 * 60 * 24)),
-            costPerClick: campaign.cpc/1e9,
-            currentPrice: 0,
-            totalPrice: campaign.campaignBudget / 1e9,
-            likes: 0,
-            dislikes: 0,
-            startDate: formatDate(campaign.startDate),
-            endDate: campaign.endDate,
-            walletAddress: campaign.campaignWalletAddress,
-            description: campaign.description || 'No description available',
-            url: campaign.originalUrl,
-            campaignInfoAddress: campaign.campaignInfoAddress,
-        }));
-        setData(transformedData);
-    };
-
-    useEffect(() => {
-        getData();
-    }, []);
+    const [activePopUp, setActivePopUp] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-    useEffect(() => {
-        setCampaigns(data);
-    }, [data]);
     const [sortOption, setSortOption] = useState<string>('timeLeft');
     const [filterOption, setFilterOption] = useState<string>('all');
     const [currentPage, setCurrentPage] = useState<number>(1);
+
+    useEffect(() => {
+        const getData = async () => {
+            const response = await fetchCampaigns();
+            const transformedData = response.map((campaign: any) => ({
+                imageSrc: campaign.banner,
+                label: campaign.category,
+                clicks: 0,
+                title: campaign.companyName,
+                daysLeft: Math.ceil((campaign.endDate - campaign.startDate) / (60 * 60 * 24)),
+                costPerClick: campaign.cpc/1e9,
+                currentPrice: 0,
+                totalPrice: campaign.campaignBudget / 1e9,
+                likes: 0,
+                dislikes: 0,
+                startDate: formatDate(campaign.startDate),
+                endDate: campaign.endDate,
+                walletAddress: campaign.campaignWalletAddress,
+                description: campaign.description || 'No description available',
+                url: campaign.originalUrl,
+                campaignInfoAddress: campaign.campaignInfoAddress,
+            }));
+            setData(transformedData);
+        };
+        getData();
+    }, []);
+
+    useEffect(() => {
+        setCampaigns(data);
+    }, [data]);
+
+    const togglePopUp = (campaignId: string) => {
+        setActivePopUp(prevPopUp => prevPopUp === campaignId ? null : campaignId);
+    };
 
     const handleSort = (option: string) => {
         setSortOption(option);
@@ -90,7 +96,7 @@ export default function CampaignList() {
         }
         setCampaigns(sortedCampaigns);
     };
-    // todo: implement filter
+
     const handleFilter = (option: string) => {
         setFilterOption(option);
         let filteredCampaigns;
@@ -99,7 +105,6 @@ export default function CampaignList() {
         } else {
             filteredCampaigns = mockData.filter(campaign => campaign.label.toLowerCase() === option.toLowerCase());
         }
-        // setCampaigns(filteredCampaigns);
         setCurrentPage(1);
     };
 
@@ -145,8 +150,8 @@ export default function CampaignList() {
                 <div className="campaign-list">
                     {paginatedCampaigns.map((campaign, index) => (
                         <CampaignCard
-                            width={'card-width-392'}
                             key={index}
+                            width={'card-width-392'}
                             imageSrc={campaign.imageSrc}
                             label={campaign.label}
                             clicks={campaign.clicks}
@@ -159,10 +164,12 @@ export default function CampaignList() {
                             dislikes={campaign.dislikes}
                             startDate={campaign.startDate}
                             endDate={campaign.endDate}
-                            walletAddress={account.address}
+                            walletAddress={campaign.walletAddress}
                             description={campaign.description}
                             url={campaign.url}
                             campaignInfoAddress={campaign.campaignInfoAddress}
+                            togglePopUp={() => togglePopUp(campaign.title)}
+                            popUp={activePopUp === campaign.title}
                         />
                     ))}
                 </div>

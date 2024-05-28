@@ -64,6 +64,19 @@ export const createCampaign = async (contents: any) => {
     const data = await response.json();
     console.log('data====>', data);
 }
+export const addSupporters = async (contents: any) => {
+    const config = {
+        headers: {
+          "Content-Type": "application/json",
+        //   Authorization: token,
+        },
+        method: "POST",
+        body: JSON.stringify({ 
+            ...contents
+         }),
+      };
+    await fetch(`${API_URL}/ad/supporters/create`, config);
+}
 
 export const fetchCampaigns = async () => {
   const config = {

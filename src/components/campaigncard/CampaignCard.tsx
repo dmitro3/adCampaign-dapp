@@ -1,17 +1,19 @@
-import { useState } from 'react';
+import React, { useState} from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { useSignAndExecuteTransactionBlock,useCurrentAccount } from "@mysten/dapp-kit";
+import { useSignAndExecuteTransactionBlock, useCurrentAccount } from "@mysten/dapp-kit";
 import { createAffiliate, fetchAffiliateProfile } from "../../common/services/api.services";
 import { generateCampaignUrl } from "../../common/helpers";
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from "../../common/config";
 import AddressURL from '../AddressURL/AddressURL';
+import AddMoneyPopUp from '../AddMoneyPopUp/AddMoneyPopUp';
 import useCoinAddress from "../../common/customHooks/coinAddress/useCoinAddress";
-import CardStats from '../cardstats/CardStats';
+import MetricsOverview from '../MetricsOverview/MetricsOverview';
 import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
 import CardReaction from '../cardreaction/CardReaction';
 import CustomButton from '../CustomButton/CustomButton';
+import { addSupporters } from '../../common/services/api.services';
 import './CampaignCard.css';
 
 interface CampaignCardProps {
@@ -31,6 +33,8 @@ interface CampaignCardProps {
     description: string;
     url: string;
     campaignInfoAddress: string;
+    togglePopUp: () => void;
+    popUp: boolean;
     width?: string,
 }
 
@@ -50,10 +54,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     description,
     url,
     campaignInfoAddress,
+    togglePopUp,
+    popUp,
     width,
 }) => {
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
-
+    const account = useCurrentAccount() as { address: string };
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [campaignUrl, setCampaignUrl] = useState('');
@@ -62,18 +68,30 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         coins: '',
         message: ''
     });
-    const [ViewMore, setViewMore] = useState(false);
+    const [viewMore, setViewMore] = useState(false);
 
+    const handleInputCoins = (e: any) => {
+        setAddCoinPayload({
+            ...addCoinPayload,
+            coins: e.target.value,
+        });
+    };
+    const handleInputMessage = (e: any) => {
+        setAddCoinPayload({
+            ...addCoinPayload,
+            message: e.target.value,
+        });
+    }
 
     const toggleViewMore = () => {
-        setViewMore(!ViewMore);
+        setViewMore(!viewMore);
     };
 
 
     const handleAddCoins = () => {
         setLoading(true);
         setError(false);
-        toast.loading('Adding coins...');
+        toast.loading('Adding...');
 
         return new Promise<void>((resolve, reject) => {
             const txb = new TransactionBlock();
@@ -109,6 +127,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                         onSuccess: async (tx: any) => {
                             setLoading(false);
                             toast.dismiss();
+                            await addSupporters({
+                                campaignConfig: CAMPAIGN_CONFIG,
+                                campaignInfoAddress: campaignInfoAddress,
+                                message: addCoinPayload.message,
+                                coins: addCoinPayload.coins,
+                                maxCoinValueAddress: maxCoinValueAddress,
+                                walletAddress: account.address,
+                                transactionDigest: tx?.effects?.transactionDigest
+                            });
                             toast.success('Coins added successfully!');
                             resolve();
                         },
@@ -119,6 +146,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                             toast.error('Error in transaction.');
                             reject(error);
                             console.error('Error in transaction', error);
+                        },
+                        onSettled: () => {
+                            togglePopUp()
                         }
                     }
                 );
@@ -184,7 +214,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     };
 
     return (
-        <div className={`card bg-white ff-tertiary ${width} ${ViewMore ? 'View-more' : ''}`}>
+        <div className={`card bg-white ff-tertiary ${width} ${viewMore ? 'View-more' : ''}`}>
             <Toaster />
             <div className="card-image">
                 <img src={imageSrc} alt="Card Image" />
@@ -198,13 +228,13 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
             <div className="card-content bg-white">
                 <div className='flex'>
-                    <p className='add-money bg-white flex font-size-14'>
-                        <CustomButton title="$ Add Money" onClick={handleAddCoins} color='#4880FF' backgroundColor='white' className='add-money-button' />
+                    <p className='add-money bg-white flex font-size-14 '>
+                        <CustomButton title="$ Add Money" color='#4880FF' onClick={togglePopUp} backgroundColor='white' className='add-money-button' />
                     </p>
-                    <CardStats>
+                    <MetricsOverview>
                         <img src={'./star.png'} alt={'star'} />
-                        <span>{clicks} Clicks</span>    
-                    </CardStats>
+                        <span>{clicks} Clicks</span>
+                    </MetricsOverview>
                 </div>
                 <div className='titleStyles'>
                     <h3 className='ff-tertiary font-weight-800'>{title}</h3>
@@ -219,11 +249,25 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                     <a href={url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                     { campaignUrl && <a href={campaignUrl} target="_blank" rel="noopener noreferrer">Campaign URL</a>}
                 </div>
-                { ViewMore && (
+                { viewMore && (
                      <p className='text-gray'>Description: {description}</p>
                 )}
-                <CustomButton border="none" backgroundColor="white" color='black'  extraStyles='text-gray' title={ViewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
+                <CustomButton border="none" backgroundColor="white" color='black'  extraStyles='text-gray' title={viewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
             </div>
+            {popUp && (
+                    <div className="popup-wrapper">
+                        <AddMoneyPopUp
+                            imageSrc="./money.png"
+                            titleText="Add Money for the Campaign"
+                            onClick={handleAddCoins}
+                            handleInputCoins={handleInputCoins}
+                            handleInputMessage={handleInputMessage}
+                            moneyAmount={addCoinPayload.coins}
+                            moneyMessage={addCoinPayload.message}
+                            handleclose={togglePopUp}
+                        />
+                    </div>
+            )}
         </div>
     );
 }
