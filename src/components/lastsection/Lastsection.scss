@@ -1,6 +1,6 @@
 @import "../../styles/mixin.scss";
 
-// .lastsection{
+
 
   .grid-container {
     @include grid-container(2, 6rem);
@@ -48,7 +48,7 @@
   .views-modal {
     position: absolute;
     top: -20px;
-    left: -30px;
+    left: -15px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -80,7 +80,7 @@
   
   .arrow img {
     padding: 6px;
-    margin-left: 10px;
+    margin-left: 5px;
   }
   
   .view-option {
@@ -99,4 +99,4 @@
     font-family: 'Mulish', sans-serif;
     font-size: 16px;
   }
-// }
+

@@ -3,9 +3,9 @@ import { Formik } from 'formik';
 import moment from 'moment';
 import toast, { Toaster } from 'react-hot-toast';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { ConnectButton, useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery } from '@mysten/dapp-kit';
 import OvalInputBox from "../ovalInputBox/OvalInputBox";
-import Button from "../reuseablecomponent/button/button";
+import CustomButton from '../CustomButton/CustomButton';
 import { createCampaign, uploadImage } from '../../common/services/api.services';
 import { getMaxBalanceObjectAddress } from '../../common/helpers';
 import { CAMPAIGN_STATUS, createCampaignInitialValues, createCampaignInputFields } from "../../common/constants";
@@ -37,18 +37,14 @@ const CreateCampaignForm = () => {
         image.append("cloud_name", CLOUDINARY_CLOUD_NAME);
         image.append("upload_preset", UPLOAD_PRESET);
         const imageUrl = await uploadImage(image)
-        console.log('--->', imageUrl)
         setImageUrl(imageUrl as any)
     }
 
     const createCampaignInSUI = (formInputs:any) => {
         try{
-            console.log('maxCoinValueAddress---->',maxCoinValueAddress, '----->',account.address)
-            // formInputs.banner = 'http://res.cloudinary.com/dsuxra6rw/image/upload/v1716823244/s3huu0wm9wsypz0bdzna.jpg';
             formInputs.startDate = moment().unix();
             formInputs.endDate = '1716993333';
             formInputs.banner = imageUrl;
-            console.log('formInputs--->',formInputs);
            const txb = new TransactionBlock();
            txb.moveCall({
              arguments: [
@@ -122,7 +118,6 @@ const CreateCampaignForm = () => {
     
     return(
         <>
-            <ConnectButton />
             <Formik
             initialValues={createCampaignInitialValues}
             validate={values => {
@@ -176,7 +171,7 @@ const CreateCampaignForm = () => {
                             {errors[field.name] && touched[field.name] && errors[field.name]}
                         </article>
                     ))}
-                    <Button color="blue" title="Create" width="203px" height="50px" type="submit" disabled={isSubmitting} />
+                    <CustomButton color="blue" title="Create" width="203px" height="50px" type="submit" disabled={isSubmitting} />
                     {transactionFinshed && 
                     <div>
                         <p>Transaction Successfully Comepleted </p>

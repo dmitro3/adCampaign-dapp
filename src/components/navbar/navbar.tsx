@@ -1,5 +1,5 @@
 import { ConnectButton } from '@mysten/dapp-kit';
-import './navbar.css';
+import './Navbar.css';
 
 export default function Navbar() {
     return (
