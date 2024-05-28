@@ -2,7 +2,7 @@
 .campaign-list-container{
 
     .campaign-list {
-        @include grid-container-cards(3, 12px, 0.2fr);
+        @include grid-container-cards(3, 50px, 0.2fr);
         
     }
     

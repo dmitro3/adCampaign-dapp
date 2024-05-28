@@ -27,7 +27,10 @@ export enum CAMPAIGN_STATUS{
     SCHEDULED = 1,
     ONGOING = 2,
     EXPIRED = 3,
-}export const mockData  = [
+}
+
+
+export const mockData  = [
     {
         imageSrc: '/journey.png',
         label: 'Social',

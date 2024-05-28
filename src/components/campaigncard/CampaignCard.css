@@ -1,3 +1,9 @@
+.card-extra-info {
+  margin: 10px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
 .card-reaction img {
   width: 24px;
   height: 24px;
@@ -6,7 +12,7 @@
 
 .card {
   width: 392px;
-  height:590px;
+  min-height: 444px;
   border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -112,8 +118,8 @@ width: min-content !important;
 }
 
 .card-meta {
-  margin-bottom: 30px;
-  width:80%;
+  margin-bottom: 10px;
+  width: 80%;
 }
 
 .button-white{
@@ -126,6 +132,11 @@ width: min-content !important;
   margin-right: 10%;
 }
 
+.titleStyles{
+  display: flex;
+  align-items: center;
 
-
-
+  *{
+    margin: 3px 10px;
+  }
+}

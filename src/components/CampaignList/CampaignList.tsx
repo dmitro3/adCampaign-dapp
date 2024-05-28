@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { fetchCampaigns } from "../../common/services/api.services";
-import CampaignCard from '../CampaignCard/CampaignCard';
+import CampaignCard from '../campaigncard/CampaignCard';
 import Filters from '../filters/Filters';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import SearchBar from '../searchbar/SearchBar';
@@ -32,7 +32,7 @@ const formatDate = (epoch: number) => {
     const date = new Date(epoch * 1000);
     return date.toLocaleDateString('en-US');
 };
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 20;
 
 export default function CampaignList() {
     const [data, setData] = useState([]);
@@ -51,7 +51,7 @@ export default function CampaignList() {
             likes: 0,
             dislikes: 0,
             startDate: formatDate(campaign.startDate),
-            endDate: formatDate(campaign.endDate),
+            endDate: campaign.endDate,
             walletAddress: campaign.campaignWalletAddress,
             description: campaign.description || 'No description available',
             url: campaign.originalUrl,
@@ -134,7 +134,7 @@ export default function CampaignList() {
                 <div className='mt-68 campaign-header flex justify-space-around align-center'>
                     <div className='campaign-subtext'>
 
-                    <div >
+                    <div>
                         <h1 className='text-black font-weight-700 font-size-52'>Campaigns</h1>
                         <p className='text-gray font-size-20'>All the campaigns are listed here</p>
                     </div>

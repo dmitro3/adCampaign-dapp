@@ -5,15 +5,13 @@ import { useSignAndExecuteTransactionBlock,useCurrentAccount } from "@mysten/dap
 import { createAffiliate, fetchAffiliateProfile } from "../../common/services/api.services";
 import { generateCampaignUrl } from "../../common/helpers";
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from "../../common/config";
+import AddressURL from '../AddressURL/AddressURL';
 import useCoinAddress from "../../common/customHooks/coinAddress/useCoinAddress";
 import CardStats from '../cardstats/CardStats';
 import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
 import CardReaction from '../cardreaction/CardReaction';
 import CustomButton from '../CustomButton/CustomButton';
-
-
-
 import './CampaignCard.css';
 
 interface CampaignCardProps {
@@ -46,25 +44,29 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     totalPrice,
     likes,
     dislikes,
-    startDate,
     endDate,
     walletAddress,
     description,
     url,
     campaignInfoAddress
 }) => {
+    const account  = useCurrentAccount() as {address: string};
+    const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [campaignUrl, setCampaignUrl] = useState('');
     const maxCoinValueAddress = useCoinAddress();
-    const [hasAddCoin, setHasAddCoin] = useState(false);
     const [addCoinPayload, setAddCoinPayload] = useState({
         coins: '',
         message: ''
     });
-    const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
+    const [ViewMore, setViewMore] = useState(false);
 
-    const account  = useCurrentAccount() as {address: string};
+
+    const toggleViewMore = () => {
+        setViewMore(!ViewMore);
+    };
 
 
     const handleAddCoins = () => {
@@ -107,7 +109,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                             setLoading(false);
                             toast.dismiss();
                             toast.success('Coins added successfully!');
-                            console.log('handleAddCoins tx--->', tx);
                             resolve();
                         },
                         onError: (error) => {
@@ -130,7 +131,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             }
         });
     };
-// todo rectify the error
+
     const getAffiliateProfile = async () => {
         try {
             setLoading(true);
@@ -138,13 +139,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             const profileDetails = await fetchAffiliateProfile({ walletAddress });
             setLoading(false);
             toast.dismiss();
-            // if (profileDetails.length) {
-
-                // return profileDetails[0].profileAddress;
-            // } 
-            // else {
-            //     return null;
-            // }
+            if (profileDetails.length) {
+                return profileDetails[0].profileAddress;
+            } 
+            else {
+                return null;
+            }
         } catch (error) {
             setLoading(false);
             toast.dismiss();
@@ -169,9 +169,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 profileAddress: affiliateProfile,
                 expirationTime: endDate,
             });
-            console.log('response--->', response);
-            // todo: set campaign url
-            // setCampaignUrl(response?.campaignUrl || '');
+            setCampaignUrl(response?.campaignUrl || '');
             setLoading(false);
             toast.dismiss();
             toast.success('Campaign created successfully!');
@@ -185,7 +183,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     };
 
     return (
-        <div className="card bg-white ff-tertiary">
+        <div className={`card bg-white ff-tertiary ${ViewMore ? 'View-more' : ''}`}>
             <Toaster />
             <div className="card-image">
                 <img src={imageSrc} alt="Card Image" />
@@ -204,19 +202,23 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                     </p>
                     <CardStats src='./star.png' clicks={clicks} />
                 </div>
-                <h3 className='ff-tertiary font-weight-800'>{title}</h3>
+                <div className='titleStyles'>
+                    <h3 className='ff-tertiary font-weight-800'>{title}</h3>
+                    <AddressURL address={campaignInfoAddress}  />
+                </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
                     <CardIconLabel src="./duration.png" text={`${daysLeft} days left`} />
                     <CardIconLabel src="./user.png" text={`$${costPerClick} per click`} />
                 </div>
-                <div className="card-extra-info font-size-14 text-gray">
-                    <p>Start Date: {startDate}</p>
-                    <p>End Date: {endDate}</p>
-                    <p>Wallet Address: {walletAddress}</p>
-                    <p>Description: {description}</p>
-                    <a href={url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
-                </div>
                 <CardPrice onClick={handleSubmit} currentPrice={currentPrice} totalPrice={totalPrice} />
+                <div className="card-extra-info font-size-14 text-gray">
+                    <a href={url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
+                    { campaignUrl && <a href={campaignUrl} target="_blank" rel="noopener noreferrer">Campaign URL</a>}
+                </div>
+                {ViewMore && (
+                     <p>Description: {description}</p>
+                )}
+                <CustomButton border="none" backgroundColor="white" color='black' title={ViewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
             </div>
         </div>
     );
