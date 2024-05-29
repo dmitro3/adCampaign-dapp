@@ -4,7 +4,7 @@ import CampaignCard from '../campaigncard/CampaignCard';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import Filters from '../filters/Filters';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
-import SearchBar from '../searchbar/SearchBar';
+import Navbar from '../Navbar/navbar';
 import Pagination from '../pagination/Pagination';
 import { mockData } from '../../common/constants';
 import './CampaignList.scss';
@@ -122,7 +122,7 @@ export default function CampaignList() {
     return (
         <div className='campaign-list-container'>
         <div className='campaignlistcontainer bg-white text-black'>
-            <SearchBar />
+            <Navbar page='campaign' color='white' textColor='black'/>
             <div className='card-container'>
                 <div className='mt-68 flex justify-space-around align-center'>
                     <div className='campaign-start-text '>
@@ -169,6 +169,7 @@ export default function CampaignList() {
                             campaignInfoAddress={campaign.campaignInfoAddress}
                             togglePopUp={() => togglePopUp(campaign.title)}
                             popUp={activePopUp === campaign.title}
+                            viewMoreToggle={false}
                         />
                     ))}
                 </div>

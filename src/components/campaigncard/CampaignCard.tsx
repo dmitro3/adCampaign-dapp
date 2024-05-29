@@ -37,6 +37,7 @@ interface CampaignCardProps {
     campaignInfoAddress: string;
     togglePopUp: () => void;
     popUp: boolean;
+    viewMoreToggle:boolean;
     width?: string,
 }
 
@@ -60,6 +61,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         togglePopUp,
         popUp,
         width,
+        viewMoreToggle = true,
     } = campaign;
     const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
@@ -72,7 +74,8 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         coins: '',
         message: ''
     });
-    const [viewMore, setViewMore] = useState(false);
+    const [viewMore, setViewMore] = useState(viewMoreToggle );
+   
 
     const handleInputCoins = (e: any) => {
         setAddCoinPayload({

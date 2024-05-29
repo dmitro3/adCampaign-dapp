@@ -7,7 +7,7 @@ import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery
 import OvalInputBox from "../ovalInputBox/OvalInputBox";
 import CustomButton from '../CustomButton/CustomButton';
 import { createCampaign, uploadImage } from '../../common/services/api.services';
-import { getMaxBalanceObjectAddress } from '../../common/helpers';
+import { getMaxBalanceObjectAddress, getTimeLeft } from '../../common/helpers';
 import { CAMPAIGN_STATUS, createCampaignInitialValues, createCampaignInputFields } from "../../common/constants";
 import CustomImageUploader from '../CustomImageUploader/CustomImageUploader';
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID, CLOUDINARY_CLOUD_NAME, UPLOAD_PRESET } from '../../common/config';
@@ -18,18 +18,18 @@ interface ImageFile {
     preview: string;
 }
 
-const CreateCampaignForm = () => {
+const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (details: any) => void }) => {
     const [imageUrl, setImageUrl] = useState<ImageFile | null>(null);
-    const account  = useCurrentAccount() as {address: string};
-    const [transactionFinshed, setTransactionFinished] = useState(false);
+    const [formValues, setFormValues] = useState(createCampaignInitialValues);
+    const account = useCurrentAccount() as { address: string };
+    const [transactionFinished, setTransactionFinished] = useState(false);
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
     const [maxCoinValueAddress, setMaxCoinValueAddress] = useState('');
-    
-    const suiObject = useSuiClientQuery('getCoins', 
-    {
-		owner: account?.address as string,
-        coinType:'0x2::sui::SUI'
-	}) as {data:{data: any[]}};
+
+    const suiObject = useSuiClientQuery('getCoins', {
+        owner: account?.address as string,
+        coinType: '0x2::sui::SUI'
+    }) as { data: { data: any[] } };
 
     const handleImage = async (imageBanner: any) => {
         const image = new FormData();
@@ -40,149 +40,186 @@ const CreateCampaignForm = () => {
         setImageUrl(imageUrl as any)
     }
 
-    const createCampaignInSUI = (formInputs:any) => {
-        try{
+    const createCampaignInSUI = (formInputs: any) => {
+        try {
             formInputs.startDate = moment().unix();
             formInputs.endDate = '1716993333';
             formInputs.banner = imageUrl;
-           const txb = new TransactionBlock();
-           txb.moveCall({
-             arguments: [
-                         txb.object(CAMPAIGN_CONFIG),
-                         txb.pure.string(formInputs.companyName),
-                         txb.pure.string(formInputs.category),
-                         txb.pure.string(formInputs.originalUrl),
-                         txb.object(maxCoinValueAddress),
-                         txb.pure.u64(parseInt(formInputs.campaignBudget)),
-                         txb.pure.u64(parseInt(formInputs.cpc)),
-                         txb.pure.u64(parseInt(formInputs.startDate.toString())),
-                         txb.pure.u64(parseInt(formInputs.endDate)),
-                         txb.pure.u64(CAMPAIGN_STATUS.ONGOING),
-                         txb.pure.address(account.address),
-                       ],
-             target: `${CAMPAIGN_PACKAGE_ID}::campaign_fund::create_campaign`,
-           });
-       
-           signAndExecute(
-             {
-               transactionBlock: txb,
-               options: {
-                 showEffects: true,
-               },
-             },
-             {
-               onSuccess: (tx) => {
-                 createCampaign({
-                   ...formInputs,
-                   coinObjectAddress: maxCoinValueAddress,
-                   campaignWalletAddress: account.address,
-                   campaignInfoAddress: getCampaignObjectAddress(tx.effects?.created || []) || '',
-                   packageAddress: CAMPAIGN_PACKAGE_ID,
-                   campaignConfig:CAMPAIGN_CONFIG,
-                   status: CAMPAIGN_STATUS.ONGOING,
-                 });
-                 toast.success("success")
-                 setTransactionFinished(true)
-               },
-               onError:(error)=>{
-                   console.log('error--->',error)
-               },
-               onSettled:(data)=>{
-                    console.log('data--->', data)
-               }
-             },
-           );
-         } catch(err) {
-           console.log('err--->', err)
+            const txb = new TransactionBlock();
+            txb.moveCall({
+                arguments: [
+                    txb.object(CAMPAIGN_CONFIG),
+                    txb.pure.string(formInputs.companyName),
+                    txb.pure.string(formInputs.category),
+                    txb.pure.string(formInputs.originalUrl),
+                    txb.object(maxCoinValueAddress),
+                    txb.pure.u64(parseInt(formInputs.campaignBudget)),
+                    txb.pure.u64(parseInt(formInputs.cpc)),
+                    txb.pure.u64(parseInt(formInputs.startDate.toString())),
+                    txb.pure.u64(parseInt(formInputs.endDate)),
+                    txb.pure.u64(CAMPAIGN_STATUS.ONGOING),
+                    txb.pure.address(account.address),
+                ],
+                target: `${CAMPAIGN_PACKAGE_ID}::campaign_fund::create_campaign`,
+            });
+
+            signAndExecute(
+                {
+                    transactionBlock: txb,
+                    options: {
+                        showEffects: true,
+                    },
+                },
+                {
+                    onSuccess: (tx) => {
+                
+                        createCampaign({
+                            ...formInputs,
+                            coinObjectAddress: maxCoinValueAddress,
+                            campaignWalletAddress: account.address,
+                            campaignInfoAddress: getCampaignObjectAddress(tx.effects?.created || []) || '',
+                            packageAddress: CAMPAIGN_PACKAGE_ID,
+                            campaignConfig: CAMPAIGN_CONFIG,
+                            status: CAMPAIGN_STATUS.ONGOING,
+                        });
+                        toast.success("success")
+                        setTransactionFinished(true)
+                    },
+                    onError: (error) => {
+                        console.log('error--->', error)
+                    },
+                    onSettled: (data) => {
+                        console.log('data--->', data)
+                    }
+                },
+            );
+        } catch (err) {
+            console.log('err--->', err)
         }
     }
 
     const getCampaignObjectAddress = (txArray: any[]) => {
-      for(let i = 0; i < txArray.length; i++){
-        if(txArray[i]?.owner?.Shared){
-          return txArray[i]?.reference.objectId
+        for (let i = 0; i < txArray.length; i++) {
+            if (txArray[i]?.owner?.Shared) {
+                return txArray[i]?.reference.objectId;
+            }
         }
-      }
     }
 
-    useEffect(()=>{
-      if(suiObject?.data?.data?.length>0){
-          const address = getMaxBalanceObjectAddress(suiObject?.data?.data)
-          setMaxCoinValueAddress(address)
-      }
-    },[suiObject?.data?.data])
+    useEffect(() => {
+        if (suiObject?.data?.data?.length > 0) {
+            const address = getMaxBalanceObjectAddress(suiObject?.data?.data);
+            setMaxCoinValueAddress(address);
+        }
+    }, [suiObject?.data?.data]);
 
-    const handleSubmit = (values:any) => {
-        createCampaignInSUI(values)
+    const handleSubmit = (values: any) => {
+        createCampaignInSUI(values);
     }
-    
-    return(
+
+    const getCampaignDetails = (formValues: any) => {
+        const { companyName, category, originalUrl, campaignBudget, cpc,endDate,description } = formValues;
+        const initialCampaignDetails = {
+            imageSrc: imageUrl || "/journey.png",
+            label: category || 'Category',
+            clicks: 0,
+            title: companyName || 'Company Name',
+            daysLeft: getTimeLeft(endDate) || 0,
+            costPerClick: parseInt(cpc || '0'),
+            currentPrice: 0,
+            totalPrice: parseInt(campaignBudget || '0'),
+            likes: 0,
+            dislikes: 0,
+            startDate: moment().format('YYYY-MM-DD'),
+            endDate: endDate,
+            walletAddress: null,
+            description: description || 'Enter your Description here...',
+            url: originalUrl,
+            campaignInfoAddress: '',
+            togglePopUp: () => {},
+            popUp: false
+        };
+        setCampaignDetails(initialCampaignDetails);
+    }
+
+    useEffect(() => {
+        getCampaignDetails(formValues)
+    }, [formValues, imageUrl]);
+
+    return (
         <>
             <Formik
-            initialValues={createCampaignInitialValues}
-            validate={values => {
-                const errors = {} as any;
-                if (!values.companyName) {
-                    errors.companyName = 'Required';
-                }
-                return errors;
-            }}
-            onSubmit={(values, { setSubmitting }) => {
-                handleSubmit(values)
-                setSubmitting(false);
-            }}
+                initialValues={createCampaignInitialValues}
+                validate={values => {
+                    const errors = {} as any;
+                    if (!values.companyName) {
+                        errors.companyName = 'Required';
+                    }
+                    return errors;
+                }}
+                onSubmit={(values, { setSubmitting }) => {
+                    setFormValues(values);
+                    handleSubmit(values);
+                    setSubmitting(false);
+                }}
             >
-            {({
-                values,
-                errors,
-                touched,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                isSubmitting,
-            }: any) => (
-                <form onSubmit={handleSubmit}>
-                    <Toaster />
-                    {createCampaignInputFields.map((field, index) => (
-                        <article key={`formik-${index}`}>
-                            {field.type=='image' ?
-                                <section>
-                                    <CustomImageUploader
-                                        image={imageUrl}
-                                        handleImage={handleImage}
-                                        backgroundColor="white"
-                                        placeholder={
-                                            <div className='uploader-container'>
-                                                <img src={'/uploader.png'} alt={'uploader-icon'} />
-                                                {field.placeholder}
-                                            </div>
-                                        }
-                                    />
-                                </section>
-                            : <OvalInputBox
-                                placeholder={field.placeholder}
-                                name={field.name}
-                                handleChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values[field.name]}
-                                endIcon={<div className={ field.name === 'campaignBudget' ? 'currency' : '' } dangerouslySetInnerHTML={{__html: field.endIcon as any}}></div>}
-                                type={field.type}
-                            />}
-                            {errors[field.name] && touched[field.name] && errors[field.name]}
-                        </article>
-                    ))}
-                    <CustomButton color="blue" title="Create" width="203px" height="50px" type="submit" disabled={isSubmitting} />
-                    {transactionFinshed && 
-                    <div>
-                        <p>Transaction Successfully Comepleted </p>
-                        <p>Please check assets section in your wallet for receipt ↗️ ⤴</p>
-                        <p>To see updated details navigate to campaigns section</p>
-                    </div>}
-                </form>
-                )}
-                
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                }: any) => {
+                    //todo - refactor
+                    useEffect(() => {
+                        setFormValues(values);
+                    }, [values]);
+
+                    return (
+                        <form onSubmit={handleSubmit}>
+                            <Toaster />
+                            {createCampaignInputFields.map((field, index) => (
+                                <article key={`formik-${index}`}>
+                                    {field.type == 'image' ?
+                                        <section>
+                                            <CustomImageUploader
+                                                image={imageUrl}
+                                                handleImage={handleImage}
+                                                backgroundColor="white"
+                                                placeholder={
+                                                    <div className='uploader-container'>
+                                                        <img src={'/uploader.png'} alt={'uploader-icon'} />
+                                                        {field.placeholder}
+                                                    </div>
+                                                }
+                                            />
+                                        </section>
+                                        : <OvalInputBox
+                                            placeholder={field.placeholder}
+                                            name={field.name}
+                                            handleChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values[field.name]}
+                                            endIcon={<div className={field.name === 'campaignBudget' ? 'currency' : ''} dangerouslySetInnerHTML={{ __html: field.endIcon as any }}></div>}
+                                            type={field.type}
+                                        />}
+                                    {errors[field.name] && touched[field.name] && errors[field.name]}
+                                </article>
+                            ))}
+                            <CustomButton color="blue" title="Create" width="203px" height="50px" type="submit" disabled={isSubmitting} />
+                            {transactionFinished &&
+                                <div>
+                                    <p>Transaction Successfully Completed</p>
+                                    <p>Please check assets section in your wallet for receipt ↗️ ⤴</p>
+                                    <p>To see updated details navigate to campaigns section</p>
+                                </div>}
+                        </form>
+                    );
+                }}
             </Formik>
-            </>
+        </>
     )
 }
 

@@ -1,18 +1,29 @@
 import { ConnectButton } from '@mysten/dapp-kit';
 import './Navbar.css';
 
-export default function Navbar() {
+export default function Navbar({ color, page, textColor }: { color: string, page: string, textColor: string }) {
     return (
-        <nav className="navbar bg-dark py-4">
+        <nav className={`navbar py-4 bg-${color}`}>
             <div className="container flex align-center main-container">
                 <div className="nav-links flex gap-16 mobdisplay-none">
-                    <a href="#" className="hover:text-blue font-weight-400 font-size-16 text-white">Become an Affiliate</a>
-                    <a href="#" className="hover:text-blue font-weight-400 font-size-16 text-white">Start a campaign</a>
-                    <a href="#" className="hover:text-blue font-weight-400 font-size-16 text-white">About</a>
+                    {page === 'campaign' && (
+                        <a href="#" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>My Campaign</a>
+                    )}
+                    <a href="#" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Become an Affiliate</a>
+                    <a href="#" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Start a campaign</a>
+                    <a href="#" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>About</a>
                 </div>
                 <div className="nav-actions flex gap-16 align-center">
-                    <a href="#" className="hover:text-blue font-weight-400 font-size-16 text-white">My earnings</a>
-                    <ConnectButton />
+                    <a href="#" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>My earnings</a>
+                    {page === 'navbar' && (<ConnectButton />)}
+                    {page === 'campaign' && (
+                        <div className="profile-pic flex align-center">
+                            <img src="/profile.png" alt="profile" className="profile-image" />
+                            <div className="profile-info">
+                                <ConnectButton />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </nav>
