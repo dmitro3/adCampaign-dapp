@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchCampaigns } from "../../common/services/api.services";
 import CampaignCard from '../campaigncard/CampaignCard';
+import Navbar from '../Navbar/Navbar';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 import Filters from '../filters/Filters';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
-import SearchBar from '../searchbar/SearchBar';
 import Pagination from '../pagination/Pagination';
 import { mockData } from '../../common/constants';
 import './CampaignList.scss';
@@ -32,44 +32,51 @@ const formatDate = (epoch: number) => {
     const date = new Date(epoch * 1000);
     return date.toLocaleDateString('en-US');
 };
+
 const ITEMS_PER_PAGE = 20;
 
 export default function CampaignList() {
+    const account  = useCurrentAccount() as {address: string};
     const [data, setData] = useState([]);
-
-    const getData = async () => {
-        const response = await fetchCampaigns();
-        const transformedData = response.map((campaign: any) => ({
-            imageSrc: campaign.banner,
-            label: campaign.category,
-            clicks: 0,
-            title: campaign.companyName,
-            daysLeft: Math.ceil((campaign.endDate - campaign.startDate) / (60 * 60 * 24)),
-            costPerClick: campaign.cpc/1e9,
-            currentPrice: 0,
-            totalPrice: campaign.campaignBudget / 1e9,
-            likes: 0,
-            dislikes: 0,
-            startDate: formatDate(campaign.startDate),
-            endDate: campaign.endDate,
-            walletAddress: campaign.campaignWalletAddress,
-            description: campaign.description || 'No description available',
-            url: campaign.originalUrl,
-            campaignInfoAddress: campaign.campaignInfoAddress,
-        }));
-        setData(transformedData);
-    };
-
-    useEffect(() => {
-        getData();
-    }, []);
+    const [activePopUp, setActivePopUp] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-    useEffect(() => {
-        setCampaigns(data);
-    }, [data]);
     const [sortOption, setSortOption] = useState<string>('timeLeft');
     const [filterOption, setFilterOption] = useState<string>('all');
     const [currentPage, setCurrentPage] = useState<number>(1);
+
+    useEffect(() => {
+        const getData = async () => {
+            const response = await fetchCampaigns();
+            const transformedData = response.map((campaign: any) => ({
+                imageSrc: campaign.banner,
+                category: campaign.category,
+                clicks: 0,
+                title: campaign.companyName,
+                daysLeft: Math.ceil((campaign.endDate - campaign.startDate) / (60 * 60 * 24)),
+                costPerClick: campaign.cpc/1e9,
+                currentPrice: 0,
+                totalPrice: campaign.campaignBudget / 1e9,
+                likes: 0,
+                dislikes: 0,
+                startDate: formatDate(campaign.startDate),
+                endDate: campaign.endDate,
+                walletAddress: campaign.campaignWalletAddress,
+                description: campaign.description || 'No description available',
+                url: campaign.originalUrl,
+                campaignInfoAddress: campaign.campaignInfoAddress,
+            }));
+            setData(transformedData);
+        };
+        getData();
+    }, []);
+
+    useEffect(() => {
+        setCampaigns(data);
+    }, [data]);
+
+    const togglePopUp = (campaignId: string) => {
+        setActivePopUp(prevPopUp => prevPopUp === campaignId ? null : campaignId);
+    };
 
     const handleSort = (option: string) => {
         setSortOption(option);
@@ -89,7 +96,7 @@ export default function CampaignList() {
         }
         setCampaigns(sortedCampaigns);
     };
-    // todo: implement filter
+
     const handleFilter = (option: string) => {
         setFilterOption(option);
         let filteredCampaigns;
@@ -98,7 +105,6 @@ export default function CampaignList() {
         } else {
             filteredCampaigns = mockData.filter(campaign => campaign.label.toLowerCase() === option.toLowerCase());
         }
-        // setCampaigns(filteredCampaigns);
         setCurrentPage(1);
     };
 
@@ -115,9 +121,8 @@ export default function CampaignList() {
 
     return (
         <div className='campaign-list-container'>
-
         <div className='campaignlistcontainer bg-white text-black'>
-            <SearchBar />
+            <Navbar page='campaign' color='white' textColor='black'/>
             <div className='card-container'>
                 <div className='mt-68 flex justify-space-around align-center'>
                     <div className='campaign-start-text '>
@@ -141,12 +146,13 @@ export default function CampaignList() {
                         <Filters onSort={handleSort} onFilter={handleFilter} />
                     </div>
                 </div>
-                <div className="campaign-list">
+                <div className="campaign-list" >
                     {paginatedCampaigns.map((campaign, index) => (
                         <CampaignCard
                             key={index}
+                            width={'card-width-392'}
                             imageSrc={campaign.imageSrc}
-                            label={campaign.label}
+                            category={campaign.label}
                             clicks={campaign.clicks}
                             title={campaign.title}
                             daysLeft={campaign.daysLeft}
@@ -161,6 +167,9 @@ export default function CampaignList() {
                             description={campaign.description}
                             url={campaign.url}
                             campaignInfoAddress={campaign.campaignInfoAddress}
+                            togglePopUp={() => togglePopUp(campaign.title)}
+                            popUp={activePopUp === campaign.title}
+                            viewMoreToggle={false}
                         />
                     ))}
                 </div>

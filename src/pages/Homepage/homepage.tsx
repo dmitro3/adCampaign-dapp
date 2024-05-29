@@ -1,18 +1,18 @@
 import Navbar from "../../components/Navbar/Navbar";
-import TopSection from "../../components/TopSection/TopSection";
-import MidSection from "../../components/MidSection/MidSection";
-import LastSection from "../../components/LastSection/Lastsection";
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../components/footer/footer";
+import Lastsection from "../../components/lastsection/Lastsection";
+import MidSection from "../../components/midsection/MidSection";
+import TopSection from "../../components/topsection/TopSection";
 
 
 export default function Homepage() {
   return (
     <>
-    <Navbar />
-    <TopSection />
-    <MidSection />
-    <LastSection />
-    <Footer />
+      <Navbar color="dark" page="navbar" textColor="white"/>
+      <TopSection />
+      <MidSection />
+      <Lastsection />
+      <Footer />
     </>
   );
 }

@@ -1,22 +1,26 @@
-import { useState } from 'react';
+import React, { useState} from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { useSignAndExecuteTransactionBlock,useCurrentAccount } from "@mysten/dapp-kit";
+import { useSignAndExecuteTransactionBlock, useCurrentAccount } from "@mysten/dapp-kit";
 import { createAffiliate, fetchAffiliateProfile } from "../../common/services/api.services";
 import { generateCampaignUrl } from "../../common/helpers";
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from "../../common/config";
 import AddressURL from '../AddressURL/AddressURL';
+import AddMoneyPopUp from '../AddMoneyPopUp/AddMoneyPopUp';
 import useCoinAddress from "../../common/customHooks/coinAddress/useCoinAddress";
-import CardStats from '../cardstats/CardStats';
+import MetricsOverview from '../MetricsOverview/MetricsOverview';
 import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
 import CardReaction from '../cardreaction/CardReaction';
 import CustomButton from '../CustomButton/CustomButton';
+import { addSupporters } from '../../common/services/api.services';
 import './CampaignCard.css';
+
 
 interface CampaignCardProps {
     imageSrc: string;
-    label: string;
+    category: string;
     clicks: number;
     title: string;
     daysLeft: number;
@@ -31,28 +35,37 @@ interface CampaignCardProps {
     description: string;
     url: string;
     campaignInfoAddress: string;
+    togglePopUp: () => void;
+    popUp: boolean;
+    viewMoreToggle?:boolean;
+    width?: string,
 }
 
-const CampaignCard: React.FC<CampaignCardProps> = ({
-    imageSrc,
-    label,
-    clicks,
-    title,
-    daysLeft,
-    costPerClick,
-    currentPrice,
-    totalPrice,
-    likes,
-    dislikes,
-    endDate,
-    walletAddress,
-    description,
-    url,
-    campaignInfoAddress
-}) => {
-    const account  = useCurrentAccount() as {address: string};
+const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
+    const {
+        imageSrc,
+        category,
+        clicks,
+        title,
+        daysLeft,
+        costPerClick,
+        currentPrice,
+        totalPrice,
+        likes,
+        dislikes,
+        endDate,
+        walletAddress,
+        description,
+        url,
+        campaignInfoAddress,
+        togglePopUp,
+        popUp,
+        width,
+        viewMoreToggle = true,
+    } = campaign;
+    const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
-
+    const account = useCurrentAccount() as { address: string };
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [campaignUrl, setCampaignUrl] = useState('');
@@ -61,18 +74,31 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         coins: '',
         message: ''
     });
-    const [ViewMore, setViewMore] = useState(false);
+    const [viewMore, setViewMore] = useState(viewMoreToggle );
+   
 
+    const handleInputCoins = (e: any) => {
+        setAddCoinPayload({
+            ...addCoinPayload,
+            coins: e.target.value,
+        });
+    };
+    const handleInputMessage = (e: any) => {
+        setAddCoinPayload({
+            ...addCoinPayload,
+            message: e.target.value,
+        });
+    }
 
     const toggleViewMore = () => {
-        setViewMore(!ViewMore);
+        setViewMore(!viewMore);
     };
 
 
     const handleAddCoins = () => {
         setLoading(true);
         setError(false);
-        toast.loading('Adding coins...');
+        toast.loading('Adding...');
 
         return new Promise<void>((resolve, reject) => {
             const txb = new TransactionBlock();
@@ -108,6 +134,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                         onSuccess: async (tx: any) => {
                             setLoading(false);
                             toast.dismiss();
+                            await addSupporters({
+                                campaignConfig: CAMPAIGN_CONFIG,
+                                campaignInfoAddress: campaignInfoAddress,
+                                message: addCoinPayload.message,
+                                coins: addCoinPayload.coins,
+                                maxCoinValueAddress: maxCoinValueAddress,
+                                walletAddress: account.address,
+                                transactionDigest: tx?.effects?.transactionDigest
+                            });
                             toast.success('Coins added successfully!');
                             resolve();
                         },
@@ -118,6 +153,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                             toast.error('Error in transaction.');
                             reject(error);
                             console.error('Error in transaction', error);
+                        },
+                        onSettled: () => {
+                            if(togglePopUp){
+                                togglePopUp()
+                            }
+                           
                         }
                     }
                 );
@@ -154,7 +195,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         }
     };
 
-    const handleSubmit = async () => {
+    const handleAffiliateCreationURL = async () => {
         try {
             setLoading(true);
             setError(false);
@@ -164,7 +205,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             const response = await createAffiliate({
                 originalUrl: url,
                 campaignUrl,
-                walletAddress: account.address,
+                cpc: costPerClick,
+                walletAddress,
                 campaignInfoAddress: campaignInfoAddress,
                 profileAddress: affiliateProfile,
                 expirationTime: endDate,
@@ -183,43 +225,60 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     };
 
     return (
-        <div className={`card bg-white ff-tertiary ${ViewMore ? 'View-more' : ''}`}>
+        <div className={`card bg-white ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
             <Toaster />
-            <div className="card-image">
+            <div className="card-image" onClick={()=>navigate(`/campaign/${campaignInfoAddress}`)}>
                 <img src={imageSrc} alt="Card Image" />
                 <div className="card-label bg-white flex ff-tertiary font-color-yellow-orange font-weight-700 justify-center">
-                    {label}
+                    {category}
                 </div>
                 <div className="card-reactions ff-tertiary flex align-center">
-                    <CardReaction src="./like.png" alt="Like Image" count={likes} />
-                    <CardReaction src="./dislike.png" alt="Dislike Image" count={dislikes} />
+                    <CardReaction src="/like.png" alt="Like Image" count={likes} />
+                    <CardReaction src="/dislike.png" alt="Dislike Image" count={dislikes} />
                 </div>
             </div>
             <div className="card-content bg-white">
                 <div className='flex'>
-                    <p className='add-money bg-white flex font-size-14'>
-                        <CustomButton title="$ Add Money" onClick={handleAddCoins} color='#4880FF' backgroundColor='white' className='add-money-btn' />
+                    <p className='add-money bg-white flex font-size-14 '>
+                        <CustomButton title="$ Add Money" color='#4880FF' onClick={togglePopUp} backgroundColor='white' className='add-money-button' />
                     </p>
-                    <CardStats src='./star.png' clicks={clicks} />
+                    <MetricsOverview>
+                        <img src={'/star.png'} alt={'star'} />
+                        <span>{clicks} Clicks</span>
+                    </MetricsOverview>
                 </div>
                 <div className='titleStyles'>
                     <h3 className='ff-tertiary font-weight-800'>{title}</h3>
                     <AddressURL address={campaignInfoAddress}  />
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
-                    <CardIconLabel src="./duration.png" text={`${daysLeft} days left`} />
-                    <CardIconLabel src="./user.png" text={`$${costPerClick} per click`} />
+                    <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft} days left`}</span>} alt="duration" />
+                    <CardIconLabel src="/user.png" text={<span>{`$${costPerClick} per click`}</span>} alt="user"/>
                 </div>
-                <CardPrice onClick={handleSubmit} currentPrice={currentPrice} totalPrice={totalPrice} />
+                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currentPrice} totalPrice={totalPrice} />
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                     { campaignUrl && <a href={campaignUrl} target="_blank" rel="noopener noreferrer">Campaign URL</a>}
                 </div>
-                {ViewMore && (
-                     <p>Description: {description}</p>
+                { viewMore && (
+                     <p className='text-gray'>Description: {description}</p>
                 )}
-                <CustomButton border="none" backgroundColor="white" color='black' title={ViewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
+                <CustomButton border="none" backgroundColor="white" color='black'  extraStyles='text-gray' title={viewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
             </div>
+            {popUp && (
+                    <div className="popup-wrapper">
+                        <AddMoneyPopUp
+                            imageSrc="/money.png"
+                            titleText="Add Money for the Campaign"
+                            onClick={handleAddCoins}
+                            handleInputCoins={handleInputCoins}
+                            handleInputMessage={handleInputMessage}
+                            moneyAmount={addCoinPayload.coins}
+                            moneyMessage={addCoinPayload.message}
+                            handleclose={togglePopUp}
+                        />
+                    </div>
+            )}
         </div>
     );
 }

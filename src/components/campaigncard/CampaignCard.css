@@ -11,8 +11,7 @@
 }
 
 .card {
-  width: 392px;
-  min-height: 444px;
+  min-height: 490px;
   border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -23,37 +22,30 @@
 width: min-content !important;
 }
 
-.bg-white {
-  background-color: white;
+.campaign-card-container {
+  position: relative;
 }
 
-.flex {
-  display: flex;
+.popup-wrapper {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
 }
 
-.ff-tertiary {
-  font-family: 'YourFontFamily', sans-serif; /* Replace with your font family */
-}
-
-.font-color-yellow-orange {
-  color: #FFA500; /* Adjust to your specific color */
-}
-
-.font-weight-700 {
-  font-weight: 700;
-}
-
-.justify-center {
-  justify-content: center;
+.card {
+  position: relative;
+  z-index: 1;
 }
 
 .add-money{
+  cursor: pointer;
   width: 124px;
   justify-content: end;
   margin-bottom: 10px;
   position: absolute;
   bottom: 90%;
-  margin-left: 3%;
   border-radius: 50px;
   border: 1px solid #E4E6E8;
   padding: 6px 3px ;
@@ -108,7 +100,6 @@ width: min-content !important;
   position: absolute;
   bottom: 90%;
   margin-left: 14%;
-
 }
 
 .card-content h3 {
@@ -119,7 +110,6 @@ width: min-content !important;
 
 .card-meta {
   margin-bottom: 10px;
-  width: 80%;
 }
 
 .button-white{
@@ -129,7 +119,7 @@ width: min-content !important;
 .no-of-clicks{
   border-radius: 50px;
   width: 40%;
-  margin-right: 10%;
+  margin-right: 20px;
 }
 
 .titleStyles{

@@ -5,6 +5,10 @@
         @include grid-container-cards(3, 50px, 0.2fr);
         
     }
+
+    .card-width-392{
+        width: 392px;
+    }
     
     @media screen and (max-width: 1337px) {
         .campaign-list {

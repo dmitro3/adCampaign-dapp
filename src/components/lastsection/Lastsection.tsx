@@ -36,7 +36,7 @@ const Lastsection = () => {
                         <InfoBadge type='img'/>
                     </ImageTextGrid>
                     <section className="lastsec text-center my-16">
-                        <h2 className="font-size-48 font-weight-700 font-secondary">Start your campaign today</h2>
+                        <h2 className="font-size-48 font-weight-700 font-secondary" >Start your campaign today</h2>
                         <p className="font-size-16 font-weight-400 ff-primary last-section-paragraph">Consistent quality and experience across all platforms and devices.</p>
                         <div className="flex justify-center gap-16 last-section-buttons">
                             <CustomButton title="Get Started" color="black" backgroundColor="white"></CustomButton>
