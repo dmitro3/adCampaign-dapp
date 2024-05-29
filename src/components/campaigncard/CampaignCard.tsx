@@ -35,6 +35,7 @@ interface CampaignCardProps {
     campaignInfoAddress: string;
     togglePopUp: () => void;
     popUp: boolean;
+    viewMoreToggle:boolean;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = ({
@@ -55,7 +56,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     campaignInfoAddress,
     togglePopUp,
     popUp,
-
+    viewMoreToggle = true,
 }) => {
     const account = useCurrentAccount() as { address: string };
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
@@ -68,7 +69,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         coins: '',
         message: ''
     });
-    const [viewMore, setViewMore] = useState(false);
+    const [viewMore, setViewMore] = useState(viewMoreToggle );
    
 
     const handleInputCoins = (e: any) => {
@@ -217,11 +218,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                     <div className="card-image">
                         <img src={imageSrc} alt="Card Image" />
                         <div className="card-label bg-white flex ff-tertiary font-color-yellow-orange font-weight-700 justify-center">
-                            {label}
+                            {label }
                         </div>
                         <div className="card-reactions ff-tertiary flex align-center">
-                            <CardReaction src="./like.png" alt="Like Image" count={likes} />
-                            <CardReaction src="./dislike.png" alt="Dislike Image" count={dislikes} />
+                            <CardReaction src="/like.png" alt="Like Image" count={likes} />
+                            <CardReaction src="/dislike.png" alt="Dislike Image" count={dislikes} />
                         </div>
                     </div>
                     <div className="card-content bg-white">
@@ -229,15 +230,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                             <p className='add-money bg-white flex font-size-14'>
                                 <CustomButton title="$ Add Money" onClick={togglePopUp} color='#4880FF' backgroundColor='white' className='add-money-btn' />
                             </p>
-                            <MetricsOverview src='./star.png' clicks={clicks} />
+                            <MetricsOverview src='/star.png' clicks={clicks} />
                         </div>
                         <div className='titleStyles'>
                             <h3 className='ff-tertiary font-weight-800'>{title}</h3>
                             <AddressURL address={campaignInfoAddress}  />
                         </div>
                         <div className="card-meta flex justify-between font-size-14 text-gray">
-                            <CardIconLabel src="./duration.png" text={`${daysLeft} days left`} />
-                            <CardIconLabel src="./user.png" text={`$${costPerClick} per click`} />
+                            <CardIconLabel src="/duration.png" text={`${daysLeft}`} />
+                            <CardIconLabel src="/user.png" text={`$${costPerClick} per click`} />
                         </div>
                         <CardPrice onClick={handleSubmit} currentPrice={currentPrice} totalPrice={totalPrice} />
                         <div className="card-extra-info font-size-14 text-gray">

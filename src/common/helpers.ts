@@ -31,6 +31,10 @@ export const getMaxBalanceObjectAddress = (balanceArr:any[]) => {
     return highestBalanaceAddress
 }
 
-export const shortnerAddress = (address:string) : string => {
-  return address.slice(0,5) +'...'+ address.slice(-5)
-}
+export const shortnerAddress = (address?: string): string => {
+  if (address) {
+      return address.slice(0, 5) + '...' + address.slice(-5);
+  } else {
+      return '';
+  }
+};
