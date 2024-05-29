@@ -14,8 +14,10 @@ import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
 import CardReaction from '../cardreaction/CardReaction';
 import CustomButton from '../CustomButton/CustomButton';
+import ShareLink from '../ShareLink/ShareLink';
 import { addSupporters } from '../../common/services/api.services';
 import './CampaignCard.css';
+import { set } from '@cloudinary/url-gen/actions/variable';
 
 
 interface CampaignCardProps {
@@ -75,7 +77,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         message: ''
     });
     const [viewMore, setViewMore] = useState(viewMoreToggle );
-   
+    const [shareLink, setShareLink] = useState(true);
 
     const handleInputCoins = (e: any) => {
         setAddCoinPayload({
@@ -92,6 +94,9 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
 
     const toggleViewMore = () => {
         setViewMore(!viewMore);
+    };
+    const toggleShareLink = () => {
+        setCampaignUrl('');
     };
 
 
@@ -223,7 +228,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             console.error('Error in handleSubmit', error);
         }
     };
-
+    const Url = "https://" + url;
     return (
         <div className={`card bg-white ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
             <Toaster />
@@ -257,8 +262,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 </div>
                 <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currentPrice} totalPrice={totalPrice} />
                 <div className="card-extra-info font-size-14 text-gray">
-                    <a href={url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
-                    { campaignUrl && <a href={campaignUrl} target="_blank" rel="noopener noreferrer">Campaign URL</a>}
+                    <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                 </div>
                 { viewMore && (
                      <p className='text-gray'>Description: {description}</p>
@@ -278,6 +282,11 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                             handleclose={togglePopUp}
                         />
                     </div>
+            )}
+            {campaignUrl && (
+                <div className='popup-wrapper'>
+                    <ShareLink url={campaignUrl} handleClose={toggleShareLink} />
+                </div>
             )}
         </div>
     );

@@ -4,7 +4,7 @@ import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, 
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
 import CardTable from "../../components/CardTable/CardTable.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
-import SearchBar from "../../components/searchbar/SearchBar";
+import Navbar from "../../components/Navbar/Navbar.tsx";
 import './CampaignDetails.scss'
 
 const CampaignDetails = () => {
@@ -56,7 +56,7 @@ const CampaignDetails = () => {
     };
     return(
         <main className="campaign-details-container">
-        <SearchBar />
+           <Navbar page='campaign' color='white' textColor='black'/>
         {campaign && <section className="campaign-details-section"> 
             <p className="title ff-tertiary text-transform-capitalize"> {campaign.campaignName || campaign.companyName} Ad Campaign</p>
             <section className="grid-container">

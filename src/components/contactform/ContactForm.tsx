@@ -1,16 +1,21 @@
-import CustomButton from "../CustomButton/CustomButton";
-const ContactForm = () => {
+import React from 'react';
+import './ContactForm.css';
+
+const ContactForm: React.FC = () => {
     return (
         <div className="form-container my-2">
-            <form>
-                <p className='ff-secondary text-black font-weight-600 font-size-18' >Get in touch</p>
-                <input type="text" placeholder="Name" className="m-2 font-weight-400 font-size-16 ff-primary" />
-                <input type="email" placeholder="Email" className="m-2 font-weight-400 font-size-16 ff-primary" />
-                <textarea placeholder="Message" className="m-2 font-weight-400 font-size-16 ff-primary"></textarea>
-                <CustomButton title="Send" color="white" backgroundColor="#006AFF" width="100px" />
-            </form>
+            <p className='ff-secondary text-black font-weight-600 font-size-18'>Get in touch</p>
+            <iframe 
+                src="https://forms.gle/8BQAWEait5n8iHYc9" 
+                width="300px" 
+                height="500px"  
+                style={{ border: 'none', overflow: 'auto' }}  
+                title="Contact Form"
+            >
+                Loading…
+            </iframe>
         </div>
     );
-} 
+}
 
 export default ContactForm;
