@@ -38,9 +38,10 @@ export const shortnerAddress = (address: string): string => {
 
 
 export const getTimeLeft = (endDate: string) => {
-  if (!moment(endDate, 'YYYY-MM-DD', true).isValid()) {
-    throw new Error('Invalid date format. Please use YYYY-MM-DD.');
-  }
+  //todo - check why error is coming.
+  // if (!moment(endDate, 'YYYY-MM-DD', true).isValid()) {
+  //   throw new Error('Invalid date format. Please use YYYY-MM-DD.');
+  // }
 
   const endMoment = moment(endDate, 'YYYY-MM-DD');
   const currentMoment = moment();

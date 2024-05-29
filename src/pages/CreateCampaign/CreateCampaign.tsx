@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import CampaignCard from '../../components/campaigncard/CampaignCard';
 import CreateCampaignFormik from '../../components/CreateCampaignForm/CreateCampaignForm';
 import SearchBar from '../../components/searchbar/SearchBar';
-import CampaignCard from '../../components/CampaignCard/CampaignCard';
 import './CreateCampaign.scss'
 
 const CreateCampaign = () => {

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { fetchCampaigns } from "../../common/services/api.services";
 import CampaignCard from '../campaigncard/CampaignCard';
+import Navbar from '../Navbar/Navbar';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import Filters from '../filters/Filters';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
-import Navbar from '../Navbar/navbar';
 import Pagination from '../pagination/Pagination';
 import { mockData } from '../../common/constants';
 import './CampaignList.scss';

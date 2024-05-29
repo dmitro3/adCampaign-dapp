@@ -4,7 +4,6 @@ import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, 
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
 import CardTable from "../../components/CardTable/CardTable.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
-import { calculateDaysLeft } from "../../common/helpers.ts";
 import SearchBar from "../../components/searchbar/SearchBar";
 import './CampaignDetails.scss'
 
@@ -70,7 +69,7 @@ const CampaignDetails = () => {
                         category={campaign.category}
                         clicks={(campaign?.validClicks + campaign?.invalidClicks) || 0}
                         title={campaign.companyName}
-                        daysLeft={calculateDaysLeft({endDate: campaign.endDate, startDate: campaign.startDate })}
+                        daysLeft={campaign.endDate - campaign.startDate}
                         costPerClick={campaign.cpc/1e9}
                         currentPrice={0}
                         totalPrice={campaign.campaignBudget / 1e9}

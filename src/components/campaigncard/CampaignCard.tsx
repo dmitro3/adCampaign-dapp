@@ -37,7 +37,7 @@ interface CampaignCardProps {
     campaignInfoAddress: string;
     togglePopUp: () => void;
     popUp: boolean;
-    viewMoreToggle:boolean;
+    viewMoreToggle?:boolean;
     width?: string,
 }
 
