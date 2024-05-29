@@ -49,7 +49,7 @@ export default function CampaignList() {
             const response = await fetchCampaigns();
             const transformedData = response.map((campaign: any) => ({
                 imageSrc: campaign.banner,
-                label: campaign.category,
+                category: campaign.category,
                 clicks: 0,
                 title: campaign.companyName,
                 daysLeft: Math.ceil((campaign.endDate - campaign.startDate) / (60 * 60 * 24)),
@@ -121,7 +121,6 @@ export default function CampaignList() {
 
     return (
         <div className='campaign-list-container'>
-
         <div className='campaignlistcontainer bg-white text-black'>
             <SearchBar />
             <div className='card-container'>
@@ -147,13 +146,13 @@ export default function CampaignList() {
                         <Filters onSort={handleSort} onFilter={handleFilter} />
                     </div>
                 </div>
-                <div className="campaign-list">
+                <div className="campaign-list" >
                     {paginatedCampaigns.map((campaign, index) => (
                         <CampaignCard
                             key={index}
                             width={'card-width-392'}
                             imageSrc={campaign.imageSrc}
-                            label={campaign.label}
+                            category={campaign.label}
                             clicks={campaign.clicks}
                             title={campaign.title}
                             daysLeft={campaign.daysLeft}

@@ -1,19 +1,19 @@
 import Card from "../Card/Card"
 import CardIconLabel from "../CardIconLabel/CardIconLabel"
 
-const CampaignDetailsCardWrapper = () => {
+const CampaignDetailsCardWrapper = ({totalClicks, totalAffiliates}: {totalClicks: number, totalAffiliates: number} ) => {
     const metrics = [
         {
             alt: 'clickicon',
             imageUrl: '/clickicon.png',
             title: 'Total Clicks',
-            value: '40,689'
+            value: totalClicks
         },
         {
             alt: 'affiliateicon',
             imageUrl: '/affiliateicon.png',
             title: 'Total Affiliates',
-            value: '10, 293'
+            value: totalAffiliates
         }
     ]
     return(
@@ -36,7 +36,7 @@ const CampaignDetailsCardWrapper = () => {
                     </Card>
                 ))
             }
-    </div>
+        </div>
     )
 }
 

@@ -13,7 +13,7 @@ function App() {
     <Routes>
         <Route path="/" index element={<Homepage/>} />
         <Route path="/campaigns" index element={<CampaignList/>} />
-        <Route path="/details" index element={<CampaignDetails />} />
+        <Route path="/campaign/:id" index element={<CampaignDetails />} />
         <Route path="/legacy/campaigns" index element={<Campaigns/>} />
         <Route path="/campaign/create" index element={<CreateCampaign/>} />
         <Route path="/legacy/campaign/create" index element={<LegacyCreateCampaign />} />

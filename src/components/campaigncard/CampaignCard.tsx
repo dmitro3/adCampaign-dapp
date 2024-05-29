@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { useSignAndExecuteTransactionBlock, useCurrentAccount } from "@mysten/dapp-kit";
 import { createAffiliate, fetchAffiliateProfile } from "../../common/services/api.services";
@@ -16,9 +17,10 @@ import CustomButton from '../CustomButton/CustomButton';
 import { addSupporters } from '../../common/services/api.services';
 import './CampaignCard.css';
 
+
 interface CampaignCardProps {
     imageSrc: string;
-    label: string;
+    category: string;
     clicks: number;
     title: string;
     daysLeft: number;
@@ -38,26 +40,28 @@ interface CampaignCardProps {
     width?: string,
 }
 
-const CampaignCard: React.FC<CampaignCardProps> = ({
-    imageSrc,
-    label,
-    clicks,
-    title,
-    daysLeft,
-    costPerClick,
-    currentPrice,
-    totalPrice,
-    likes,
-    dislikes,
-    endDate,
-    walletAddress,
-    description,
-    url,
-    campaignInfoAddress,
-    togglePopUp,
-    popUp,
-    width,
-}) => {
+const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
+    const {
+        imageSrc,
+        category,
+        clicks,
+        title,
+        daysLeft,
+        costPerClick,
+        currentPrice,
+        totalPrice,
+        likes,
+        dislikes,
+        endDate,
+        walletAddress,
+        description,
+        url,
+        campaignInfoAddress,
+        togglePopUp,
+        popUp,
+        width,
+    } = campaign;
+    const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
     const account = useCurrentAccount() as { address: string };
     const [loading, setLoading] = useState(false);
@@ -148,7 +152,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                             console.error('Error in transaction', error);
                         },
                         onSettled: () => {
-                            togglePopUp()
+                            if(togglePopUp){
+                                togglePopUp()
+                            }
+                           
                         }
                     }
                 );
@@ -195,6 +202,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             const response = await createAffiliate({
                 originalUrl: url,
                 campaignUrl,
+                cpc: costPerClick,
                 walletAddress,
                 campaignInfoAddress: campaignInfoAddress,
                 profileAddress: affiliateProfile,
@@ -214,16 +222,16 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     };
 
     return (
-        <div className={`card bg-white ff-tertiary ${width} ${viewMore ? 'View-more' : ''}`}>
+        <div className={`card bg-white ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
             <Toaster />
-            <div className="card-image">
+            <div className="card-image" onClick={()=>navigate(`/campaign/${campaignInfoAddress}`)}>
                 <img src={imageSrc} alt="Card Image" />
                 <div className="card-label bg-white flex ff-tertiary font-color-yellow-orange font-weight-700 justify-center">
-                    {label}
+                    {category}
                 </div>
                 <div className="card-reactions ff-tertiary flex align-center">
-                    <CardReaction src="./like.png" alt="Like Image" count={likes} />
-                    <CardReaction src="./dislike.png" alt="Dislike Image" count={dislikes} />
+                    <CardReaction src="/like.png" alt="Like Image" count={likes} />
+                    <CardReaction src="/dislike.png" alt="Dislike Image" count={dislikes} />
                 </div>
             </div>
             <div className="card-content bg-white">
@@ -232,7 +240,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                         <CustomButton title="$ Add Money" color='#4880FF' onClick={togglePopUp} backgroundColor='white' className='add-money-button' />
                     </p>
                     <MetricsOverview>
-                        <img src={'./star.png'} alt={'star'} />
+                        <img src={'/star.png'} alt={'star'} />
                         <span>{clicks} Clicks</span>
                     </MetricsOverview>
                 </div>
@@ -241,8 +249,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                     <AddressURL address={campaignInfoAddress}  />
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
-                    <CardIconLabel src="./duration.png" text={<span>{ `${daysLeft} days left`}</span>} alt="duration" />
-                    <CardIconLabel src="./user.png" text={<span>{`$${costPerClick} per click`}</span>} alt="user"/>
+                    <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft} days left`}</span>} alt="duration" />
+                    <CardIconLabel src="/user.png" text={<span>{`$${costPerClick} per click`}</span>} alt="user"/>
                 </div>
                 <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currentPrice} totalPrice={totalPrice} />
                 <div className="card-extra-info font-size-14 text-gray">
@@ -257,7 +265,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             {popUp && (
                     <div className="popup-wrapper">
                         <AddMoneyPopUp
-                            imageSrc="./money.png"
+                            imageSrc="/money.png"
                             titleText="Add Money for the Campaign"
                             onClick={handleAddCoins}
                             handleInputCoins={handleInputCoins}

@@ -32,5 +32,9 @@ export const getMaxBalanceObjectAddress = (balanceArr:any[]) => {
 }
 
 export const shortnerAddress = (address:string) : string => {
-  return address.slice(0,5) +'...'+ address.slice(-5)
+  return address.slice(0,4) +'...'+ address.slice(-3)
+}
+
+export const calculateDaysLeft = ({endDate, startDate}: {endDate: number, startDate: number}) => {
+  return Math.ceil((endDate - startDate) / (60 * 60 * 24))
 }
