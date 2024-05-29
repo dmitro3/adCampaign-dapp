@@ -7,7 +7,7 @@ import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery
 import OvalInputBox from "../ovalInputBox/OvalInputBox";
 import CustomButton from '../CustomButton/CustomButton';
 import { createCampaign, uploadImage } from '../../common/services/api.services';
-import { getMaxBalanceObjectAddress } from '../../common/helpers';
+import { getMaxBalanceObjectAddress, getTimeLeft } from '../../common/helpers';
 import { CAMPAIGN_STATUS, createCampaignInitialValues, createCampaignInputFields } from "../../common/constants";
 import CustomImageUploader from '../CustomImageUploader/CustomImageUploader';
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID, CLOUDINARY_CLOUD_NAME, UPLOAD_PRESET } from '../../common/config';
@@ -84,7 +84,6 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                         });
                         toast.success("success")
                         setTransactionFinished(true)
-                        setCampaignDetails(newCampaignDetails);
                     },
                     onError: (error) => {
                         console.log('error--->', error)
@@ -117,33 +116,14 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
     const handleSubmit = (values: any) => {
         createCampaignInSUI(values);
     }
-    function getTimeLeft(endDate:any) {
-      let endMoment = moment(endDate, 'YYYY-MM-DD');
-      let currentDate = moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD');
-      let daysLeft = endMoment.diff(currentDate, 'days');
-      
-      if (daysLeft > 1) {
-          return  `${daysLeft} Days Left`;
-      } else if (daysLeft === 1) {
-          let hoursLeft = endMoment.diff(moment(), 'hours');
-          return ` ${hoursLeft} Hours left`;
-      } else {
-          let hoursLeft = endMoment.diff(moment(), 'hours');
-          if (hoursLeft >= 1) {
-              return `${hoursLeft} Hours left`;
-          } else {
-              let minutesLeft = endMoment.diff(moment(), 'minutes');
-              return ` ${minutesLeft || 0} Minutes left`;
-          }
-      }
-  }
-    useEffect(() => {
+
+    const getCampaignDetails = (formValues: any) => {
         const { companyName, category, originalUrl, campaignBudget, cpc,endDate,description } = formValues;
-        const updatedCampaignDetails = {
+        const initialCampaignDetails = {
             imageSrc: imageUrl || "/journey.png",
-            label: category || 'category',
+            label: category || 'Category',
             clicks: 0,
-            title: companyName || 'companyName',
+            title: companyName || 'Company Name',
             daysLeft: getTimeLeft(endDate) || 0,
             costPerClick: parseInt(cpc || '0'),
             currentPrice: 0,
@@ -153,13 +133,17 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
             startDate: moment().format('YYYY-MM-DD'),
             endDate: endDate,
             walletAddress: null,
-            description: description || 'Enter your Company Description here',
+            description: description || 'Enter your Description here...',
             url: originalUrl,
             campaignInfoAddress: '',
             togglePopUp: () => {},
             popUp: false
         };
-        setCampaignDetails(updatedCampaignDetails);
+        setCampaignDetails(initialCampaignDetails);
+    }
+
+    useEffect(() => {
+        getCampaignDetails(formValues)
     }, [formValues, imageUrl]);
 
     return (
@@ -187,7 +171,8 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                     handleBlur,
                     handleSubmit,
                     isSubmitting,
-                }) => {
+                }: any) => {
+                    //todo - refactor
                     useEffect(() => {
                         setFormValues(values);
                     }, [values]);

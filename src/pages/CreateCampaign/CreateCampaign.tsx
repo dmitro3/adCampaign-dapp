@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import CreateCampaignFormik from '../../components/CreateCampaignForm/CreateCampaignForm';
-import moment from 'moment';
 import SearchBar from '../../components/searchbar/SearchBar';
 import CampaignCard from '../../components/CampaignCard/CampaignCard';
 import './CreateCampaign.scss'
 
 const CreateCampaign = () => {
     const [campaignDetails, setCampaignDetails] = useState<any>();
-
-    console.log('Campaign Details:', campaignDetails);
  
     return (
         <main className="create-campaign-container">
