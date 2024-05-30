@@ -155,7 +155,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                             setLoading(false);
                             setError(true);
                             toast.dismiss();
-                            toast.error('Error in transaction.');
+                            toast.error('Error in transaction. Try to add more coins');
                             reject(error);
                             console.error('Error in transaction', error);
                         },
@@ -273,7 +273,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
                     <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft}`}</span>} alt="duration" />
-                    <CardIconLabel src="/user.png" text={<span>{`$${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
+                    <CardIconLabel src="/user.png" text={<span>{`SUI${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
                 </div>
                 <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)} />
                 <div className="card-extra-info font-size-14 text-gray">
