@@ -30,9 +30,9 @@ const CustomImageUploader = ({placeholder, backgroundColor, handleImage, image}:
     multiple: false,
   });
 
-  const removeImage = () => {
-    handleImage(null);
-  };
+  // const removeImage = () => {
+  //   handleImage(null);
+  // };
 
   return (
     <div>
@@ -40,14 +40,14 @@ const CustomImageUploader = ({placeholder, backgroundColor, handleImage, image}:
       {<div className="dropzone-container" style={{backgroundColor}} {...getRootProps()}>
       {!image ? 
           <>
-            <input {...getInputProps()} />
+            <input {...getInputProps()}/>
             {placeholder}
           </> 
           : 
           <>  
             <img className='image-preview' src={image} alt="Preview" />
             {/* todo change this button */}
-            <button onClick={removeImage} className='remove-button'>Remove</button>
+            {/* <button onClick={removeImage} className='remove-button' type='button'>Remove</button> */}
           </>
         }
       </div>}

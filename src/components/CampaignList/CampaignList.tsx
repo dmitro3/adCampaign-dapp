@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import { fetchCampaigns } from "../../common/services/api.services";
-import CampaignCard from '../campaigncard/CampaignCard';
 import Navbar from '../Navbar/Navbar';
+import CampaignCard from '../campaigncard/CampaignCard';
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import Filters from '../filters/Filters';
+// import Filters from '../filters/Filters';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import Pagination from '../pagination/Pagination';
-import { mockData } from '../../common/constants';
+// import { mockData } from '../../common/constants';
 import './CampaignList.scss';
+import { currencyConverter, currencyConverterIntoSUI } from '../../common/helpers';
 
 type Campaign = {
     imageSrc: string;
-    label: string;
+    category: string;
     clicks: number;
     title: string;
     daysLeft: number;
@@ -25,6 +26,7 @@ type Campaign = {
     walletAddress: string;
     description: string;
     url: string;
+    validClicks: number;
     campaignInfoAddress: string;
 };
 
@@ -40,33 +42,37 @@ export default function CampaignList() {
     const [data, setData] = useState([]);
     const [activePopUp, setActivePopUp] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-    const [sortOption, setSortOption] = useState<string>('timeLeft');
-    const [filterOption, setFilterOption] = useState<string>('all');
+    // const [sortOption, setSortOption] = useState<string>('timeLeft');
+    // const [filterOption, setFilterOption] = useState<string>('all');
     const [currentPage, setCurrentPage] = useState<number>(1);
 
+    const getData = async () => {
+        const response = await fetchCampaigns();
+
+        const transformedData = response.map((campaign: any) => ({
+            imageSrc: campaign?.banner,
+            category: campaign?.category,
+            clicks: 0,
+            validClicks: campaign.validClicks,
+            title: campaign?.companyName,
+            daysLeft: `${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`,
+            costPerClick: currencyConverter(campaign?.cpc),
+            currentPrice: 0,
+            totalPrice: currencyConverter(campaign?.campaignBudget),
+            likes: 0,
+            dislikes: 0,
+            startDate: formatDate(campaign?.startDate),
+            endDate: campaign?.endDate,
+            walletAddress: campaign?.campaignWalletAddress,
+            description: campaign?.description || 'No description available',
+            url: campaign?.originalUrl,
+            campaignInfoAddress: campaign?.campaignInfoAddress,
+        }));
+        
+        setData(transformedData);
+    };
+
     useEffect(() => {
-        const getData = async () => {
-            const response = await fetchCampaigns();
-            const transformedData = response.map((campaign: any) => ({
-                imageSrc: campaign.banner,
-                category: campaign.category,
-                clicks: 0,
-                title: campaign.companyName,
-                daysLeft: Math.ceil((campaign.endDate - campaign.startDate) / (60 * 60 * 24)),
-                costPerClick: campaign.cpc/1e9,
-                currentPrice: 0,
-                totalPrice: campaign.campaignBudget / 1e9,
-                likes: 0,
-                dislikes: 0,
-                startDate: formatDate(campaign.startDate),
-                endDate: campaign.endDate,
-                walletAddress: campaign.campaignWalletAddress,
-                description: campaign.description || 'No description available',
-                url: campaign.originalUrl,
-                campaignInfoAddress: campaign.campaignInfoAddress,
-            }));
-            setData(transformedData);
-        };
         getData();
     }, []);
 
@@ -78,35 +84,36 @@ export default function CampaignList() {
         setActivePopUp(prevPopUp => prevPopUp === campaignId ? null : campaignId);
     };
 
-    const handleSort = (option: string) => {
-        setSortOption(option);
-        let sortedCampaigns;
-        switch (option) {
-            case 'timeLeft':
-                sortedCampaigns = [...campaigns].sort((a, b) => a.daysLeft - b.daysLeft);
-                break;
-            case 'trustLikes':
-                sortedCampaigns = [...campaigns].sort((a, b) => b.likes - a.likes);
-                break;
-            case 'rateClick':
-                sortedCampaigns = [...campaigns].sort((a, b) => b.costPerClick - a.costPerClick);
-                break;
-            default:
-                sortedCampaigns = campaigns;
-        }
-        setCampaigns(sortedCampaigns);
-    };
+    // todo - check filters
+    // const handleSort = (option: string) => {
+    //     // setSortOption(option);
+    //     let sortedCampaigns;
+    //     switch (option) {
+    //         case 'timeLeft':
+    //             sortedCampaigns = [...campaigns].sort((a, b) => a.daysLeft - b.daysLeft);
+    //             break;
+    //         case 'trustLikes':
+    //             sortedCampaigns = [...campaigns].sort((a, b) => b.likes - a.likes);
+    //             break;
+    //         case 'rateClick':
+    //             sortedCampaigns = [...campaigns].sort((a, b) => b.costPerClick - a.costPerClick);
+    //             break;
+    //         default:
+    //             sortedCampaigns = campaigns;
+    //     }
+    //     setCampaigns(sortedCampaigns);
+    // };
 
-    const handleFilter = (option: string) => {
-        setFilterOption(option);
-        let filteredCampaigns;
-        if (option === 'all') {
-            filteredCampaigns = mockData;
-        } else {
-            filteredCampaigns = mockData.filter(campaign => campaign.label.toLowerCase() === option.toLowerCase());
-        }
-        setCurrentPage(1);
-    };
+    // const handleFilter = (option: string) => {
+    //     // setFilterOption(option);
+    //     let filteredCampaigns;
+    //     if (option === 'all') {
+    //         filteredCampaigns = mockData;
+    //     } else {
+    //         filteredCampaigns = mockData.filter(campaign => campaign.label.toLowerCase() === option.toLowerCase());
+    //     }
+    //     setCurrentPage(1);
+    // };
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -143,7 +150,7 @@ export default function CampaignList() {
                     </div>
                     </div>
                     <div className='filter-container align-center'>
-                        <Filters onSort={handleSort} onFilter={handleFilter} />
+                        {/* <Filters onSort={handleSort} onFilter={handleFilter} /> */}
                     </div>
                 </div>
                 <div className="campaign-list" >
@@ -152,18 +159,17 @@ export default function CampaignList() {
                             key={index}
                             width={'card-width-392'}
                             imageSrc={campaign.imageSrc}
-                            category={campaign.label}
-                            clicks={campaign.clicks}
+                            category={campaign.category}
+                            clicks={campaign.validClicks}
                             title={campaign.title}
                             daysLeft={campaign.daysLeft}
-                            costPerClick={campaign.costPerClick}
-                            currentPrice={campaign.currentPrice}
-                            totalPrice={campaign.totalPrice}
+                            costPerClick={currencyConverterIntoSUI(campaign.costPerClick)}
+                            totalPrice={currencyConverterIntoSUI(campaign.totalPrice)}
                             likes={campaign.likes}
                             dislikes={campaign.dislikes}
                             startDate={campaign.startDate}
                             endDate={campaign.endDate}
-                            walletAddress={campaign.walletAddress}
+                            walletAddress={account.address}
                             description={campaign.description}
                             url={campaign.url}
                             campaignInfoAddress={campaign.campaignInfoAddress}

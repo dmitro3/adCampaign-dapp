@@ -34,7 +34,8 @@ const CampaignCard = ({campaign}:any) => {
                 },
                 {
                   onSuccess: async (tx:any) => {
-                    resolve('response--->',tx.effects?.created[0]?.reference?.objectId)  
+                    resolve(tx)
+                    // resolve('response--->',tx.effects?.created[0]?.reference?.objectId)  
                   },
                   onError:(error)=>{
                         reject(error)

@@ -7,7 +7,7 @@ import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery
 import OvalInputBox from "../ovalInputBox/OvalInputBox";
 import CustomButton from '../CustomButton/CustomButton';
 import { createCampaign, uploadImage } from '../../common/services/api.services';
-import { getMaxBalanceObjectAddress, getTimeLeft } from '../../common/helpers';
+import { currencyConverterIntoSUI, getMaxBalanceObjectAddress, getTimeLeft } from '../../common/helpers';
 import { CAMPAIGN_STATUS, createCampaignInitialValues, createCampaignInputFields } from "../../common/constants";
 import CustomImageUploader from '../CustomImageUploader/CustomImageUploader';
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID, CLOUDINARY_CLOUD_NAME, UPLOAD_PRESET } from '../../common/config';
@@ -17,7 +17,8 @@ interface ImageFile {
     file: File;
     preview: string;
 }
-
+//todo - unix - start date
+//todo -  remove previous dates disabled
 const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (details: any) => void }) => {
     const [imageUrl, setImageUrl] = useState<ImageFile | null>(null);
     const [formValues, setFormValues] = useState(createCampaignInitialValues);
@@ -32,19 +33,32 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
     }) as { data: { data: any[] } };
 
     const handleImage = async (imageBanner: any) => {
-        const image = new FormData();
-        image.append("file", imageBanner.file);
-        image.append("cloud_name", CLOUDINARY_CLOUD_NAME);
-        image.append("upload_preset", UPLOAD_PRESET);
-        const imageUrl = await uploadImage(image)
-        setImageUrl(imageUrl as any)
+        try{
+            toast.loading('Uploading...');
+            const image = new FormData();
+            image.append("file", imageBanner.file);
+            image.append("cloud_name", CLOUDINARY_CLOUD_NAME);
+            image.append("upload_preset", UPLOAD_PRESET);
+            const imageUrl = await uploadImage(image)
+            setImageUrl(imageUrl as any)
+            toast.dismiss();
+            toast.success('Successfully uploaded')
+        }catch(err){
+            toast.error('Error in uploading');
+        }
     }
 
     const createCampaignInSUI = (formInputs: any) => {
         try {
+            toast.loading('Creating...');
             formInputs.startDate = moment().unix();
-            formInputs.endDate = '1716993333';
+            let momentObjEndDate = moment(formInputs.endDate)
+            formInputs.endDate = momentObjEndDate.unix();
             formInputs.banner = imageUrl;
+
+            formInputs.campaignBudget = currencyConverterIntoSUI(parseFloat(formInputs.campaignBudget));
+            formInputs.cpc = currencyConverterIntoSUI(parseFloat(formInputs.cpc));
+
             const txb = new TransactionBlock();
             txb.moveCall({
                 arguments: [
@@ -53,9 +67,9 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                     txb.pure.string(formInputs.category),
                     txb.pure.string(formInputs.originalUrl),
                     txb.object(maxCoinValueAddress),
-                    txb.pure.u64(parseInt(formInputs.campaignBudget)),
-                    txb.pure.u64(parseInt(formInputs.cpc)),
-                    txb.pure.u64(parseInt(formInputs.startDate.toString())),
+                    txb.pure.u64(((formInputs.campaignBudget))),
+                    txb.pure.u64(((formInputs.cpc))),
+                    txb.pure.u64(parseInt(formInputs.startDate)),
                     txb.pure.u64(parseInt(formInputs.endDate)),
                     txb.pure.u64(CAMPAIGN_STATUS.ONGOING),
                     txb.pure.address(account.address),
@@ -72,7 +86,6 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                 },
                 {
                     onSuccess: (tx) => {
-                
                         createCampaign({
                             ...formInputs,
                             coinObjectAddress: maxCoinValueAddress,
@@ -82,13 +95,17 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                             campaignConfig: CAMPAIGN_CONFIG,
                             status: CAMPAIGN_STATUS.ONGOING,
                         });
+                        toast.dismiss();
                         toast.success("success")
                         setTransactionFinished(true)
                     },
                     onError: (error) => {
+                        toast.dismiss();
+                        toast.loading('Error in creating campaign...');
                         console.log('error--->', error)
                     },
                     onSettled: (data) => {
+                        toast.dismiss();
                         console.log('data--->', data)
                     }
                 },
@@ -114,20 +131,22 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
     }, [suiObject?.data?.data]);
 
     const handleSubmit = (values: any) => {
+        console.log('---main---values---->>', values)
         createCampaignInSUI(values);
     }
 
     const getCampaignDetails = (formValues: any) => {
-        const { companyName, category, originalUrl, campaignBudget, cpc,endDate,description } = formValues;
+        const { campaignName, category, originalUrl, campaignBudget, cpc,endDate,description } = formValues;
+        console.log(', campaignBudget, cpc----->', campaignBudget, cpc)
         const initialCampaignDetails = {
             imageSrc: imageUrl || "/journey.png",
-            label: category || 'Category',
+            category: category || 'Category',
             clicks: 0,
-            title: companyName || 'Company Name',
+            title: campaignName || 'Campaign Name',
             daysLeft: getTimeLeft(endDate) || 0,
-            costPerClick: parseInt(cpc || '0'),
+            costPerClick: currencyConverterIntoSUI(parseFloat(cpc || 0)),
             currentPrice: 0,
-            totalPrice: parseInt(campaignBudget || '0'),
+            totalPrice: currencyConverterIntoSUI(parseFloat(campaignBudget || '0')),
             likes: 0,
             dislikes: 0,
             startDate: moment().format('YYYY-MM-DD'),
@@ -143,6 +162,7 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
     }
 
     useEffect(() => {
+        console.log('------formValues----', formValues)
         getCampaignDetails(formValues)
     }, [formValues, imageUrl]);
 
@@ -150,11 +170,15 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
         <>
             <Formik
                 initialValues={createCampaignInitialValues}
-                validate={values => {
+                validate={(values: any) => {
+                    const keys = Object.keys(values)
                     const errors = {} as any;
-                    if (!values.companyName) {
-                        errors.companyName = 'Required';
+                    for(const key of keys){
+                        if ( key!=='banner' && !values[key]) {
+                            errors[key] = 'Required';
+                        }
                     }
+                    console.log('error---->', errors)
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -186,6 +210,8 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                                         <section>
                                             <CustomImageUploader
                                                 image={imageUrl}
+                                                // name={field.name}
+                                                // handleChange={handleChange}
                                                 handleImage={handleImage}
                                                 backgroundColor="white"
                                                 placeholder={
@@ -205,7 +231,7 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                                             endIcon={<div className={field.name === 'campaignBudget' ? 'currency' : ''} dangerouslySetInnerHTML={{ __html: field.endIcon as any }}></div>}
                                             type={field.type}
                                         />}
-                                    {errors[field.name] && touched[field.name] && errors[field.name]}
+                                    {<p className='text-red'> {errors[field.name] && touched[field.name] && errors[field.name]  } </p>}
                                 </article>
                             ))}
                             <CustomButton color="blue" title="Create" width="203px" height="50px" type="submit" disabled={isSubmitting} />

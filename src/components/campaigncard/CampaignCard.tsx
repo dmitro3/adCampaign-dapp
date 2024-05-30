@@ -2,9 +2,9 @@ import React, { useState} from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { useSignAndExecuteTransactionBlock, useCurrentAccount } from "@mysten/dapp-kit";
+import { useSignAndExecuteTransactionBlock } from "@mysten/dapp-kit";
 import { createAffiliate, fetchAffiliateProfile } from "../../common/services/api.services";
-import { generateCampaignUrl } from "../../common/helpers";
+import { currencyConverter, generateCampaignUrl } from "../../common/helpers";
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from "../../common/config";
 import AddressURL from '../AddressURL/AddressURL';
 import AddMoneyPopUp from '../AddMoneyPopUp/AddMoneyPopUp';
@@ -16,6 +16,7 @@ import CardReaction from '../cardreaction/CardReaction';
 import CustomButton from '../CustomButton/CustomButton';
 import { addSupporters } from '../../common/services/api.services';
 import './CampaignCard.css';
+import moment from 'moment';
 
 
 interface CampaignCardProps {
@@ -23,9 +24,8 @@ interface CampaignCardProps {
     category: string;
     clicks: number;
     title: string;
-    daysLeft: number;
+    daysLeft: any;
     costPerClick: number;
-    currentPrice: number;
     totalPrice: number;
     likes: number;
     dislikes: number;
@@ -49,7 +49,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         title,
         daysLeft,
         costPerClick,
-        currentPrice,
         totalPrice,
         likes,
         dislikes,
@@ -65,7 +64,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     } = campaign;
     const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
-    const account = useCurrentAccount() as { address: string };
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [campaignUrl, setCampaignUrl] = useState('');
@@ -140,7 +138,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                                 message: addCoinPayload.message,
                                 coins: addCoinPayload.coins,
                                 maxCoinValueAddress: maxCoinValueAddress,
-                                walletAddress: account.address,
+                                walletAddress,
                                 transactionDigest: tx?.effects?.transactionDigest
                             });
                             toast.success('Coins added successfully!');
@@ -195,9 +193,19 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         }
     };
 
+    const validateCampaignLive = (endDate: any) => {
+        console.log('end date---', endDate, '---type---', typeof(endDate));
+        const currentTime = moment().unix();
+        return endDate > currentTime;
+    }
+
     const handleAffiliateCreationURL = async () => {
         try {
-            setLoading(true);
+            if(!validateCampaignLive(endDate)){
+                toast.error('Campaign already ended')
+                return;
+            };
+            toast.loading('Creating URL...')
             setError(false);
             toast.loading('Submitting...');
             const campaignUrl = generateCampaignUrl();
@@ -224,8 +232,14 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         }
     };
 
+    const calculateCurrentPrice = () =>{
+        return totalPrice - (clicks * costPerClick);
+    }
+
     return (
         <div className={`card bg-white ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
+            {loading}
+            {error}
             <Toaster />
             <div className="card-image" onClick={()=>navigate(`/campaign/${campaignInfoAddress}`)}>
                 <img src={imageSrc} alt="Card Image" />
@@ -252,10 +266,10 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     <AddressURL address={campaignInfoAddress}  />
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
-                    <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft} days left`}</span>} alt="duration" />
-                    <CardIconLabel src="/user.png" text={<span>{`$${costPerClick} per click`}</span>} alt="user"/>
+                    <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft}`}</span>} alt="duration" />
+                    <CardIconLabel src="/user.png" text={<span>{`$${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
                 </div>
-                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currentPrice} totalPrice={totalPrice} />
+                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)} />
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                     { campaignUrl && <a href={campaignUrl} target="_blank" rel="noopener noreferrer">Campaign URL</a>}

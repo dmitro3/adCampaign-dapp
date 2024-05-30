@@ -18,11 +18,12 @@ const CampaignDetails = () => {
         totalEarnings: 0,
     });
 
-    const getAffiliatesByCampaignId = async () =>{
-        const data = await fetchAffiliatesByCampaignId({
+    const getAffiliatesByCampaignId = async (campaign: any) =>{
+        const datas = await fetchAffiliatesByCampaignId({
             campaignInfoAddress
         });
-        setAffiliates(data || []);
+        const transformedData = datas.map((data:any)=> {return {...data, earnings: data.validClicks*campaign.cpc}})
+        setAffiliates(transformedData || []);
     }
 
     const getSupportersByCampaignId = async () => {
@@ -36,6 +37,7 @@ const CampaignDetails = () => {
         const data =  await  fetchCampaignById({campaignInfoAddress});
         if(data.length){
             setCampaign(data[0])
+            getAffiliatesByCampaignId(data[0])
         }
     }
 
@@ -45,7 +47,6 @@ const CampaignDetails = () => {
     }
 
     useEffect(()=>{
-        getAffiliatesByCampaignId()
         getSupportersByCampaignId()
         getCampaignIdByDetails()
         getAffiliateMetrics()
@@ -61,7 +62,7 @@ const CampaignDetails = () => {
             <p className="title ff-tertiary text-transform-capitalize"> {campaign.campaignName || campaign.companyName} Ad Campaign</p>
             <section className="grid-container">
                 <article className="grid-row">
-                   <CampaignDetailsCardWrapper totalAffiliates={metrics.totalEarnings} totalClicks={metrics.totalClicks}/>
+                   <CampaignDetailsCardWrapper totalAffiliates={affiliates?.length} totalClicks={metrics.totalClicks}/>
                    {/* todo - current price and campaign budget */}
                     <CampaignCard
                         key={1}
@@ -69,10 +70,9 @@ const CampaignDetails = () => {
                         category={campaign.category}
                         clicks={(campaign?.validClicks + campaign?.invalidClicks) || 0}
                         title={campaign.companyName}
-                        daysLeft={campaign.endDate - campaign.startDate}
-                        costPerClick={campaign.cpc/1e9}
-                        currentPrice={0}
-                        totalPrice={campaign.campaignBudget / 1e9}
+                        daysLeft={`${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`}
+                        costPerClick={campaign.cpc}
+                        totalPrice={campaign.campaignBudget}
                         likes={0}
                         dislikes={0}
                         startDate={campaign.startDate}

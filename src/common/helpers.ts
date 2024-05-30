@@ -33,12 +33,28 @@ export const getMaxBalanceObjectAddress = (balanceArr:any[]) => {
 }
 
 export const shortnerAddress = (address: string): string => {
-  return address.slice(0, 5) + '...' + address.slice(-5);
+  return address.slice(0, 4) + '...' + address.slice(-3);
 };
+
+export const currencyConverter = (value: number, title: string = 'SUI'):number => {
+  if(title ==='SUI'){
+    return value/1e9
+  }
+  return value;
+}
+
+export const currencyConverterIntoSUI = (value: number, title: string = 'SUI'):number => {
+  if(title ==='SUI'){
+    return value*1e9
+  }
+  return value;
+}
+
+
 
 
 export const getTimeLeft = (endDate: string) => {
-  //todo - check why error is coming.
+  if(endDate){
   // if (!moment(endDate, 'YYYY-MM-DD', true).isValid()) {
   //   throw new Error('Invalid date format. Please use YYYY-MM-DD.');
   // }
@@ -71,4 +87,6 @@ export const getTimeLeft = (endDate: string) => {
   } else {
     return `${minutesLeft || 0} Minutes Left`;
   }
+  }
+
 };
