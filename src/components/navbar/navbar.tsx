@@ -16,7 +16,6 @@ export default function Navbar({ color, page, textColor }: { color: string, page
                     {/* <a href="#" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>About</a> */}
                 </div>
                 <div className="nav-actions flex gap-16 align-center">
-                    <a href="#" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>My earnings</a>
                     {page === 'navbar' && (<ConnectButton />)}
                     {page === 'campaign' && (
                         <div className="profile-pic flex align-center">

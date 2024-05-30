@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { fetchCampaigns } from "../../common/services/api.services";
-import Navbar from '../Navbar/Navbar';
+import Navbar from '../Navbar/navbar';
 import CampaignCard from '../campaigncard/CampaignCard';
 import { useCurrentAccount } from '@mysten/dapp-kit';
-// import Filters from '../filters/Filters';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import Pagination from '../pagination/Pagination';
-// import { mockData } from '../../common/constants';
 import './CampaignList.scss';
 import { currencyConverter, currencyConverterIntoSUI } from '../../common/helpers';
+
 
 type Campaign = {
     imageSrc: string;
@@ -84,37 +83,6 @@ export default function CampaignList() {
         setActivePopUp(prevPopUp => prevPopUp === campaignId ? null : campaignId);
     };
 
-    // todo - check filters
-    // const handleSort = (option: string) => {
-    //     // setSortOption(option);
-    //     let sortedCampaigns;
-    //     switch (option) {
-    //         case 'timeLeft':
-    //             sortedCampaigns = [...campaigns].sort((a, b) => a.daysLeft - b.daysLeft);
-    //             break;
-    //         case 'trustLikes':
-    //             sortedCampaigns = [...campaigns].sort((a, b) => b.likes - a.likes);
-    //             break;
-    //         case 'rateClick':
-    //             sortedCampaigns = [...campaigns].sort((a, b) => b.costPerClick - a.costPerClick);
-    //             break;
-    //         default:
-    //             sortedCampaigns = campaigns;
-    //     }
-    //     setCampaigns(sortedCampaigns);
-    // };
-
-    // const handleFilter = (option: string) => {
-    //     // setFilterOption(option);
-    //     let filteredCampaigns;
-    //     if (option === 'all') {
-    //         filteredCampaigns = mockData;
-    //     } else {
-    //         filteredCampaigns = mockData.filter(campaign => campaign.label.toLowerCase() === option.toLowerCase());
-    //     }
-    //     setCurrentPage(1);
-    // };
-
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -149,9 +117,8 @@ export default function CampaignList() {
                         <p className='text-gray font-size-20'>All the campaigns are listed here</p>
                     </div>
                     </div>
-                    <div className='filter-container align-center'>
-                        {/* <Filters onSort={handleSort} onFilter={handleFilter} /> */}
-                    </div>
+                    <>
+                    </>
                 </div>
                 <div className="campaign-list" >
                     {paginatedCampaigns.map((campaign, index) => (
@@ -169,7 +136,7 @@ export default function CampaignList() {
                             dislikes={campaign.dislikes}
                             startDate={campaign.startDate}
                             endDate={campaign.endDate}
-                            walletAddress={account.address}
+                            walletAddress={account?.address}
                             description={campaign.description}
                             url={campaign.url}
                             campaignInfoAddress={campaign.campaignInfoAddress}

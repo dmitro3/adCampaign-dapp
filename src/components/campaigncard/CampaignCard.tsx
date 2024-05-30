@@ -12,13 +12,13 @@ import useCoinAddress from "../../common/customHooks/coinAddress/useCoinAddress"
 import MetricsOverview from '../MetricsOverview/MetricsOverview';
 import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
+import moment from 'moment';
 import CardReaction from '../cardreaction/CardReaction';
 import CustomButton from '../CustomButton/CustomButton';
 import ShareLink from '../ShareLink/ShareLink';
 import { addSupporters } from '../../common/services/api.services';
 import './CampaignCard.css';
-import { set } from '@cloudinary/url-gen/actions/variable';
-import moment from 'moment';
+
 
 
 interface CampaignCardProps {
@@ -75,7 +75,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         message: ''
     });
     const [viewMore, setViewMore] = useState(viewMoreToggle );
-    const [shareLink, setShareLink] = useState(true);
 
     const handleInputCoins = (e: any) => {
         setAddCoinPayload({
@@ -212,7 +211,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             };
             toast.loading('Creating URL...')
             setError(false);
-            toast.loading('Submitting...');
             const campaignUrl = generateCampaignUrl();
             const affiliateProfile = await getAffiliateProfile();
             const response = await createAffiliate({

@@ -1,8 +1,6 @@
 import { ImageTextGrid } from '../imagetextgrid/ImageTextGrid';
 import InfoBadge from '../infobadge/InfoBadge';
 import CustomButton from '../CustomButton/CustomButton';
-import { ImageTextGrid } from '../imagetextgrid/ImageTextGrid';
-import InfoBadge from '../infobadge/InfoBadge';
 import './Lastsection.scss';
 
 const Lastsection = () => {
