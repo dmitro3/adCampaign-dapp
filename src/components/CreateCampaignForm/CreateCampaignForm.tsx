@@ -51,14 +51,18 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
     const createCampaignInSUI = (formInputs: any) => {
         try {
             toast.loading('Creating...');
+            console.log( 'before start date=====>', formInputs.startDate)
             formInputs.startDate = moment().unix();
+            console.log( 'after start date======>', formInputs.startDate)
+            console.log('forms=====end====date==before===>', formInputs.endDate,)
             let momentObjEndDate = moment(formInputs.endDate)
-            formInputs.endDate = momentObjEndDate.unix();
+            const unixEndDate = momentObjEndDate.unix() as any;
             formInputs.banner = imageUrl;
+            console.log('forms=====end====date==after===>', formInputs.endDate, '---->', unixEndDate)
 
-            formInputs.campaignBudget = currencyConverterIntoSUI(parseFloat(formInputs.campaignBudget));
-            formInputs.cpc = currencyConverterIntoSUI(parseFloat(formInputs.cpc));
-
+            const campaignBudget = currencyConverterIntoSUI(parseFloat(formInputs.campaignBudget))
+            const cpc = currencyConverterIntoSUI(parseFloat(formInputs.cpc))
+            console.log('---campaign budget--', campaignBudget, '---cpc---', cpc)
             const txb = new TransactionBlock();
             txb.moveCall({
                 arguments: [
@@ -67,10 +71,10 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                     txb.pure.string(formInputs.category),
                     txb.pure.string(formInputs.originalUrl),
                     txb.object(maxCoinValueAddress),
-                    txb.pure.u64(((formInputs.campaignBudget))),
-                    txb.pure.u64(((formInputs.cpc))),
+                    txb.pure.u64(campaignBudget),
+                    txb.pure.u64(cpc),
                     txb.pure.u64(parseInt(formInputs.startDate)),
-                    txb.pure.u64(parseInt(formInputs.endDate)),
+                    txb.pure.u64(parseInt(unixEndDate)),
                     txb.pure.u64(CAMPAIGN_STATUS.ONGOING),
                     txb.pure.address(account.address),
                 ],
@@ -88,6 +92,9 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                     onSuccess: (tx) => {
                         createCampaign({
                             ...formInputs,
+                            campaignBudget,
+                            cpc,
+                            endDate: unixEndDate,
                             coinObjectAddress: maxCoinValueAddress,
                             campaignWalletAddress: account.address,
                             campaignInfoAddress: getCampaignObjectAddress(tx.effects?.created || []) || '',
@@ -101,12 +108,12 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                     },
                     onError: (error) => {
                         toast.dismiss();
-                        toast.loading('Error in creating campaign...');
-                        console.log('error--->', error)
-                    },
-                    onSettled: (data) => {
-                        toast.dismiss();
-                        console.log('data--->', data)
+                        if(error.message == 'Rejected from user'){
+                            toast.error('Rejected from user');
+                            return;
+                        }
+                        toast.error(`Insufficient Gas tokens, Please Add More Gas tokens`);
+                        console.log('error--->', error.message)
                     }
                 },
             );
@@ -135,36 +142,31 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
         createCampaignInSUI(values);
     }
 
-    const getCampaignDetails = (formValues: any) => {
-        const { campaignName, category, originalUrl, campaignBudget, cpc,endDate,description } = formValues;
-        console.log(', campaignBudget, cpc----->', campaignBudget, cpc)
-        const initialCampaignDetails = {
-            imageSrc: imageUrl || "/journey.png",
-            category: category || 'Category',
-            clicks: 0,
-            title: campaignName || 'Campaign Name',
-            daysLeft: getTimeLeft(endDate) || 0,
-            costPerClick: currencyConverterIntoSUI(parseFloat(cpc || 0)),
-            currentPrice: 0,
-            totalPrice: currencyConverterIntoSUI(parseFloat(campaignBudget || '0')),
-            likes: 0,
-            dislikes: 0,
-            startDate: moment().format('YYYY-MM-DD'),
-            endDate: endDate,
-            walletAddress: null,
-            description: description || 'Enter your Description here...',
-            url: originalUrl,
-            campaignInfoAddress: '',
-            togglePopUp: () => {},
-            popUp: false
-        };
-        setCampaignDetails(initialCampaignDetails);
-    }
-
-    useEffect(() => {
-        console.log('------formValues----', formValues)
-        getCampaignDetails(formValues)
-    }, [formValues, imageUrl]);
+    // const getCampaignDetails = (formValues: any) => {
+    //     const { campaignName, category, originalUrl, campaignBudget, cpc,endDate,description } = formValues;
+    //     console.log(', campaignBudget, cpc----->', campaignBudget, cpc)
+    //     const initialCampaignDetails = {
+    //         imageSrc: imageUrl || "/journey.png",
+    //         category: category || 'Category',
+    //         clicks: 0,
+    //         title: campaignName || 'Campaign Name',
+    //         daysLeft: getTimeLeft(endDate) || 0,
+    //         costPerClick: currencyConverterIntoSUI(parseFloat(cpc || 0)),
+    //         currentPrice: 0,
+    //         totalPrice: currencyConverterIntoSUI(parseFloat(campaignBudget || '0')),
+    //         likes: 0,
+    //         dislikes: 0,
+    //         startDate: moment().format('YYYY-MM-DD'),
+    //         endDate: endDate,
+    //         walletAddress: null,
+    //         description: description || 'Enter your Description here...',
+    //         url: originalUrl,
+    //         campaignInfoAddress: '',
+    //         togglePopUp: () => {},
+    //         popUp: false
+    //     };
+    //     setCampaignDetails(initialCampaignDetails);
+    // }
 
     return (
         <>
@@ -182,7 +184,7 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    setFormValues(values);
+                    // setFormValues(values);
                     handleSubmit(values);
                     setSubmitting(false);
                 }}
@@ -197,9 +199,9 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                     isSubmitting,
                 }: any) => {
                     //todo - refactor
-                    useEffect(() => {
-                        setFormValues(values);
-                    }, [values]);
+                    // useEffect(() => {
+                    //     getCampaignDetails(values);
+                    // }, [values]);
 
                     return (
                         <form onSubmit={handleSubmit}>
@@ -210,8 +212,6 @@ const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (detai
                                         <section>
                                             <CustomImageUploader
                                                 image={imageUrl}
-                                                // name={field.name}
-                                                // handleChange={handleChange}
                                                 handleImage={handleImage}
                                                 backgroundColor="white"
                                                 placeholder={

@@ -1,22 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import './OvalInputBox.scss'
 
 const OvalInputBox = ({endIcon, handleChange, handleBlur, name, placeholder, value, type}: any) => {
-    const [isFocused, setIsFocused] = useState(false);
+    const [isFocused, setIsFocused] = useState(true);
     const inputContainerRef = useRef(null) as any;
 
-    const handleClickOutside = (event:any) => {
-        if (inputContainerRef.current && !inputContainerRef.current.contains(event.target)) {
-          setIsFocused(false);
-        }
-      };
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
-      }, []);
     
     return(
         <section className={`input-container ${isFocused || value ? 'focused' : ''}`} ref={inputContainerRef}>
@@ -28,7 +16,7 @@ const OvalInputBox = ({endIcon, handleChange, handleBlur, name, placeholder, val
                   defaultValue={value} 
                   onChange={handleChange} 
                   name={name}
-                  onFocus={() => setIsFocused((prev: any)=>!prev)}
+                  onFocus={() => setIsFocused(true)}
                   onBlur={handleBlur}
                   type={type}
                 />

@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import CampaignCard from '../../components/campaigncard/CampaignCard';
 import CreateCampaignFormik from '../../components/CreateCampaignForm/CreateCampaignForm';
-import Navbar from '../../components/Navbar/Navbar';
+import Navbar from '../../components/Navbar/navbar';
 import './CreateCampaign.scss'
 
+//todo - refactor it
 const CreateCampaign = () => {
     const [campaignDetails, setCampaignDetails] = useState<any>();
     return (
         <main className="create-campaign-container">
-             <Navbar page='campaign' color='white' textColor='black'/>
+            <Navbar page='campaign' color='white' textColor='black'/>
             <section className="sub-container">
                 <section>
                     <p className="heading"> Start your own campaign </p>
@@ -16,12 +16,10 @@ const CreateCampaign = () => {
                 </section>
                 <div className='preview-container flex justify-space-around'>
                 <div className='createform'>
-
-                <CreateCampaignFormik setCampaignDetails={setCampaignDetails} />
+                    <CreateCampaignFormik setCampaignDetails={setCampaignDetails} />
                 </div>
                 <div className='previewcard'>
-
-                <CampaignCard {...campaignDetails} />
+                    {/* <CampaignCard {...campaignDetails} /> */}
                 </div>
                 </div>
             </section>

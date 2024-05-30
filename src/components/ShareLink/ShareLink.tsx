@@ -8,6 +8,7 @@ const ShareLink = ({ url, handleClose }: { url: string, handleClose: () => void 
   const handleCopy = () => {
     navigator.clipboard.writeText(url);
     toast.success('Copied to clipboard');
+    handleClose()
   };
 
   return (

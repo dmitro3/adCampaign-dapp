@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { useSignAndExecuteTransactionBlock } from "@mysten/dapp-kit";
 import { createAffiliate, fetchAffiliateProfile } from "../../common/services/api.services";
-import { currencyConverter, generateCampaignUrl } from "../../common/helpers";
+import { currencyConverter, currencyConverterIntoSUI, generateCampaignUrl } from "../../common/helpers";
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID } from "../../common/config";
 import AddressURL from '../AddressURL/AddressURL';
 import AddMoneyPopUp from '../AddMoneyPopUp/AddMoneyPopUp';
@@ -79,7 +79,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     const handleInputCoins = (e: any) => {
         setAddCoinPayload({
             ...addCoinPayload,
-            coins: e.target.value,
+            coins:  e.target.value,
         });
     };
     const handleInputMessage = (e: any) => {
@@ -109,9 +109,12 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 console.error('TransactionBlock methods not available', txb);
                 setLoading(false);
                 setError(true);
+                toast.dismiss();
                 toast.error('Transaction setup error.');
                 return;
             }
+
+            const coinsInSUI =  currencyConverterIntoSUI(parseFloat(addCoinPayload.coins))
 
             try {
                 txb.moveCall({
@@ -119,7 +122,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                         txb.object(CAMPAIGN_CONFIG),
                         txb.object(campaignInfoAddress),
                         txb.pure.string(addCoinPayload.message),
-                        txb.pure.u64(addCoinPayload.coins),
+                        txb.pure.u64(coinsInSUI),
                         txb.object(maxCoinValueAddress)
                     ],
                     target: `${CAMPAIGN_PACKAGE_ID}::campaign_fund::update_campaign_pool`,
@@ -140,7 +143,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                                 campaignConfig: CAMPAIGN_CONFIG,
                                 campaignInfoAddress: campaignInfoAddress,
                                 message: addCoinPayload.message,
-                                coins: addCoinPayload.coins,
+                                coins: coinsInSUI,
                                 maxCoinValueAddress: maxCoinValueAddress,
                                 walletAddress,
                                 transactionDigest: tx?.effects?.transactionDigest
@@ -181,7 +184,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             toast.loading('Fetching affiliate profile...');
             const profileDetails = await fetchAffiliateProfile({ walletAddress });
             setLoading(false);
-            toast.dismiss();
+            // toast.dismiss();
             if (profileDetails.length) {
                 return profileDetails[0].profileAddress;
             } 
