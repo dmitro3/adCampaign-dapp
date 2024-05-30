@@ -4,7 +4,7 @@ import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, 
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
 import CardTable from "../../components/CardTable/CardTable.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
-import Navbar from "../../components/Navbar/Navbar.tsx";
+import Navbar from "../../components/Navbar/navbar.tsx";
 import './CampaignDetails.scss'
 
 const CampaignDetails = () => {

@@ -269,7 +269,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 </div>
                 <div className='titleStyles'>
                     <h3 className='ff-tertiary font-weight-800'>{title}</h3>
-                    <AddressURL address={campaignInfoAddress}  />
+                    <AddressURL type={'object'} address={campaignInfoAddress}  />
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
                     <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft}`}</span>} alt="duration" />

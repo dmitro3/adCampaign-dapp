@@ -9,6 +9,18 @@ const CardTable = ({title, contents}:{title: string, contents: any}) => {
     const [headers, setHeaders] = useState([])
     const addressHeaders = ['profileAddress', 'transactionDigest', 'walletAddress']
 
+    const getType = (key: string) => {
+        console.log('----key---', key)
+        if(key === 'profileAddress'){
+            return 'object'
+        }else if(key === 'walletAddress'){
+            return 'account'
+        }else if(key === 'transactionDigest'){
+            return 'txblock'
+        }
+        return 'object'
+    }
+
     const tranformData = (arr: any) => {
         for(let i in (arr)){
             return Object.keys(arr[i]);
@@ -37,7 +49,7 @@ const CardTable = ({title, contents}:{title: string, contents: any}) => {
                     <tr key={`content-${index}`}>
                         {headers?.map((header: any) => (
                             //todo - refactor this code
-                            <td key={header.id} className="text-transform-capitalize">{ ( addressHeaders.includes(header) ? <AddressURL address={content[header]} />  : (((typeof(content[header]) === 'number') && content[header] > 10000  ) ? currencyConverter(content[header]) : content[header] ) ) }</td>
+                            <td key={header.id} className="text-transform-capitalize">{ ( addressHeaders.includes(header) ? <AddressURL type={getType(header)} address={content[header]} />  : (((typeof(content[header]) === 'number') && content[header] > 10000  ) ? currencyConverter(content[header]) : content[header] ) ) }</td>
                         ))}
                     </tr>
                 ))}
