@@ -4,9 +4,10 @@ interface CardPriceProps {
     currentPrice: number;
     totalPrice: number;
     onClick?: () => void;
+    loading: boolean
 }
 
-export default function CardPrice({ currentPrice, totalPrice, onClick }: CardPriceProps) {  
+export default function CardPrice({ totalPrice, onClick, loading }: CardPriceProps) {
     return (
         <div className="card-price-container">
             <div className="card-price flex font-size-16 justify-between align-center">
@@ -17,7 +18,7 @@ export default function CardPrice({ currentPrice, totalPrice, onClick }: CardPri
                         <p className="pool-amount font-size-10">Pool amount</p>
                     </div>
                 </div>
-                <button onClick={onClick} className='flex align-center text-black bg-white font-weight-700 share-btn'>
+                <button onClick={onClick} className='flex align-center text-black bg-white font-weight-700 share-btn' disabled={loading}>
                     <p>Share & Earn</p>
                     <img src="/share.png" alt="share" />
                 </button>

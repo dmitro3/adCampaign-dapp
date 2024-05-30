@@ -1,7 +1,6 @@
 .share-link-popup {
     top: 0;
     left: 0;
-    width: 372px;
     height: 120px;
     margin-top: 17px;
     background: rgba(240, 235, 235, 0.5);
@@ -14,7 +13,6 @@
     border-radius: 10px;
     border: 1px solid  grey ;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    width: 372px;
   }
   
   .close-button {

@@ -7,7 +7,7 @@ import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery
 import OvalInputBox from "../ovalInputBox/OvalInputBox";
 import CustomButton from '../CustomButton/CustomButton';
 import { createCampaign, uploadImage } from '../../common/services/api.services';
-import { currencyConverterIntoSUI, getMaxBalanceObjectAddress, getTimeLeft } from '../../common/helpers';
+import { currencyConverterIntoSUI, getMaxBalanceObjectAddress } from '../../common/helpers';
 import { CAMPAIGN_STATUS, createCampaignInitialValues, createCampaignInputFields } from "../../common/constants";
 import CustomImageUploader from '../CustomImageUploader/CustomImageUploader';
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID, CLOUDINARY_CLOUD_NAME, UPLOAD_PRESET } from '../../common/config';
@@ -19,9 +19,9 @@ interface ImageFile {
 }
 //todo - unix - start date
 //todo -  remove previous dates disabled
-const CreateCampaignForm = ({ setCampaignDetails }: { setCampaignDetails: (details: any) => void }) => {
+const CreateCampaignForm = () => {
     const [imageUrl, setImageUrl] = useState<ImageFile | null>(null);
-    const [formValues, setFormValues] = useState(createCampaignInitialValues);
+    // const [formValues, setFormValues] = useState(createCampaignInitialValues);
     const account = useCurrentAccount() as { address: string };
     const [transactionFinished, setTransactionFinished] = useState(false);
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();

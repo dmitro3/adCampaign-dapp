@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useCurrentAccount } from "@mysten/dapp-kit";
 import { useParams } from "react-router-dom";
 import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, fetchSupportersByCampaignId } from "../../common/services/api.services.ts";
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
@@ -7,7 +9,9 @@ import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
 import Navbar from "../../components/Navbar/navbar.tsx";
 import './CampaignDetails.scss'
 
+
 const CampaignDetails = () => {
+    const account  = useCurrentAccount() as {address: string};
     const { id : campaignInfoAddress} = useParams();  
     const [campaign, setCampaign] = useState() as any;
     const [activePopUp, setActivePopUp] = useState<string | null>(null);
@@ -27,17 +31,32 @@ const CampaignDetails = () => {
     }
 
     const getSupportersByCampaignId = async () => {
-        const data = await fetchSupportersByCampaignId({
-            campaignInfoAddress
-        })
-        setSupporters(data || [])
+        try{
+            toast.loading('Loading...')
+            const data = await fetchSupportersByCampaignId({
+                campaignInfoAddress
+            })
+            toast.dismiss()
+            setSupporters(data || [])
+        }catch(err){
+            console.log('error-->', err)
+            toast.error('Error in loading details')
+        }
+       
     }
 
     const getCampaignIdByDetails = async () => {
-        const data =  await  fetchCampaignById({campaignInfoAddress});
-        if(data.length){
-            setCampaign(data[0])
-            getAffiliatesByCampaignId(data[0])
+        try{
+            toast.loading('Loading...')
+            const data =  await  fetchCampaignById({campaignInfoAddress});
+            if(data.length){
+                setCampaign(data[0])
+                getAffiliatesByCampaignId(data[0])
+            }
+            toast.dismiss()
+        }catch(err){
+            console.log('error-->', err)
+            toast.error('Error in loading details')
         }
     }
 
@@ -77,7 +96,7 @@ const CampaignDetails = () => {
                         dislikes={0}
                         startDate={campaign.startDate}
                         endDate={campaign.endDate}
-                        walletAddress={campaign.walletAddress}
+                        walletAddress={account?.address}
                         description={campaign.description}
                         url={campaign.originalUrl}
                         campaignInfoAddress={campaign.campaignInfoAddress}

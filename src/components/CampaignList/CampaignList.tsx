@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import { fetchCampaigns } from "../../common/services/api.services";
 import Navbar from '../Navbar/navbar';
 import CampaignCard from '../campaigncard/CampaignCard';
@@ -46,29 +47,34 @@ export default function CampaignList() {
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     const getData = async () => {
-        const response = await fetchCampaigns();
+        try{
+            toast.loading('Loading...')
+            const response = await fetchCampaigns();
 
-        const transformedData = response.map((campaign: any) => ({
-            imageSrc: campaign?.banner,
-            category: campaign?.category,
-            clicks: 0,
-            validClicks: campaign.validClicks,
-            title: campaign?.companyName,
-            daysLeft: `${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`,
-            costPerClick: currencyConverter(campaign?.cpc),
-            currentPrice: 0,
-            totalPrice: currencyConverter(campaign?.campaignBudget),
-            likes: 0,
-            dislikes: 0,
-            startDate: formatDate(campaign?.startDate),
-            endDate: campaign?.endDate,
-            walletAddress: campaign?.campaignWalletAddress,
-            description: campaign?.description || 'No description available',
-            url: campaign?.originalUrl,
-            campaignInfoAddress: campaign?.campaignInfoAddress,
-        }));
-        
-        setData(transformedData);
+            const transformedData = response.map((campaign: any) => ({
+                imageSrc: campaign?.banner,
+                category: campaign?.category,
+                clicks: 0,
+                validClicks: campaign.validClicks,
+                title: campaign?.companyName,
+                daysLeft: `${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`,
+                costPerClick: currencyConverter(campaign?.cpc),
+                currentPrice: 0,
+                totalPrice: currencyConverter(campaign?.campaignBudget),
+                likes: 0,
+                dislikes: 0,
+                startDate: formatDate(campaign?.startDate),
+                endDate: campaign?.endDate,
+                walletAddress: campaign?.campaignWalletAddress,
+                description: campaign?.description || 'No description available',
+                url: campaign?.originalUrl,
+                campaignInfoAddress: campaign?.campaignInfoAddress,
+            }));
+            toast.dismiss()
+            setData(transformedData);
+        }catch(err){
+            toast.error('Error in fetching campaign')
+        }
     };
 
     useEffect(() => {
@@ -96,6 +102,7 @@ export default function CampaignList() {
 
     return (
         <div className='campaign-list-container'>
+        <Toaster />
         <div className='campaignlistcontainer bg-white text-black'>
             <Navbar page='campaign' color='white' textColor='black'/>
             <div className='card-container'>

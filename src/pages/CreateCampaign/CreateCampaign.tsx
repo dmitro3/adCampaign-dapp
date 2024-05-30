@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import CreateCampaignFormik from '../../components/CreateCampaignForm/CreateCampaignForm';
 import Navbar from '../../components/Navbar/navbar';
 import './CreateCampaign.scss'
 
 //todo - refactor it
 const CreateCampaign = () => {
-    const [campaignDetails, setCampaignDetails] = useState<any>();
     return (
         <main className="create-campaign-container">
             <Navbar page='campaign' color='white' textColor='black'/>
@@ -16,7 +14,7 @@ const CreateCampaign = () => {
                 </section>
                 <div className='preview-container flex justify-space-around'>
                 <div className='createform'>
-                    <CreateCampaignFormik setCampaignDetails={setCampaignDetails} />
+                    <CreateCampaignFormik />
                 </div>
                 <div className='previewcard'>
                     {/* <CampaignCard {...campaignDetails} /> */}

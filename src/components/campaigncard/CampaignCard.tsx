@@ -148,7 +148,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                                 walletAddress,
                                 transactionDigest: tx?.effects?.transactionDigest
                             });
-                            toast.success('Coins added successfully!');
+                            toast.success('Please refresh updated values');
                             resolve();
                         },
                         onError: (error) => {
@@ -214,6 +214,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             };
             toast.loading('Creating URL...')
             setError(false);
+            setLoading(true)
             const campaignUrl = generateCampaignUrl();
             const affiliateProfile = await getAffiliateProfile();
             const response = await createAffiliate({
@@ -275,7 +276,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft}`}</span>} alt="duration" />
                     <CardIconLabel src="/user.png" text={<span>{`SUI${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
                 </div>
-                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)} />
+                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading}/>
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                 </div>
