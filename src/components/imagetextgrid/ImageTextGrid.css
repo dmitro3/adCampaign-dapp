@@ -15,3 +15,9 @@
 .grid-col-rev {
     grid-auto-flow: dense;
 }
+
+@media screen and (max-width: 820px) {
+    .img-text-container{
+        margin: 30px;
+    }
+}
