@@ -12,7 +12,7 @@ export default function CardPrice({ currentPrice, totalPrice, onClick, loading }
         <div className="card-price-container">
             <div className="card-price flex font-size-16 justify-between align-center">
                 <div className="price-details flex align-center">
-                    <span className="current-price text-black font-size-24 font-weight-800">${currentPrice}</span>
+                    <span className="current-price text-black font-size-24 font-weight-800">SUI {currentPrice}</span>
                     <div className="mt-13">
                         <span className="total-price font-size-16 font-weight-500">  /SUI {totalPrice}</span>
                         <p className="pool-amount font-size-10">Pool amount</p>

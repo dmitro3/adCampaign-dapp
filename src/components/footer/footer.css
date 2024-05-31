@@ -1,44 +1,41 @@
-.footer-container{
-    margin-top: 30px;
-    .contact-info {
-        text-align: center;
-    }
-    
-    .form-container {
-        display: grid;
-        gap: 10px;
-    }
-    .main-container {
-        margin-left: '10%';
-         margin-top: '80px';
-    }
-    form {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-    .btn{
-        width: 115px;
-    }
-    input[type="text"],
-    input[type="email"],
-    textarea {
-        width: 15rem;
-        background-color:white;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-    
-    @media screen and (max-width: 768px) {
-       form{
-        margin-top: 30px;
-       }
-        .contact-info{
-            display: none;
-        }
-    }
+.footer-container {
+    padding: 16px 0;
 }
 
+.footer-content {
+    margin-top: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 20px;
+    gap: 110px;
+}
 
+.social-handles {
+    display: flex;
+    gap: 30px;
+}
+
+.social-icon {
+    width: 36px;
+    height: 36px;
+}
+
+.contact-link, .get-in-touch-link {
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.contact-link:hover, .get-in-touch-link:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}

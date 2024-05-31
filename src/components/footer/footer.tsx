@@ -1,17 +1,27 @@
-import ContactForm from '../contactform/ContactForm';
 import './Footer.css';
 
 function Footer() {
     return (
         <footer className="footer-container bg-footer py-4">
-            <div className="maincontainer main-container flex justify-space-evenly">
-                <div className="contact-info grid">
-                    <h2 className="ff-primary font-size-16 text-black font-weight-600">Contact info</h2>
-                    <div className='flex justify-center'>
-                        <img src="location.png" alt="Location icon" className="mb-4" />
-                    </div>
+            <div className="footer-content flex  align-center">
+                <div className="social-handles">
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/twitter.png" alt="Facebook" className="social-icon" />
+                    </a>
+                    <a href="https://gmail.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/gmail.png" alt="Instagram" className="social-icon" />
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/linkedin.png" alt="LinkedIn" className="social-icon" />
+                    </a>
                 </div>
-                <ContactForm />
+                <div className="contact-info flex align-center">
+                    <img src='/contact.png' alt='contact'></img>
+                    <a href="mailto:example@gmail.com" className="contact-link text-black ff-primary font-size-16">Book a Call</a>
+                </div>
+                <div className="get-in-touch">
+                    <a href="https://forms.gle/" target="_blank" rel="noopener noreferrer" className="get-in-touch-link text-black ff-primary font-size-16">Get in Touch</a>
+                </div>
             </div>
         </footer>
     );

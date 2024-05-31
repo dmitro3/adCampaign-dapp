@@ -10,3 +10,14 @@
 .note{
     width: 367px;
 }
+
+.createform select{
+    display: flex;
+    border: 1px solid var(--clr-crayola);
+    border-radius: 100vw;
+    height: 48px;
+    width: 367px;
+    background-color: var(--clr-white);
+    margin: 10px 0;
+    padding-left: 12px;
+}

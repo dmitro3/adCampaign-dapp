@@ -18,6 +18,11 @@ interface ImageFile {
     preview: string;
 }
 
+const categoryOptions = [
+    'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin', 'Dev Tooling',
+    'Wallets', 'DAO’s', 'Gaming', 'Bridge', 'DEX', 'Others'
+];
+
 const CreateCampaignForm = () => {
     const [imageUrl, setImageUrl] = useState<ImageFile | null>(null);
     const account = useCurrentAccount() as { address: string };
@@ -170,6 +175,7 @@ const CreateCampaignForm = () => {
                     handleChange,
                     handleBlur,
                     handleSubmit,
+                    setFieldValue,
                     isSubmitting,
                 }: any) => {
 
@@ -178,7 +184,36 @@ const CreateCampaignForm = () => {
                             <Toaster />
                             {createCampaignInputFields.map((field, index) => (
                                 <article key={`formik-${index}`}>
-                                    {field.type == 'image' ?
+                                    {field.name === 'category'? (
+                                        <section>
+                                            <select
+                                                name="category"
+                                                value={values.category}
+                                                onChange={(e) => {
+                                                    handleChange(e);
+                                                    if (e.target.value !== 'Others') {
+                                                        setFieldValue('otherCategory', '');
+                                                    }
+                                                }}
+                                                onBlur={handleBlur}
+                                            >
+                                                {categoryOptions.map((option) => (
+                                                    <option key={option} value={option}>
+                                                        {option}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {values.category === 'Others' && (
+                                                <OvalInputBox
+                                                    placeholder="Enter category"
+                                                    name="otherCategory"
+                                                    handleChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    value={values.otherCategory}
+                                                />
+                                            )}
+                                        </section>
+                                    ) : field.type == 'image' ? (
                                         <section>
                                             <CustomImageUploader
                                                 image={imageUrl}
@@ -192,7 +227,8 @@ const CreateCampaignForm = () => {
                                                 }
                                             />
                                         </section>
-                                        : <OvalInputBox
+                                    ) : (
+                                        <OvalInputBox
                                             placeholder={field.placeholder}
                                             name={field.name}
                                             handleChange={handleChange}
@@ -200,11 +236,12 @@ const CreateCampaignForm = () => {
                                             value={values[field.name]}
                                             endIcon={<div className={field.name === 'campaignBudget' ? 'currency' : ''} dangerouslySetInnerHTML={{ __html: field.endIcon as any }}></div>}
                                             type={field.type}
-                                        />}
-                                    {<p className='text-red'> {errors[field.name] && touched[field.name] && errors[field.name]  } </p>}
+                                        />
+                                    )}
+                                    {<p className='text-red'> {errors[field.name] && touched[field.name] && errors[field.name]} </p>}
                                 </article>
                             ))}
-                            <p className='note font-size-14 ff-tertiary font-weight-600'>Note: A 10% fee is added on top of  the campaign budget to cover gas-free, real-time transactions for affiliates.</p>
+                            <p className='note font-size-14 ff-tertiary font-weight-600'>Note: A 10% fee is added on top of the campaign budget to cover gas-free, real-time transactions for affiliates.</p>
                             <CustomButton color="blue" title="Create" width="203px" height="50px" type="submit" disabled={isSubmitting} />
                             {transactionFinished &&
                                 <div>
