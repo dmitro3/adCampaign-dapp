@@ -126,7 +126,7 @@ export const addSupporters = async (contents: any) => {
     await fetch(`${API_URL}/ad/supporters/create`, config);
 }
 
-export const fetchCampaigns = async () => {
+export const fetchCampaigns = async ({page,limit,category,sortBy}: any) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -134,7 +134,7 @@ export const fetchCampaigns = async () => {
     },
     method: "GET",
   }
-  const response = await fetch(`${API_URL}/ad/campaigns`, config)
+  const response = await fetch(`${API_URL}/ad/campaigns?page=${page}&limit=${limit}&category=${category}&sortBy=${sortBy}`, config);
   const data = response.json();
   return data;
 }

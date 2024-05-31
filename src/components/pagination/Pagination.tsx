@@ -1,3 +1,4 @@
+import React from 'react';
 import './Pagination.css';
 
 type PaginationProps = {
@@ -12,7 +13,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             {Array.from({ length: totalPages }, (_, i) => (
                 <button
                     key={i}
-                    className={`text-black bg-white page-button ${i + 1 === currentPage ? 'active' : ' text-white'}`}
+                    className={`text-black bg-white page-button ${i + 1 === currentPage ? 'active' : ''}`}
                     onClick={() => onPageChange(i + 1)}
                 >
                     {i + 1}

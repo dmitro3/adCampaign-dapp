@@ -1,6 +1,6 @@
 @import "../../styles/mixin.scss";
 .campaign-list-container{
-
+    background-color: var(--clr-cultured);
     .campaign-list {
         @include grid-container-cards(3, 50px, 0.2fr);
         
@@ -55,7 +55,7 @@
     
    
     .campaign-subtext{
-        margin-right:150px;
+        margin-right:68px;
     }
     .card-container{
         max-width:1500px;

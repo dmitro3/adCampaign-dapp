@@ -1,4 +1,5 @@
 .filters {
+    
     display: flex;
     gap: 11px;
     margin-bottom: 20px;
@@ -19,4 +20,11 @@
     select option{
         border-radius: 50px;
     }
+}
+
+@media screen and (max-width: 880px){
+   .filters{
+    margin-top: 30px;
+    justify-content: center;
+   }
 }

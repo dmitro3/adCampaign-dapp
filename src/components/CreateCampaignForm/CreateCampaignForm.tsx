@@ -204,6 +204,7 @@ const CreateCampaignForm = () => {
                                     {<p className='text-red'> {errors[field.name] && touched[field.name] && errors[field.name]  } </p>}
                                 </article>
                             ))}
+                            <p className='note font-size-14 ff-tertiary font-weight-600'>Note: A 10% fee is added on top of  the campaign budget to cover gas-free, real-time transactions for affiliates.</p>
                             <CustomButton color="blue" title="Create" width="203px" height="50px" type="submit" disabled={isSubmitting} />
                             {transactionFinished &&
                                 <div>

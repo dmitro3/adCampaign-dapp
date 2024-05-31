@@ -78,7 +78,7 @@ const CampaignDetails = () => {
         <main className="campaign-details-container">
            <Navbar page='campaign' color='white' textColor='black'/>
         {campaign && <section className="campaign-details-section"> 
-            <p className="title ff-tertiary text-transform-capitalize"> {campaign.campaignName || campaign.companyName} Ad Campaign</p>
+            {campaign.campaignName.length > 20  && <p className="title ff-tertiary text-transform-capitalize"> {campaign.campaignName.substring(0,20)}......... Ad Campaign</p>}
             <section className="grid-container">
                 <article className="grid-row">
                    <CampaignDetailsCardWrapper totalAffiliates={affiliates?.length} totalClicks={metrics.totalClicks}/>

@@ -253,7 +253,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     }
 
     return (
-        <div className={`card bg-white ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
+        <div className={`card  ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
             {loading}
             {error}
             <Toaster />
@@ -264,31 +264,50 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 </div>
             </div>
             <div className="card-content bg-white">
-                <div className='flex'>
-                    <p className='add-money bg-white flex font-size-14 '>
+                <div className='flex add-money'>
                         <CustomButton title="$ Add Money" color='#4880FF' onClick={togglePopUp} backgroundColor='white' className='add-money-button' />
-                    </p>
+                    
                     <MetricsOverview>
                         <img src={'/star.png'} alt={'star'} />
                         <span>{clicks} Clicks</span>
                     </MetricsOverview>
                 </div>
                 <div className='titleStyles'>
-                    <h3 className='ff-tertiary font-weight-800'>{title}</h3>
+                {title.length > 50 ? (
+                        <h3 className='ff-tertiary font-weight-800'>{title.substring(0, 50)}...</h3>
+                    ) : (
+                        <h3 className='ff-tertiary font-weight-800'>{title}</h3>
+                    )}
                     <AddressURL type={'object'} address={campaignInfoAddress}  />
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
                     <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft}`}</span>} alt="duration" />
                     <CardIconLabel src="/user.png" text={<span>{`SUI${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
+                    
                 </div>
                 <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading}/>
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                 </div>
                 { viewMore && (
-                     <p className='text-gray'>Description: {description}</p>
+                    <div>
+                        {description.length > 100 ? (
+                            <>
+                                <p className='text-gray'>Description: {description.substring(0, 100)}........</p>
+                                <div className='flex justify-end' >
+                                </div>
+                            </>
+                        ) : (
+
+                               <p className='text-gray'>Description: {description}</p>
+                       
+                        )}
+                    </div>
                 )}
-                <CustomButton border="none" backgroundColor="white" color='black'  extraStyles='text-gray' title={viewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
+                <div className='view-more-container'>
+                    
+                <CustomButton border="none" backgroundColor="white" color='black' extraStyles='text-gray' title={viewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
+                </div>
             </div>
             {popUp && (
                     <div className="popup-wrapper">
