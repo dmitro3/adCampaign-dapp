@@ -5,12 +5,27 @@
         font-size: var(--fs-32);
         font-weight: var(--fw-800);
     }
-
+    .preview-container{
+       margin-top: 60px;
+    }
     .sub-heading{
         font-size: var(--fs-16);
         line-height: var(--lh-24);
     }
     .card{
         margin-top: 50px;
+    }
+    @media screen and (max-width: 768px){
+        .preview-container{
+            display: block;
+        }
+        .createform{
+            display: flex;  
+            justify-content: center;
+        }
+        .previewcard{
+            display: flex;
+            justify-content: center;
+        }
     }
 }

@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useCurrentAccount } from "@mysten/dapp-kit";
 import { useParams } from "react-router-dom";
 import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, fetchSupportersByCampaignId } from "../../common/services/api.services.ts";
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
 import CardTable from "../../components/CardTable/CardTable.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
-import SearchBar from "../../components/searchbar/SearchBar";
+import Navbar from "../../components/Navbar/navbar.tsx";
 import './CampaignDetails.scss'
 
+
 const CampaignDetails = () => {
+    const account  = useCurrentAccount() as {address: string};
     const { id : campaignInfoAddress} = useParams();  
     const [campaign, setCampaign] = useState() as any;
     const [activePopUp, setActivePopUp] = useState<string | null>(null);
@@ -18,24 +22,41 @@ const CampaignDetails = () => {
         totalEarnings: 0,
     });
 
-    const getAffiliatesByCampaignId = async () =>{
-        const data = await fetchAffiliatesByCampaignId({
+    const getAffiliatesByCampaignId = async (campaign: any) =>{
+        const datas = await fetchAffiliatesByCampaignId({
             campaignInfoAddress
         });
-        setAffiliates(data || []);
+        const transformedData = datas.map((data:any)=> {return {...data, earnings: data.validClicks*campaign.cpc}})
+        setAffiliates(transformedData || []);
     }
 
     const getSupportersByCampaignId = async () => {
-        const data = await fetchSupportersByCampaignId({
-            campaignInfoAddress
-        })
-        setSupporters(data || [])
+        try{
+            toast.loading('Loading...')
+            const data = await fetchSupportersByCampaignId({
+                campaignInfoAddress
+            })
+            toast.dismiss()
+            setSupporters(data || [])
+        }catch(err){
+            console.log('error-->', err)
+            toast.error('Error in loading details')
+        }
+       
     }
 
     const getCampaignIdByDetails = async () => {
-        const data =  await  fetchCampaignById({campaignInfoAddress});
-        if(data.length){
-            setCampaign(data[0])
+        try{
+            toast.loading('Loading...')
+            const data =  await  fetchCampaignById({campaignInfoAddress});
+            if(data.length){
+                setCampaign(data[0])
+                getAffiliatesByCampaignId(data[0])
+            }
+            toast.dismiss()
+        }catch(err){
+            console.log('error-->', err)
+            toast.error('Error in loading details')
         }
     }
 
@@ -45,7 +66,6 @@ const CampaignDetails = () => {
     }
 
     useEffect(()=>{
-        getAffiliatesByCampaignId()
         getSupportersByCampaignId()
         getCampaignIdByDetails()
         getAffiliateMetrics()
@@ -56,12 +76,12 @@ const CampaignDetails = () => {
     };
     return(
         <main className="campaign-details-container">
-        <SearchBar />
+           <Navbar page='campaign' color='white' textColor='black'/>
         {campaign && <section className="campaign-details-section"> 
             <p className="title ff-tertiary text-transform-capitalize"> {campaign.campaignName || campaign.companyName} Ad Campaign</p>
             <section className="grid-container">
                 <article className="grid-row">
-                   <CampaignDetailsCardWrapper totalAffiliates={metrics.totalEarnings} totalClicks={metrics.totalClicks}/>
+                   <CampaignDetailsCardWrapper totalAffiliates={affiliates?.length} totalClicks={metrics.totalClicks}/>
                    {/* todo - current price and campaign budget */}
                     <CampaignCard
                         key={1}
@@ -69,15 +89,14 @@ const CampaignDetails = () => {
                         category={campaign.category}
                         clicks={(campaign?.validClicks + campaign?.invalidClicks) || 0}
                         title={campaign.companyName}
-                        daysLeft={campaign.endDate - campaign.startDate}
-                        costPerClick={campaign.cpc/1e9}
-                        currentPrice={0}
-                        totalPrice={campaign.campaignBudget / 1e9}
+                        daysLeft={`${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`}
+                        costPerClick={campaign.cpc}
+                        totalPrice={campaign.campaignBudget}
                         likes={0}
                         dislikes={0}
                         startDate={campaign.startDate}
                         endDate={campaign.endDate}
-                        walletAddress={campaign.walletAddress}
+                        walletAddress={account?.address}
                         description={campaign.description}
                         url={campaign.originalUrl}
                         campaignInfoAddress={campaign.campaignInfoAddress}

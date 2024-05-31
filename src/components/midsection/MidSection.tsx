@@ -1,4 +1,5 @@
-import FeatureItem from '../FeatureItem/FeatureItem';
+
+import FeatureItem from '../featureitem/FeatureItem';
 import './MidSection.scss';
 
 export default function MidSection() {
