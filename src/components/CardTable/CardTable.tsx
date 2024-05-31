@@ -10,7 +10,6 @@ const CardTable = ({title, contents}:{title: string, contents: any}) => {
     const addressHeaders = ['profileAddress', 'transactionDigest', 'walletAddress']
 
     const getType = (key: string) => {
-        console.log('----key---', key)
         if(key === 'profileAddress'){
             return 'object'
         }else if(key === 'walletAddress'){

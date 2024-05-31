@@ -13,7 +13,6 @@ import MetricsOverview from '../MetricsOverview/MetricsOverview';
 import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
 import moment from 'moment';
-import CardReaction from '../cardreaction/CardReaction';
 import CustomButton from '../CustomButton/CustomButton';
 import ShareLink from '../ShareLink/ShareLink';
 import { addSupporters } from '../../common/services/api.services';
@@ -52,8 +51,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         daysLeft,
         costPerClick,
         totalPrice,
-        likes,
-        dislikes,
         endDate,
         walletAddress,
         description,
@@ -98,84 +95,92 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
 
 
     const handleAddCoins = () => {
-        setLoading(true);
-        setError(false);
-        toast.loading('Adding...');
-
-        return new Promise<void>((resolve, reject) => {
-            const txb = new TransactionBlock();
-
-            if (!txb.pure || !txb.object) {
-                console.error('TransactionBlock methods not available', txb);
-                setLoading(false);
-                setError(true);
-                toast.dismiss();
-                toast.error('Transaction setup error.');
-                return;
-            }
-
-            const coinsInSUI =  currencyConverterIntoSUI(parseFloat(addCoinPayload.coins))
-
-            try {
-                txb.moveCall({
-                    arguments: [
-                        txb.object(CAMPAIGN_CONFIG),
-                        txb.object(campaignInfoAddress),
-                        txb.pure.string(addCoinPayload.message),
-                        txb.pure.u64(coinsInSUI),
-                        txb.object(maxCoinValueAddress)
-                    ],
-                    target: `${CAMPAIGN_PACKAGE_ID}::campaign_fund::update_campaign_pool`,
-                });
-
-                signAndExecute(
-                    {
-                        transactionBlock: txb,
-                        options: {
-                            showEffects: true,
+        if(walletAddress){
+            setLoading(true);
+            setError(false);
+            toast.loading('Adding...');
+    
+            return new Promise<void>((resolve, reject) => {
+                const txb = new TransactionBlock();
+    
+                if (!txb.pure || !txb.object) {
+                    console.error('TransactionBlock methods not available', txb);
+                    setLoading(false);
+                    setError(true);
+                    toast.dismiss();
+                    toast.error('Transaction setup error.');
+                    return;
+                }
+    
+                const coinsInSUI =  currencyConverterIntoSUI(parseFloat(addCoinPayload.coins))
+    
+                try {
+                    txb.moveCall({
+                        arguments: [
+                            txb.object(CAMPAIGN_CONFIG),
+                            txb.object(campaignInfoAddress),
+                            txb.pure.string(addCoinPayload.message),
+                            txb.pure.u64(coinsInSUI),
+                            txb.object(maxCoinValueAddress)
+                        ],
+                        target: `${CAMPAIGN_PACKAGE_ID}::campaign_fund::update_campaign_pool`,
+                    });
+    
+                    signAndExecute(
+                        {
+                            transactionBlock: txb,
+                            options: {
+                                showEffects: true,
+                            },
                         },
-                    },
-                    {
-                        onSuccess: async (tx: any) => {
-                            setLoading(false);
-                            toast.dismiss();
-                            await addSupporters({
-                                campaignConfig: CAMPAIGN_CONFIG,
-                                campaignInfoAddress: campaignInfoAddress,
-                                message: addCoinPayload.message,
-                                coins: coinsInSUI,
-                                maxCoinValueAddress: maxCoinValueAddress,
-                                walletAddress,
-                                transactionDigest: tx?.effects?.transactionDigest
-                            });
-                            toast.success('Please refresh updated values');
-                            resolve();
-                        },
-                        onError: (error) => {
-                            setLoading(false);
-                            setError(true);
-                            toast.dismiss();
-                            toast.error('Error in transaction. Try to add more coins');
-                            reject(error);
-                            console.error('Error in transaction', error);
-                        },
-                        onSettled: () => {
-                            if(togglePopUp){
-                                togglePopUp()
+                        {
+                            onSuccess: async (tx: any) => {
+                                setLoading(false);
+                                toast.dismiss();
+                                await addSupporters({
+                                    campaignConfig: CAMPAIGN_CONFIG,
+                                    campaignInfoAddress: campaignInfoAddress,
+                                    message: addCoinPayload.message,
+                                    coins: coinsInSUI,
+                                    maxCoinValueAddress: maxCoinValueAddress,
+                                    walletAddress,
+                                    transactionDigest: tx?.effects?.transactionDigest
+                                });
+                                toast.success('Please refresh updated values');
+                                resolve();
+                            },
+                            onError: (error) => {
+                                setLoading(false);
+                                setError(true);
+                                toast.dismiss();
+                                if(error.message == 'Rejected from user'){
+                                    toast.error('Rejected from user');
+                                }else{
+                                    toast.error('Error in transaction. Try to add more coins');
+                                }
+                                reject(error);
+                                console.error('Error in transaction', error);
+                            },
+                            onSettled: () => {
+                                if(togglePopUp){
+                                    togglePopUp()
+                                }
+                               
                             }
-                           
                         }
-                    }
-                );
-            } catch (error) {
-                console.error('Error during transaction setup', error);
-                setLoading(false);
-                setError(true);
-                toast.dismiss();
-                toast.error('Error during transaction setup.');
-                reject(error);
-            }
-        });
+                    );
+                } catch (error) {
+                    console.error('Error during transaction setup', error);
+                    setLoading(false);
+                    setError(true);
+                    toast.dismiss();
+                    toast.error('Error during transaction setup.');
+                    reject(error);
+                }
+            });
+        }else{
+            toast.error('Please connect to your wallet address')
+        }
     };
 
     const getAffiliateProfile = async () => {
@@ -207,35 +212,39 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     }
 
     const handleAffiliateCreationURL = async () => {
-        try {
-            if(!validateCampaignLive(endDate)){
-                toast.error('Campaign already ended')
-                return;
-            };
-            toast.loading('Creating URL...')
-            setError(false);
-            setLoading(true)
-            const campaignUrl = generateCampaignUrl();
-            const affiliateProfile = await getAffiliateProfile();
-            const response = await createAffiliate({
-                originalUrl: url,
-                campaignUrl,
-                cpc: costPerClick,
-                walletAddress,
-                campaignInfoAddress: campaignInfoAddress,
-                profileAddress: affiliateProfile,
-                expirationTime: endDate,
-            });
-            setCampaignUrl(response?.campaignUrl || '');
-            setLoading(false);
-            toast.dismiss();
-            toast.success('Campaign created successfully!');
-        } catch (error) {
-            setLoading(false);
-            setError(true);
-            toast.dismiss();
-            toast.error('Error in submission.');
-            console.error('Error in handleSubmit', error);
+        if(walletAddress){
+            try {
+                if(!validateCampaignLive(endDate)){
+                    toast.error('Campaign already ended')
+                    return;
+                };
+                toast.loading('Creating URL...')
+                setError(false);
+                setLoading(true)
+                const campaignUrl = generateCampaignUrl();
+                const affiliateProfile = await getAffiliateProfile();
+                const response = await createAffiliate({
+                    originalUrl: url,
+                    campaignUrl,
+                    cpc: costPerClick,
+                    walletAddress,
+                    campaignInfoAddress: campaignInfoAddress,
+                    profileAddress: affiliateProfile,
+                    expirationTime: endDate,
+                });
+                setCampaignUrl(response?.campaignUrl || '');
+                setLoading(false);
+                toast.dismiss();
+                toast.success('Campaign created successfully!');
+            } catch (error) {
+                setLoading(false);
+                setError(true);
+                toast.dismiss();
+                toast.error('Error in submission.');
+                console.error('Error in handleSubmit', error);
+            }
+        }else{
+            toast.error('Please connect to your wallet address')
         }
     };
     const Url = "https://" + url;
@@ -252,10 +261,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 <img src={imageSrc} alt="Card Image" />
                 <div className="card-label bg-white flex ff-tertiary font-color-yellow-orange font-weight-700 justify-center">
                     {category}
-                </div>
-                <div className="card-reactions ff-tertiary flex align-center">
-                    <CardReaction src="/like.png" alt="Like Image" count={likes} />
-                    <CardReaction src="/dislike.png" alt="Dislike Image" count={dislikes} />
                 </div>
             </div>
             <div className="card-content bg-white">

@@ -17,11 +17,9 @@ interface ImageFile {
     file: File;
     preview: string;
 }
-//todo - unix - start date
-//todo -  remove previous dates disabled
+
 const CreateCampaignForm = () => {
     const [imageUrl, setImageUrl] = useState<ImageFile | null>(null);
-    // const [formValues, setFormValues] = useState(createCampaignInitialValues);
     const account = useCurrentAccount() as { address: string };
     const [transactionFinished, setTransactionFinished] = useState(false);
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
@@ -50,19 +48,24 @@ const CreateCampaignForm = () => {
 
     const createCampaignInSUI = (formInputs: any) => {
         try {
-            toast.loading('Creating...');
-            console.log( 'before start date=====>', formInputs.startDate)
+            if(!account?.address){
+                toast.error('Please connect your wallet address')
+                return;
+            }
             formInputs.startDate = moment().unix();
-            console.log( 'after start date======>', formInputs.startDate)
-            console.log('forms=====end====date==before===>', formInputs.endDate,)
             let momentObjEndDate = moment(formInputs.endDate)
             const unixEndDate = momentObjEndDate.unix() as any;
             formInputs.banner = imageUrl;
-            console.log('forms=====end====date==after===>', formInputs.endDate, '---->', unixEndDate)
+
+            if(unixEndDate < formInputs.startDate){
+                toast.error('Expiration date should be future date')
+                return;
+            }
+
+            toast.loading('Creating...');
 
             const campaignBudget = currencyConverterIntoSUI(parseFloat(formInputs.campaignBudget))
             const cpc = currencyConverterIntoSUI(parseFloat(formInputs.cpc))
-            console.log('---campaign budget--', campaignBudget, '---cpc---', cpc)
             const txb = new TransactionBlock();
             txb.moveCall({
                 arguments: [
@@ -138,35 +141,8 @@ const CreateCampaignForm = () => {
     }, [suiObject?.data?.data]);
 
     const handleSubmit = (values: any) => {
-        console.log('---main---values---->>', values)
         createCampaignInSUI(values);
     }
-
-    // const getCampaignDetails = (formValues: any) => {
-    //     const { campaignName, category, originalUrl, campaignBudget, cpc,endDate,description } = formValues;
-    //     console.log(', campaignBudget, cpc----->', campaignBudget, cpc)
-    //     const initialCampaignDetails = {
-    //         imageSrc: imageUrl || "/journey.png",
-    //         category: category || 'Category',
-    //         clicks: 0,
-    //         title: campaignName || 'Campaign Name',
-    //         daysLeft: getTimeLeft(endDate) || 0,
-    //         costPerClick: currencyConverterIntoSUI(parseFloat(cpc || 0)),
-    //         currentPrice: 0,
-    //         totalPrice: currencyConverterIntoSUI(parseFloat(campaignBudget || '0')),
-    //         likes: 0,
-    //         dislikes: 0,
-    //         startDate: moment().format('YYYY-MM-DD'),
-    //         endDate: endDate,
-    //         walletAddress: null,
-    //         description: description || 'Enter your Description here...',
-    //         url: originalUrl,
-    //         campaignInfoAddress: '',
-    //         togglePopUp: () => {},
-    //         popUp: false
-    //     };
-    //     setCampaignDetails(initialCampaignDetails);
-    // }
 
     return (
         <>
@@ -180,11 +156,9 @@ const CreateCampaignForm = () => {
                             errors[key] = 'Required';
                         }
                     }
-                    console.log('error---->', errors)
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    // setFormValues(values);
                     handleSubmit(values);
                     setSubmitting(false);
                 }}
@@ -198,10 +172,6 @@ const CreateCampaignForm = () => {
                     handleSubmit,
                     isSubmitting,
                 }: any) => {
-                    //todo - refactor
-                    // useEffect(() => {
-                    //     getCampaignDetails(values);
-                    // }, [values]);
 
                     return (
                         <form onSubmit={handleSubmit}>

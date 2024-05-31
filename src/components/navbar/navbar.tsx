@@ -9,6 +9,7 @@ export default function Navbar({ color, page, textColor }: { color: string, page
                     {/* {page === 'campaign' && ( */}
                         {/* // <a href="#" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>My Campaign</a> */}
                     {/* )} */}
+                    <a href="/" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Home</a>
                     <a href="/campaigns" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Become an Affiliate</a>
                     <a href="/campaign/create" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Start a campaign</a>
 

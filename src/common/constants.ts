@@ -16,7 +16,7 @@ export const createCampaignInputFields = [
     { placeholder: "Click to Upload Image Banner", name: "banner", type: "image"},
     { placeholder: "Description", name: "description", type:"text"  },
     { placeholder: "CTA link", name: "originalUrl", type:"text"  },
-    { placeholder: "End Date (DD/MM/YYY)", name: "endDate", type:"date" },
+    { placeholder: "Expiration Date", name: "endDate", type:"date" },
     { placeholder: "Budget", name: "campaignBudget", endIcon: '<p>$SUI</p>', type:"text"  },
     { placeholder: "Cost per click", name: "cpc", type:"text"  },
 ];
