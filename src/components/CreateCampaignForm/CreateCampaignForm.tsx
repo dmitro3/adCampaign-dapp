@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery } from '@mysten/dapp-kit';
@@ -20,10 +21,11 @@ interface ImageFile {
 
 const categoryOptions = [
     'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin', 'Dev Tooling',
-    'Wallets', 'DAO’s', 'Gaming', 'Bridge', 'DEX', 'Others'
+    'Wallets', 'DAO', 'Gaming', 'Bridge', 'DEX', 'Others'
 ];
 
 const CreateCampaignForm = () => {
+    const navigate = useNavigate();
     const [imageUrl, setImageUrl] = useState<ImageFile | null>(null);
     const account = useCurrentAccount() as { address: string };
     const [transactionFinished, setTransactionFinished] = useState(false);
@@ -57,6 +59,15 @@ const CreateCampaignForm = () => {
                 toast.error('Please connect your wallet address')
                 return;
             }
+            if(parseFloat(formInputs.campaignBudget) < 5){
+                toast.error('Minimim budget for the campaign should be 5 SUI')
+                return;
+            }
+            if(parseFloat(formInputs.cpc) < 0.05){
+                toast.error('Minimim cost per click should be 0.05 SUI')
+                return;
+            }
+
             formInputs.startDate = moment().unix();
             let momentObjEndDate = moment(formInputs.endDate)
             const unixEndDate = momentObjEndDate.unix() as any;
@@ -113,6 +124,9 @@ const CreateCampaignForm = () => {
                         toast.dismiss();
                         toast.success("success")
                         setTransactionFinished(true)
+                        setTimeout(()=>{
+                            navigate('/campaigns')
+                        },3000)
                     },
                     onError: (error) => {
                         toast.dismiss();
@@ -175,7 +189,6 @@ const CreateCampaignForm = () => {
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                    setFieldValue,
                     isSubmitting,
                 }: any) => {
 
@@ -191,9 +204,6 @@ const CreateCampaignForm = () => {
                                                 value={values.category}
                                                 onChange={(e) => {
                                                     handleChange(e);
-                                                    if (e.target.value !== 'Others') {
-                                                        setFieldValue('otherCategory', '');
-                                                    }
                                                 }}
                                                 onBlur={handleBlur}
                                             >

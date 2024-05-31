@@ -206,7 +206,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     };
 
     const validateCampaignLive = (endDate: any) => {
-        console.log('end date---', endDate, '---type---', typeof(endDate));
         const currentTime = moment().unix();
         return endDate > currentTime;
     }

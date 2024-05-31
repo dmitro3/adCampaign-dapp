@@ -46,9 +46,9 @@ const CardTable = ({title, contents}:{title: string, contents: any}) => {
                 <tbody>
                 {contents?.map((content: any, index: number) => (
                     <tr key={`content-${index}`}>
-                        {headers?.map((header: any) => (
+                        {headers?.map((header: any, index) => (
                             //todo - refactor this code
-                            <td key={header.id} className="text-transform-capitalize">{ ( addressHeaders.includes(header) ? <AddressURL type={getType(header)} address={content[header]} />  : (((typeof(content[header]) === 'number') && content[header] > 10000  ) ? currencyConverter(content[header]) : content[header] ) ) }</td>
+                            <td key={`values-${index}`} className="text-transform-capitalize">{ ( addressHeaders.includes(header) ? <AddressURL type={getType(header)} address={content[header]} />  : (((typeof(content[header]) === 'number') && content[header] > 10000  ) ? currencyConverter(content[header]) : content[header] ) ) }</td>
                         ))}
                     </tr>
                 ))}

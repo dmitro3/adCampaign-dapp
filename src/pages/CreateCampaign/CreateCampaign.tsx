@@ -1,5 +1,5 @@
 import CreateCampaignFormik from '../../components/CreateCampaignForm/CreateCampaignForm';
-import Navbar from '../../components/Navbar/navbar';
+import Navbar from '../../components/navbar/navbar';
 import './CreateCampaign.scss'
 
 //todo - refactor it

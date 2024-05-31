@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchCampaigns } from "../../common/services/api.services";
-import Navbar from '../Navbar/navbar';
+import Navbar from '../navbar/navbar';
 import CampaignCard from '../campaigncard/CampaignCard';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';

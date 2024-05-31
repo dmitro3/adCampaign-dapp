@@ -6,7 +6,7 @@ import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, 
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
 import CardTable from "../../components/CardTable/CardTable.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
-import Navbar from "../../components/Navbar/navbar.tsx";
+import Navbar from "../../components/navbar/navbar.tsx";
 import './CampaignDetails.scss'
 
 
@@ -78,7 +78,7 @@ const CampaignDetails = () => {
         <main className="campaign-details-container">
            <Navbar page='campaign' color='white' textColor='black'/>
         {campaign && <section className="campaign-details-section"> 
-            {campaign.campaignName.length > 20  && <p className="title ff-tertiary text-transform-capitalize"> {campaign.campaignName.substring(0,20)}......... Ad Campaign</p>}
+            <p className="title ff-tertiary text-transform-capitalize"> { campaign.campaignName.length > 20  ? `${campaign.campaignName.substring(0,20)}......... Ad Campaign` : campaign.companyName} </p>
             <section className="grid-container">
                 <article className="grid-row">
                    <CampaignDetailsCardWrapper totalAffiliates={affiliates?.length} totalClicks={metrics.totalClicks}/>
