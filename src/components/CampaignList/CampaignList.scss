@@ -5,7 +5,7 @@
         @include grid-container-cards(3, 50px, 0.2fr);
         
     }
-
+    
     .card-width-392{
         width: 392px;
     }
@@ -44,18 +44,20 @@
             display: flex;
             justify-content: center;
         }
+        .card-stats{
+            margin-left: 300px;
+        }
     }
-    @media  screen and (max-width: 410px){
     
-        
-    }
+
     .campaign-start-text{
         width: 48%;
     }
     
    
     .campaign-subtext{
-        margin-right:68px;
+        width: 450px;
+        margin-left: 60px;
     }
     .card-container{
         max-width:1500px;

@@ -57,6 +57,11 @@ export default function CampaignList() {
         try {
             toast.loading('Loading...');
             const { campaigns, totalPages } = await fetchCampaigns({ page: currentPage, limit: 12, category: filterOption, sortBy: sortOption });
+            if(campaigns.length === 0){
+                toast.dismiss();
+                toast.error('No campaigns found');
+                return;
+            } 
             setTotalPages(totalPages);
             const transformedData = campaigns.map((campaign: any) => ({
                 imageSrc: campaign?.banner,
@@ -108,10 +113,9 @@ export default function CampaignList() {
                 <div className='card-container'>
                     <div className='mt-68 flex justify-space-around align-center'>
                         <div className='campaign-start-text '>
-                            <h1 className='campaign-title'>Lorem Ipsum dior random content about ads</h1>
+                            <h1 className='campaign-title'>Start Your Campaign Now</h1>
                             <p className='campaign-subtitle'>
-                                Lorem Ipsum dior random content about ads etc that can be pushed over here 
-                                and tells the story about our product to be added here
+                            Launch your campaign and reach Global audience easily. Get started with real-time data and secure transactions
                             </p>
                         </div>
                         <StartCampaignBtn line1='Start your' line2='campaign now' />
@@ -119,8 +123,8 @@ export default function CampaignList() {
                     <div className='mt-68 campaign-header flex justify-space-around align-center'>
                         <div className='campaign-subtext'>
                             <div>
-                                <h1 className='text-black font-weight-700 font-size-52'>Campaigns</h1>
-                                <p className='text-gray font-size-20'>All the campaigns are listed here</p>
+                                <h1 className='text-black font-weight-700 font-size-52'>All Campaigns</h1>
+                                <p className='text-gray font-size-20'>Join campaigns below and earn rewards for each valid click. Share your referral links and start earning</p>
                             </div>
                         </div>
                         <Filters onSort={handleSort} onFilter={handleFilter} />

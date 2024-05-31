@@ -253,7 +253,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     }
 
     return (
-        <div className={`card  ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
+        <div className={`card bg-white  ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
             {loading}
             {error}
             <Toaster />
@@ -273,8 +273,8 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     </MetricsOverview>
                 </div>
                 <div className='titleStyles'>
-                {title.length > 50 ? (
-                        <h3 className='ff-tertiary font-weight-800'>{title.substring(0, 50)}...</h3>
+                {title.length > 30 ? (
+                        <h3 className='ff-tertiary font-weight-800 w-240'>{title.substring(0, 30)}...</h3>
                     ) : (
                         <h3 className='ff-tertiary font-weight-800'>{title}</h3>
                     )}
