@@ -12,6 +12,11 @@ export const createAffiliate = async (contents: any) => {
      }),
   }
   const response = await fetch(`${API_URL}/ad/affiliate/create`, config);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Something went wrong');
+  }
+
   const data = await response.json();
   return data;
 }

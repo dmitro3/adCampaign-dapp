@@ -213,15 +213,6 @@ const CreateCampaignForm = () => {
                                                     </option>
                                                 ))}
                                             </select>
-                                            {values.category === 'Others' && (
-                                                <OvalInputBox
-                                                    placeholder="Enter category"
-                                                    name="otherCategory"
-                                                    handleChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    value={values.otherCategory}
-                                                />
-                                            )}
                                         </section>
                                     ) : field.type == 'image' ? (
                                         <section>

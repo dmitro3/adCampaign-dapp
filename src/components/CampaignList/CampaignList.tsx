@@ -1,3 +1,4 @@
+import moment from 'moment';
 import  { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchCampaigns } from "../../common/services/api.services";
@@ -69,7 +70,7 @@ export default function CampaignList() {
                 clicks: 0,
                 validClicks: campaign.validClicks,
                 title: campaign?.companyName,
-                daysLeft: `${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`,
+                daysLeft: `${Math.ceil((campaign?.endDate - moment().unix()) / (60 * 60 * 24))} days left`,
                 costPerClick: currencyConverter(campaign?.cpc),
                 currentPrice: 0,
                 totalPrice: currencyConverter(campaign?.campaignBudget),

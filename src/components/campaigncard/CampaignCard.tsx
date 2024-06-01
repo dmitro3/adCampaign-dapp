@@ -214,7 +214,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         if(walletAddress){
             try {
                 if(!validateCampaignLive(endDate)){
-                    toast.error('Campaign already ended')
+                    toast.error('Campaign already expired')
                     return;
                 };
                 toast.loading('Creating URL...')
@@ -235,11 +235,11 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 setLoading(false);
                 toast.dismiss();
                 toast.success('Campaign created successfully!');
-            } catch (error) {
+            } catch (error: any) {
                 setLoading(false);
                 setError(true);
                 toast.dismiss();
-                toast.error('Error in submission.');
+                toast.error(error.message);
                 console.error('Error in handleSubmit', error);
             }
         }else{

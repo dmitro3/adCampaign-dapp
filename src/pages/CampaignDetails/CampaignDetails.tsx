@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useCurrentAccount } from "@mysten/dapp-kit";
@@ -78,7 +79,7 @@ const CampaignDetails = () => {
         <main className="campaign-details-container">
            <Navbar page='campaign' color='white' textColor='black'/>
         {campaign && <section className="campaign-details-section"> 
-            <p className="title ff-tertiary text-transform-capitalize"> { campaign.campaignName.length > 20  ? `${campaign.campaignName.substring(0,20)}......... Ad Campaign` : campaign.companyName} </p>
+            <p className="title ff-tertiary text-transform-capitalize"> { campaign.companyName.length > 20  ? `${campaign.companyName.substring(0,20)}......... Ad Campaign` : campaign.companyName} </p>
             <section className="grid-container">
                 <article className="grid-row">
                    <CampaignDetailsCardWrapper totalAffiliates={affiliates?.length} totalClicks={metrics.totalClicks}/>
@@ -88,8 +89,8 @@ const CampaignDetails = () => {
                         imageSrc={campaign.banner}
                         category={campaign.category}
                         clicks={(campaign?.validClicks + campaign?.invalidClicks) || 0}
-                        title={campaign.companyName}
-                        daysLeft={`${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`}
+                        title={campaign.campaignName}
+                        daysLeft={`${Math.ceil((campaign?.endDate - moment().unix()) / (60 * 60 * 24))} days left`}
                         costPerClick={campaign.cpc}
                         totalPrice={campaign.campaignBudget}
                         likes={0}
