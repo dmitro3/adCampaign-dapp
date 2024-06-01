@@ -1,7 +1,7 @@
 export const createCampaignInitialValues = {
     companyName: '',
     campaignName: '',
-    category: '',
+    category: 'Defi',
     description: '',
     originalUrl:'',
     endDate: '',

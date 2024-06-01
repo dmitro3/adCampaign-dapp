@@ -6,14 +6,14 @@ function Footer() {
             <div className="footer-content flex  align-center">
                 <div className="social-handles">
                     <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                        <img src="/twitter.png" alt="Facebook" className="social-icon" />
+                        <img src="/twitterx.svg" alt="Facebook" className="social-icon" />
                     </a>
                     <a href="https://gmail.com" target="_blank" rel="noopener noreferrer">
                         <img src="/gmail.png" alt="Instagram" className="social-icon" />
                     </a>
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                    {/* <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
                         <img src="/linkedin.png" alt="LinkedIn" className="social-icon" />
-                    </a>
+                    </a> */}
                 </div>
                 <div className="contact-info flex align-center">
                     <img src='/contact.png' alt='contact'></img>

@@ -22,21 +22,23 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
     const renderPageNumbers = () => {
         const pages = [];
-        if (totalPages <= 3) {
-            for (let i = 1; i <= totalPages; i++) {
+        if (totalPages <= 3 || currentPage <= 3) {
+            for (let i = 1; i <= Math.min(totalPages, 3); i++) {
                 pages.push(i);
             }
         } else {
-            if (currentPage <= 2) {
-                pages.push(1, 2, 3);
-            } else if (currentPage >= totalPages - 1) {
-                pages.push(totalPages - 2, totalPages - 1, totalPages);
-            } else {
-                pages.push(currentPage - 1, currentPage, currentPage + 1);
+        
+            for (let i = currentPage - 1; i <= Math.min(currentPage + 1, totalPages); i++) {
+                pages.push(i);
             }
         }
+        if (totalPages > 3 && currentPage <= totalPages - 2) {
+            pages.push('...', totalPages);
+        }
+      
         return pages;
     };
+    
 
     return (
         <div className='pagination text-black flex justify-center align-center'>
@@ -51,7 +53,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                 <button
                     key={page}
                     className={`text-black bg-white page-button ${page === currentPage ? 'active' : ''}`}
-                    onClick={() => onPageChange(page)}
+                    onClick={() => onPageChange(page as number)}
                 >
                     {page}
                 </button>

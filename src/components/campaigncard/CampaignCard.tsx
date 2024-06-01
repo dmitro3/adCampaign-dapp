@@ -17,6 +17,7 @@ import CustomButton from '../CustomButton/CustomButton';
 import InfoCard from '../InfoCard/InfoCard';
 import ShareLink from '../ShareLink/ShareLink';
 import { addSupporters } from '../../common/services/api.services';
+import { getTimeLeft } from '../../common/helpers';
 import './CampaignCard.css';
 
 
@@ -26,7 +27,6 @@ interface CampaignCardProps {
     category: string;
     clicks: number;
     title: string;
-    daysLeft: any;
     costPerClick: number;
     totalPrice: number;
     likes: number;
@@ -41,6 +41,7 @@ interface CampaignCardProps {
     popUp: boolean;
     viewMoreToggle?:boolean;
     width?: string,
+    index?: number;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
@@ -49,7 +50,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         category,
         clicks,
         title,
-        daysLeft,
         costPerClick,
         totalPrice,
         endDate,
@@ -61,6 +61,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         popUp,
         width,
         viewMoreToggle = true,
+        index,
     } = campaign;
     const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
@@ -73,7 +74,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         message: ''
     });
     const [viewMore, setViewMore] = useState(viewMoreToggle );
-
+;
     const handleInputCoins = (e: any) => {
         setAddCoinPayload({
             ...addCoinPayload,
@@ -93,7 +94,9 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     const toggleShareLink = () => {
         setCampaignUrl('');
     };
+  
 
+    const daysleft= getTimeLeft(endDate);
 
     const handleAddCoins = () => {
         if(walletAddress){
@@ -281,8 +284,8 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     <AddressURL type={'object'} address={campaignInfoAddress}  />
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
-                    <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft}`}</span>} alt="duration" />
-                    <CardIconLabel src="/user.png" text={<span>{`SUI${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
+                    <CardIconLabel  toolkitname={`${index}info1`} src="/duration.png" text={<span>{ `${daysleft}`}</span>} alt="duration" />
+                    <CardIconLabel  toolkitname={`${index}info2`} src="/user.png" text={<span>{`${currencyConverter(costPerClick)} $SUI per click`}</span>} alt="user"/>
                     
                 </div>
                 <div className='flex'>
@@ -296,13 +299,14 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
       {description.length > 19 && (
         <div className='view-more-container'>
           <InfoCard
-            type="text"
+            toolkitname={`${index}description`}
+            types="text"
             toolkitContent={description}
           />
         </div>
       )}
     </div>
-                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading}/>
+                <CardPrice onClick={handleAffiliateCreationURL} toolkitname={`${index}info3`} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading}/>
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                 </div>
