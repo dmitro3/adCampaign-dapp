@@ -1,6 +1,7 @@
 import { ImageTextGrid } from '../imagetextgrid/ImageTextGrid';
 import InfoBadge from '../infobadge/InfoBadge';
 import CustomButton from '../CustomButton/CustomButton';
+import Footer from '../footer/footer';
 import './Lastsection.scss';
 
 const Lastsection = () => {
@@ -24,7 +25,7 @@ const Lastsection = () => {
                 <main className="mx-auto">
                     <ImageTextGrid
                         title="Monetize your way"
-                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, pulvinar facilisis justo mollis, auctor consequat urna."
+                        description="We expand your reach through individual affiliates, influencers, and website placements. Maximize revenue with a diverse advertising strategy."
                         imageSrc="/img01.png"
                         imageAlt="Monetize your way"
                         link='/campaigns'
@@ -33,7 +34,7 @@ const Lastsection = () => {
                     </ImageTextGrid>
                     <ImageTextGrid
                         title="Optimized for growth"
-                        description="The ecosystem is designed to help you generate profit. Set up complete ad funnels with ease using the Platform. Generate leads and convert your audience into paying subscribers, at no extra cost."
+                        description="Optimize your campaigns with AdToken's analytics. Track performance and achieve remarkable growth."
                         imageSrc="/img02.png"
                         imageAlt="Optimized for growth"
                         reverse={true}
@@ -48,6 +49,8 @@ const Lastsection = () => {
                             <CustomButton title="Get Started" color="black" backgroundColor="white" onClick={handleGetStarted}/>
                             <CustomButton title="Connect Wallet" color="white" backgroundColor="black" border="1px solid white" onClick={scrollToTop}/>
                         </div>
+                        <h3 className="font-size-32 font-weight-700 font-secondary"> Get connected with us</h3>
+                        <Footer />
                     </section>
                 </main>
             </div>

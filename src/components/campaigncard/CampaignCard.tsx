@@ -187,7 +187,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             toast.loading('Fetching affiliate profile...');
             const profileDetails = await fetchAffiliateProfile({ walletAddress });
             setLoading(false);
-            // toast.dismiss();
             if (profileDetails.length) {
                 return profileDetails[0].profileAddress;
             } 
