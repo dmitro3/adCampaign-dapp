@@ -1,4 +1,5 @@
 .info-icon-container {
+  margin-bottom: 12px;
     position: relative;
     display: inline-block;
   }
@@ -8,24 +9,49 @@
     height: 20px;
     cursor: pointer;
   }
-  
+  .viewmore-text{
+    font-size: 14px;
+    text-decoration-line: underline;
+
+  }
   .toolkit-content {
     visibility: hidden;
-    font-size: 14px;
-    width: 200px;
+    font-size: 10px;
+    max-height: 50px;
     background-color: #f9f9f9;
     color: #000;
     text-align: center;
     border-radius: 5px;
-    padding: 10px;
     position: absolute;
     z-index: 1;
-    right: -70px;
+    right: -90px;
+    top: -38px;
+    padding: 5px;
+    transform: translateX(-50%);
+    border: 1px solid #ccc;
+  }
+  .toolkit-text {
+    visibility: hidden;
+    font-size: 14px;
+    width: 338px;
+    min-height: 250px;
+    background-color: #f9f9f9;
+    color: #000;
+    text-align: center;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 1;
+    right: -192px;
+    top: -200px;
+    padding: 5px;
     transform: translateX(-50%);
     border: 1px solid #ccc;
   }
   
   .info-icon-container:hover .toolkit-content {
+    visibility: visible;
+  }
+  .info-icon-container:hover .toolkit-text {
     visibility: visible;
   }
   

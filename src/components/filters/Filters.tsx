@@ -1,22 +1,38 @@
-import './Filters.css'
-
+import React from 'react';
+import './Filters.css';
+import Dropdown from '../DropDown/DropDown';
 interface FiltersProps {
     onSort: (sortKey: string) => void;
     onFilter: (filterValue: string) => void;
+    sortOptions: string[];
+    categoryOptions: string[];
 }
 
-const Filters: React.FC<FiltersProps> = ({ onSort, onFilter }) => {
+const Filters: React.FC<FiltersProps> = ({ onSort, onFilter, sortOptions, categoryOptions }) => {
+    const handleSort = (sortKey: string) => {
+        onSort(sortKey);
+    };
+
+    const handleFilter = (filterValue: string) => {
+        onFilter(filterValue);
+    };
+
     return (
         <div className="filters">
-            <button onClick={() => onSort('Time Left')}>Time Left</button>
-            <button onClick={() => onSort('status')}>Status</button>
-            <button onClick={() => onSort('Rates Per Click')}>Rate/Click</button>
-            <select onChange={(e) => onFilter(e.target.value)}>
-                <option value="">All</option>
-                <option value="Meme Coin">Meme Coin</option>
-                <option value="NFT">NFT</option>
-                <option value="Wallets">Wallets</option>
-            </select>
+            <Dropdown 
+                imageSrc="/arrowdown.png" 
+                text="Sort By"
+                options={sortOptions}
+                onSelect={handleSort}
+                droptype='/sort.svg'
+            />
+            <Dropdown 
+                imageSrc="/arrowdown.png" 
+                text="All Categories"
+                options={categoryOptions}
+                onSelect={handleFilter}
+                droptype='/filter.svg'
+            />
         </div>
     );
 };

@@ -11,6 +11,8 @@
 }
 .view-more-container button{
   text-decoration: underline !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
 }
 .card {
   min-height: 490px;

@@ -15,7 +15,10 @@ export default function CardIconLabel({ src, alt, text, width, height, extraStyl
         <div className={`card-icon-label-container flex align-center justify-between text-gray font-size-14 ${extraStyles}`} style={{width, height}}>
             <img src={src} alt={alt} />
             {text}
-            {alt === "user" && <InfoCard toolkitContent="The amount in Campaign Currency affiliates earn per click" />}
+            <div className='user-icon'>
+            {alt === "user" && <InfoCard  type="img" toolkitContent="The amount in Campaign Currency affiliates earn per click" />}
+            </div>
+            {alt === "duration" && <InfoCard type="img"toolkitContent="The expiration date of the campaign" />}
         </div>
     );
 }
