@@ -9,7 +9,10 @@
   color: white;
   padding: 16px;
 }
+.logo{
+  width: 50px;
 
+}
 .navbar .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -49,9 +52,7 @@
   }
 }
 
-.earning-container {
-  position: relative;
-}
+
 
 .my-earning {
   cursor: pointer;
@@ -61,7 +62,7 @@
   visibility: hidden;
   transition: visibility 0s, opacity 0.3s linear;
   position: absolute;
-  top: 100%;
+  top: 60%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
@@ -70,9 +71,17 @@
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
-  color: black; 
+  color: black;
+  margin-top: 10px; 
 }
 
-.earning-container:hover .ad-campaign-list {
+.earning-container:hover .ad-campaign-list,
+.ad-campaign-list:hover {
   visibility: visible;
 }
+
+.earning-container {
+  position: relative;
+}
+
+
