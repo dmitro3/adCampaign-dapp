@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { Tooltip } from "react-tooltip";
 import AddressURL from "../AddressURL/AddressURL";
 import Card from "../Card/Card";
-import './CardTable.scss'
 import { currencyConverter } from "../../common/helpers";
+import './CardTable.scss'
 
 const CardTable = ({title, contents}:{title: string, contents: any}) => {
 
@@ -26,8 +27,25 @@ const CardTable = ({title, contents}:{title: string, contents: any}) => {
         }
     }
 
+    const HandleTextOverflow = ({content, header}:any) => {
+        const text = content[header]?.length>10 ? content[header].slice(0,9)+'...' : content[header];
+        return(
+            <>
+                <p data-tooltip-id="my-tooltip-1">{text}</p>     
+                {header == 'message' && <Tooltip
+                    id="my-tooltip-1"
+                    place="bottom"
+                    content={content[header]}
+                />}
+           </>
+        )
+    }
+
     useEffect(()=>{
-        setHeaders(tranformData(contents) as any)
+        const headerArr = tranformData(contents);
+        headerArr?.unshift('#Rank');
+        headerArr?.sort()
+        setHeaders(headerArr as any)
     },[contents])
 
     return(
@@ -38,20 +56,29 @@ const CardTable = ({title, contents}:{title: string, contents: any}) => {
                 <tr>
                     {
                         headers?.length && headers.map((header, index)=>(
-                            <th  className="font-size-10 text-transform-uppercase " key={`header-${index}`}>{header}</th>
+                            <th  className="font-size-10 text-transform-capitalize " key={`header-${index}`}>{header === 'transactionDigest' ? 'Explorer' :  header}</th>
                         ))
                     }
                 </tr>
                 </thead>
                 <tbody>
-                {contents?.map((content: any, index: number) => (
-                    <tr key={`content-${index}`}>
-                        {headers?.map((header: any, index) => (
-                            //todo - refactor this code
-                            <td key={`values-${index}`} className="text-transform-capitalize">{ ( addressHeaders.includes(header) ? <AddressURL type={getType(header)} address={content[header]} />  : (((typeof(content[header]) === 'number') && content[header] > 10000  ) ? currencyConverter(content[header]) : content[header] ) ) }</td>
-                        ))}
-                    </tr>
-                ))}
+                    {contents?.map((content: any, index: number) => (
+                        <>
+                            <tr>
+                                {headers?.map((header: any) => (
+                                    //todo - refactor this code
+                                    <td key={`values-${index}`} className="text-transform-capitalize">
+                                        {header === '#Rank' && <p>{index+1}</p>}
+                                        {( addressHeaders.includes(header) ? 
+                                            <AddressURL type={getType(header)} address={content[header]} />  : 
+                                                (((typeof(content[header]) === 'number') && content[header] > 10000  ) ? 
+                                                    currencyConverter(content[header]) :  
+                                                        <HandleTextOverflow key={`overflow-${index}`} content={content} header={header} /> ) ) }
+                                    </td>
+                                ))}
+                            </tr>
+                        </>
+                    ))}
                 </tbody>
             </table>
         </Card>     

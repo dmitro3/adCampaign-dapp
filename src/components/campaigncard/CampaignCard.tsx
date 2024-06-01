@@ -253,7 +253,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             {error}
             <Toaster />
             <div className="card-image" onClick={()=>navigate(`/campaign/${campaignInfoAddress}`)}>
-                <img src={imageSrc} alt="Card Image" />
+                <img src={imageSrc || '/journey.png'} alt="Card Image" />
                 <div className="card-label bg-white flex ff-tertiary font-color-yellow-orange font-weight-700 justify-center">
                     {category}
                 </div>

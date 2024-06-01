@@ -11,8 +11,9 @@ export default function TopSection() {
         <div className="landing-page-container bg-dark ">
             <div className="grid-container grid-cols-2-md topsectiongrid">
                 <div className="content">
-                    <h1 className='font-size-49 text-white'>Reach more people in real time</h1>
-                    <p className='font-size-16 ff-primary text-white'>Lorem Ipsum dior random content about ads etc that can be pushed over here and tells the story about our product to be added here</p>
+                    <h1 className='font-size-49 text-white'>Harness the Power of Decentralized Advertising</h1>
+                    <p className='font-size-16 ff-primary text-white'>Become an affiliate and earn instantly by sharing ads, or create impactful campaigns that reach a global audience.</p>
+                    <p className='font-size-16 ff-primary text-white'> Your ads, your way.</p>
                     <div className="buttons flex gap-8 ff-primary">
                         <CustomButton title="Become an Affiliate" color="white" backgroundColor="#006AFF" onClick={()=> navigate('/campaigns')} /> 
                         <CustomButton title="Start Campaign" color="white" backgroundColor="black" border="1px solid white" onClick={()=> navigate('/campaign/create')}/>                        

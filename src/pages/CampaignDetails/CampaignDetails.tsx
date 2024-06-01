@@ -11,7 +11,6 @@ import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
 import Navbar from "../../components/navbar/navbar.tsx";
 import './CampaignDetails.scss'
 
-
 const CampaignDetails = () => {
     const account  = useCurrentAccount() as {address: string};
     const [campaignUrl, setCampaignUrl] = useState('');

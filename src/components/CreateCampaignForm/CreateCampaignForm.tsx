@@ -59,7 +59,7 @@ const CreateCampaignForm = () => {
                 toast.error('Please connect your wallet address')
                 return;
             }
-            if(parseFloat(formInputs.campaignBudget) < 5){
+            if(parseFloat(formInputs.campaignBudget) < 0.2){
                 toast.error('Minimim budget for the campaign should be 5 SUI')
                 return;
             }

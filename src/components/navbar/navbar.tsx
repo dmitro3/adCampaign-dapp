@@ -20,13 +20,14 @@ export default function Navbar({ color, page, textColor }: { color: string, page
                 <div className="nav-actions flex gap-16 align-center">
                 {page === 'navbar' && (
                         <div className="earning-container">
-                            <div className="my-earning">My Earning</div>
+                            {/* todo */}
+                            {/* <div className="my-earning">My Earning</div>
                             <HoverCard className="hover-card" campaigns={[
                                 { price: 0.5, name: 'BTC' },
                                 { price: 0.5, name: 'ETH' },
                                 { price: 0.5, name: 'SOL' },
                                 { price: 0.5, name: 'USDT' },
-                            ]} />
+                            ]} /> */}
                         </div>
                     )}
                     {page === 'navbar' && (<ConnectButton />)}
