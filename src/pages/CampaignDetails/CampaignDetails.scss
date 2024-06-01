@@ -23,12 +23,19 @@
             .grid-container{
                 @include grid-container(1, 1rem);
             }
+           
         }
     }
-
+    @media screen and (max-width: 638px){
+        .card-stats{
+            margin-left: 60% !important;
+        }
+    }
     .grid-row{
         display: grid;
         gap: 1rem;
     }
-
+    .card-stats{
+        margin-left: 500px;
+    }
 }

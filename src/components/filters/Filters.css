@@ -1,4 +1,5 @@
 .filters {
+    
     display: flex;
     gap: 11px;
     margin-bottom: 20px;
@@ -13,10 +14,19 @@
         font-weight: 500;
         font-family: 'Manrope', sans-serif;
     }
+    
     button:hover, select:hover {
         background: #d0d0d0;
     }
     select option{
         border-radius: 50px;
+        background-color: white;
     }
+}
+
+@media screen and (max-width: 880px){
+   .filters{
+    margin-top: 30px;
+    justify-content: center;
+   }
 }

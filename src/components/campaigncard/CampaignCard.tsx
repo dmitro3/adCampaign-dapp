@@ -14,18 +14,16 @@ import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
 import moment from 'moment';
 import CustomButton from '../CustomButton/CustomButton';
-import ShareLink from '../ShareLink/ShareLink';
+import InfoCard from '../InfoCard/InfoCard';
 import { addSupporters } from '../../common/services/api.services';
+import { getTimeLeft } from '../../common/helpers';
 import './CampaignCard.css';
-
-
 
 interface CampaignCardProps {
     imageSrc: string;
     category: string;
     clicks: number;
     title: string;
-    daysLeft: any;
     costPerClick: number;
     totalPrice: number;
     likes: number;
@@ -40,6 +38,8 @@ interface CampaignCardProps {
     popUp: boolean;
     viewMoreToggle?:boolean;
     width?: string,
+    index?: number;
+    handleShareUrl:(url: string)=>void;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
@@ -48,7 +48,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         category,
         clicks,
         title,
-        daysLeft,
         costPerClick,
         totalPrice,
         endDate,
@@ -60,19 +59,20 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         popUp,
         width,
         viewMoreToggle = true,
+        index,
+        handleShareUrl,
     } = campaign;
     const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [campaignUrl, setCampaignUrl] = useState('');
     const maxCoinValueAddress = useCoinAddress();
     const [addCoinPayload, setAddCoinPayload] = useState({
         coins: '',
         message: ''
     });
     const [viewMore, setViewMore] = useState(viewMoreToggle );
-
+;
     const handleInputCoins = (e: any) => {
         setAddCoinPayload({
             ...addCoinPayload,
@@ -89,10 +89,8 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     const toggleViewMore = () => {
         setViewMore(!viewMore);
     };
-    const toggleShareLink = () => {
-        setCampaignUrl('');
-    };
-
+  
+    const daysleft= getTimeLeft(endDate);
 
     const handleAddCoins = () => {
         if(walletAddress){
@@ -189,7 +187,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             toast.loading('Fetching affiliate profile...');
             const profileDetails = await fetchAffiliateProfile({ walletAddress });
             setLoading(false);
-            // toast.dismiss();
             if (profileDetails.length) {
                 return profileDetails[0].profileAddress;
             } 
@@ -206,16 +203,15 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     };
 
     const validateCampaignLive = (endDate: any) => {
-        console.log('end date---', endDate, '---type---', typeof(endDate));
         const currentTime = moment().unix();
-        return endDate > currentTime;
+        return endDate < currentTime;
     }
 
     const handleAffiliateCreationURL = async () => {
         if(walletAddress){
             try {
-                if(!validateCampaignLive(endDate)){
-                    toast.error('Campaign already ended')
+                if(validateCampaignLive(endDate)){
+                    toast.error('Campaign already expired')
                     return;
                 };
                 toast.loading('Creating URL...')
@@ -232,15 +228,15 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     profileAddress: affiliateProfile,
                     expirationTime: endDate,
                 });
-                setCampaignUrl(response?.campaignUrl || '');
+                handleShareUrl(response?.campaignUrl || '');
                 setLoading(false);
                 toast.dismiss();
                 toast.success('Campaign created successfully!');
-            } catch (error) {
+            } catch (error: any) {
                 setLoading(false);
                 setError(true);
                 toast.dismiss();
-                toast.error('Error in submission.');
+                toast.error(error.message);
                 console.error('Error in handleSubmit', error);
             }
         }else{
@@ -253,42 +249,61 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     }
 
     return (
-        <div className={`card bg-white ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
+        <div className={`card bg-white  ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
             {loading}
             {error}
             <Toaster />
+            {  validateCampaignLive(campaign.endDate) && <p className='text-align-center expired-styles font-size-11'>Campaign Expired</p>}
             <div className="card-image" onClick={()=>navigate(`/campaign/${campaignInfoAddress}`)}>
-                <img src={imageSrc} alt="Card Image" />
+                <img src={imageSrc || '/journey.png'} alt="Card Image" />
                 <div className="card-label bg-white flex ff-tertiary font-color-yellow-orange font-weight-700 justify-center">
                     {category}
                 </div>
             </div>
             <div className="card-content bg-white">
-                <div className='flex'>
-                    <p className='add-money bg-white flex font-size-14 '>
+                <div className='flex add-money'>
                         <CustomButton title="$ Add Money" color='#4880FF' onClick={togglePopUp} backgroundColor='white' className='add-money-button' />
-                    </p>
+                    
                     <MetricsOverview>
                         <img src={'/star.png'} alt={'star'} />
                         <span>{clicks} Clicks</span>
                     </MetricsOverview>
                 </div>
                 <div className='titleStyles'>
-                    <h3 className='ff-tertiary font-weight-800'>{title}</h3>
+                {title.length > 30 ? (
+                        <h3 className='ff-tertiary font-weight-800 w-240'>{title.substring(0, 30)}...</h3>
+                    ) : (
+                        <h3 className='ff-tertiary font-weight-800'>{title}</h3>
+                    )}
                     <AddressURL type={'object'} address={campaignInfoAddress}  />
                 </div>
                 <div className="card-meta flex justify-between font-size-14 text-gray">
-                    <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft}`}</span>} alt="duration" />
-                    <CardIconLabel src="/user.png" text={<span>{`SUI${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
+                    <CardIconLabel  toolkitname={`${index}info1`} src="/duration.png" text={<span>{ `${daysleft}`}</span>} alt="duration" />
+                    <CardIconLabel  toolkitname={`${index}info2`} src="/user.png" text={<span>{`${currencyConverter(costPerClick)} $SUI per click`}</span>} alt="user"/>
+                    
                 </div>
-                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading}/>
+                <div className='flex'>
+                <div onClick={toggleViewMore}>
+                    {viewMore ? (
+                    <p className='text-gray'>Description: {description}</p>
+                    ) : (
+                    <p className='text-gray'>Description: {description.substring(0, 19)}{description.length > 19 ? '...' : ''}</p>
+                    )}
+                </div>
+                {description.length > 19 && (
+                    <div className='view-more-container'>
+                    <InfoCard
+                        toolkitname={`${index}description`}
+                        types="text"
+                        toolkitContent={description}
+                    />
+                    </div>
+                )}
+                </div>
+                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading} toolkitname={''}/>
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                 </div>
-                { viewMore && (
-                     <p className='text-gray'>Description: {description}</p>
-                )}
-                <CustomButton border="none" backgroundColor="white" color='black'  extraStyles='text-gray' title={viewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
             </div>
             {popUp && (
                     <div className="popup-wrapper">
@@ -303,11 +318,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                             handleclose={togglePopUp}
                         />
                     </div>
-            )}
-            {campaignUrl && (
-                <div className='popup-wrapper'>
-                    <ShareLink url={campaignUrl} handleClose={toggleShareLink} />
-                </div>
             )}
         </div>
     );

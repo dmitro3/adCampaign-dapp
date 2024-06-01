@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import ShareLink from "../../components/ShareLink/ShareLink.tsx";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { useParams } from "react-router-dom";
 import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, fetchSupportersByCampaignId } from "../../common/services/api.services.ts";
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
 import CardTable from "../../components/CardTable/CardTable.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
-import Navbar from "../../components/Navbar/navbar.tsx";
+import Navbar from "../../components/navbar/navbar.tsx";
 import './CampaignDetails.scss'
-
 
 const CampaignDetails = () => {
     const account  = useCurrentAccount() as {address: string};
+    const [campaignUrl, setCampaignUrl] = useState('');
     const { id : campaignInfoAddress} = useParams();  
     const [campaign, setCampaign] = useState() as any;
     const [activePopUp, setActivePopUp] = useState<string | null>(null);
@@ -65,6 +66,11 @@ const CampaignDetails = () => {
         setMetrics({totalClicks: totalClicks, totalEarnings: 0 })
     }
 
+    const toggleShareLink = (url: string) => {
+        setCampaignUrl(url);
+    };
+
+
     useEffect(()=>{
         getSupportersByCampaignId()
         getCampaignIdByDetails()
@@ -78,7 +84,7 @@ const CampaignDetails = () => {
         <main className="campaign-details-container">
            <Navbar page='campaign' color='white' textColor='black'/>
         {campaign && <section className="campaign-details-section"> 
-            <p className="title ff-tertiary text-transform-capitalize"> {campaign.campaignName || campaign.companyName} Ad Campaign</p>
+            <p className="title ff-tertiary text-transform-capitalize"> { campaign.companyName.length > 20  ? `${campaign.companyName.substring(0,20)}......... Ad Campaign` : campaign.companyName} </p>
             <section className="grid-container">
                 <article className="grid-row">
                    <CampaignDetailsCardWrapper totalAffiliates={affiliates?.length} totalClicks={metrics.totalClicks}/>
@@ -88,8 +94,7 @@ const CampaignDetails = () => {
                         imageSrc={campaign.banner}
                         category={campaign.category}
                         clicks={(campaign?.validClicks + campaign?.invalidClicks) || 0}
-                        title={campaign.companyName}
-                        daysLeft={`${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`}
+                        title={campaign.campaignName}
                         costPerClick={campaign.cpc}
                         totalPrice={campaign.campaignBudget}
                         likes={0}
@@ -102,8 +107,10 @@ const CampaignDetails = () => {
                         campaignInfoAddress={campaign.campaignInfoAddress}
                         togglePopUp={() => togglePopUp(campaign.title)}
                         popUp={activePopUp === campaign.title}
+                        handleShareUrl={toggleShareLink}
                     />
                 </article>
+                {campaignUrl && <ShareLink url={campaignUrl} handleToggle={toggleShareLink} />}
                 <article className="grid-row">
                     <CardTable title="Affilates Leaderboard" contents={affiliates} />
                     <CardTable title="Campaign Supporters" contents={supporters}/>

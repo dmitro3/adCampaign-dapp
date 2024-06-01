@@ -1,14 +1,17 @@
-import { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
+import moment from 'moment';
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchCampaigns } from "../../common/services/api.services";
-import Navbar from '../Navbar/navbar';
-import CampaignCard from '../campaigncard/CampaignCard';
+import Navbar from '../navbar/navbar';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
+import Filters from '../filters/Filters';
+import Footer from '../footer/footer';
 import Pagination from '../pagination/Pagination';
-import './CampaignList.scss';
 import { currencyConverter, currencyConverterIntoSUI } from '../../common/helpers';
-
+import ShareLink from '../ShareLink/ShareLink';
+import CampaignCard from '../campaigncard/CampaignCard';
+import './CampaignList.scss';
 
 type Campaign = {
     imageSrc: string;
@@ -28,6 +31,7 @@ type Campaign = {
     url: string;
     validClicks: number;
     campaignInfoAddress: string;
+
 };
 
 const formatDate = (epoch: number) => {
@@ -35,29 +39,45 @@ const formatDate = (epoch: number) => {
     return date.toLocaleDateString('en-US');
 };
 
-const ITEMS_PER_PAGE = 20;
-
 export default function CampaignList() {
     const account  = useCurrentAccount() as {address: string};
-    const [data, setData] = useState([]);
+    const [campaignUrl, setCampaignUrl] = useState('');
+    const [data, setData] = useState<Campaign[]>([]);
     const [activePopUp, setActivePopUp] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-    // const [sortOption, setSortOption] = useState<string>('timeLeft');
-    // const [filterOption, setFilterOption] = useState<string>('all');
+    const [sortOption, setSortOption] = useState<string>('');
+    const [filterOption, setFilterOption] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(0);
+    const sortOptions = ['Rates Per Click', 'Time Left', 'Budget Left'];
+    const categoryOptions = [
+        'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin',
+        'Dev Tooling', 'Wallets', 'DAO’s', 'Gaming', 'Bridge', 'DEX', 'Others'
+    ];
+    const handleSort = (sortKey: string) => {
+        setSortOption(sortKey);
+    };
+
+    const handleFilter = (filterValue: string) => {
+        setFilterOption(filterValue);
+    };
 
     const getData = async () => {
-        try{
-            toast.loading('Loading...')
-            const response = await fetchCampaigns();
-
-            const transformedData = response.map((campaign: any) => ({
+        try {
+            toast.loading('Loading...');
+            const { campaigns, totalPages } = await fetchCampaigns({ page: currentPage, limit: 12, category: filterOption, sortBy: sortOption });
+            if(campaigns.length === 0){
+                toast.dismiss();
+                toast.error('No campaigns found');
+            } 
+            setTotalPages(totalPages);
+            const transformedData = campaigns.map((campaign: any) => ({
                 imageSrc: campaign?.banner,
                 category: campaign?.category,
                 clicks: 0,
                 validClicks: campaign.validClicks,
                 title: campaign?.companyName,
-                daysLeft: `${Math.ceil((campaign?.endDate - campaign?.startDate) / (60 * 60 * 24))} days left`,
+                daysLeft: `${Math.ceil((campaign?.endDate - moment().unix()) / (60 * 60 * 24))} days left`,
                 costPerClick: currencyConverter(campaign?.cpc),
                 currentPrice: 0,
                 totalPrice: currencyConverter(campaign?.campaignBudget),
@@ -70,16 +90,16 @@ export default function CampaignList() {
                 url: campaign?.originalUrl,
                 campaignInfoAddress: campaign?.campaignInfoAddress,
             }));
-            toast.dismiss()
+            toast.dismiss();
             setData(transformedData);
-        }catch(err){
-            toast.error('Error in fetching campaign')
+        } catch (err) {
+            toast.error('Error in fetching campaigns');
         }
     };
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [sortOption, filterOption, currentPage]);
 
     useEffect(() => {
         setCampaigns(data);
@@ -89,73 +109,70 @@ export default function CampaignList() {
         setActivePopUp(prevPopUp => prevPopUp === campaignId ? null : campaignId);
     };
 
+    const toggleShareLink = (url: string) => {
+        setCampaignUrl(url);
+    };
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
 
-    const paginatedCampaigns = campaigns.slice(
-        (currentPage - 1) * ITEMS_PER_PAGE,
-        currentPage * ITEMS_PER_PAGE
-    );
-
-    const totalPages = Math.ceil(campaigns.length / ITEMS_PER_PAGE);
-
     return (
         <div className='campaign-list-container'>
-        <Toaster />
-        <div className='campaignlistcontainer bg-white text-black'>
-            <Navbar page='campaign' color='white' textColor='black'/>
-            <div className='card-container'>
-                <div className='mt-68 flex justify-space-around align-center'>
-                    <div className='campaign-start-text '>
-                        <h1 className='campaign-title'>Lorem Ipsum dior random content about ads</h1>
-                        <p className='campaign-subtitle'>
-                            Lorem Ipsum dior random content about ads etc that can be pushed over here 
-                            and tells the story about our product to be added here
-                        </p>
+            <Toaster />
+            <div className='campaign-list-container text-black'>
+                <Navbar page='campaign' color='white' textColor='black' />
+                <div className='card-container'>
+                    <div className='mt-68 flex justify-space-around align-center'>
+                        <div className='campaign-start-text '>
+                            <h1 className='campaign-title'>Start Your Campaign Now</h1>
+                            <p className='campaign-subtitle'>
+                            Launch your campaign and reach Global audience easily. Get started with real-time data and secure transactions
+                            </p>
+                        </div>
+                        <StartCampaignBtn line1='Start your' line2='campaign now' />
                     </div>
-                    <StartCampaignBtn line1='Start your' line2='campaign now' />
-                </div>
-                <div className='mt-68 campaign-header flex justify-space-around align-center'>
-                    <div className='campaign-subtext'>
-
-                    <div>
-                        <h1 className='text-black font-weight-700 font-size-52'>Campaigns</h1>
-                        <p className='text-gray font-size-20'>All the campaigns are listed here</p>
+                    <div className='mt-68 campaign-header flex justify-space-around '>
+                        <div className='campaign-subtext'>
+                            <div>
+                                <h1 className='text-black font-weight-700 font-size-52'>All Campaigns</h1>
+                                <p className='text-gray font-size-20'>Join campaigns below and earn rewards for each valid click. Share your referral links and start earning</p>
+                            </div>
+                        </div>
+                        <Filters onSort={handleSort} onFilter={handleFilter} sortOptions={sortOptions} categoryOptions={categoryOptions} />
                     </div>
+                    <div className="campaign-list">
+                        {campaigns.map((campaign, index) => (
+                            <CampaignCard
+                                key={index}
+                                width={'card-width-392'}
+                                imageSrc={campaign.imageSrc}
+                                category={campaign.category}
+                                clicks={campaign.validClicks}
+                                title={campaign.title}
+                                costPerClick={currencyConverterIntoSUI(campaign.costPerClick)}
+                                totalPrice={currencyConverterIntoSUI(campaign.totalPrice)}
+                                likes={campaign.likes}
+                                dislikes={campaign.dislikes}
+                                startDate={campaign.startDate}
+                                endDate={campaign.endDate}
+                                walletAddress={account?.address}
+                                description={campaign.description}
+                                url={campaign.url}
+                                campaignInfoAddress={campaign.campaignInfoAddress}
+                                togglePopUp={() => togglePopUp(campaign.title)}
+                                popUp={activePopUp === campaign.title}
+                                viewMoreToggle={false}
+                                index={index}
+                                handleShareUrl={toggleShareLink}
+                            />
+                        ))}
                     </div>
-                    <>
-                    </>
+                    {campaignUrl && <ShareLink url={campaignUrl} handleToggle={toggleShareLink} />}
+                    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
                 </div>
-                <div className="campaign-list" >
-                    {paginatedCampaigns.map((campaign, index) => (
-                        <CampaignCard
-                            key={index}
-                            width={'card-width-392'}
-                            imageSrc={campaign.imageSrc}
-                            category={campaign.category}
-                            clicks={campaign.validClicks}
-                            title={campaign.title}
-                            daysLeft={campaign.daysLeft}
-                            costPerClick={currencyConverterIntoSUI(campaign.costPerClick)}
-                            totalPrice={currencyConverterIntoSUI(campaign.totalPrice)}
-                            likes={campaign.likes}
-                            dislikes={campaign.dislikes}
-                            startDate={campaign.startDate}
-                            endDate={campaign.endDate}
-                            walletAddress={account?.address}
-                            description={campaign.description}
-                            url={campaign.url}
-                            campaignInfoAddress={campaign.campaignInfoAddress}
-                            togglePopUp={() => togglePopUp(campaign.title)}
-                            popUp={activePopUp === campaign.title}
-                            viewMoreToggle={false}
-                        />
-                    ))}
-                </div>
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+                <Footer />
             </div>
-        </div>
         </div>
     );
 }

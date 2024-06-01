@@ -30,10 +30,6 @@ const CustomImageUploader = ({placeholder, backgroundColor, handleImage, image}:
     multiple: false,
   });
 
-  // const removeImage = () => {
-  //   handleImage(null);
-  // };
-
   return (
     <div>
       <Toaster />
@@ -46,8 +42,6 @@ const CustomImageUploader = ({placeholder, backgroundColor, handleImage, image}:
           : 
           <>  
             <img className='image-preview' src={image} alt="Preview" />
-            {/* todo change this button */}
-            {/* <button onClick={removeImage} className='remove-button' type='button'>Remove</button> */}
           </>
         }
       </div>}

@@ -51,42 +51,27 @@ export const currencyConverterIntoSUI = (value: number, title: string = 'SUI'):n
 }
 
 
+export const getTimeLeft = (endDate: any) => {
+  if (endDate) {
+    const endMoment = endDate;
+    const currentMoment = moment().unix();
+    const totalSecondsLeft = endMoment - currentMoment;
+    const daysLeft = Math.floor(totalSecondsLeft / (60 * 60 * 24));
 
-
-export const getTimeLeft = (endDate: string) => {
-  if(endDate){
-  // if (!moment(endDate, 'YYYY-MM-DD', true).isValid()) {
-  //   throw new Error('Invalid date format. Please use YYYY-MM-DD.');
-  // }
-
-  const endMoment = moment(endDate, 'YYYY-MM-DD');
-  const currentMoment = moment();
-
-  const getDaysLeft = (end: any, current: any) => {
-    return end.diff(current, 'days');
-  };
-
-  const getHoursLeft = (end: any, current: any) => {
-    return end.diff(current, 'hours');
-  };
-
-  const getMinutesLeft = (end: any, current: any) => {
-    return end.diff(current, 'minutes');
-  };
-
-  const daysLeft = getDaysLeft(endMoment, currentMoment);
-  const hoursLeft = getHoursLeft(endMoment, currentMoment);
-  const minutesLeft = getMinutesLeft(endMoment, currentMoment);
-
-  if (daysLeft > 1) {
-    return `${daysLeft} Days Left`;
-  } else if (daysLeft === 1) {
-    return `${hoursLeft} Hours Left`;
-  } else if (hoursLeft >= 1) {
-    return `${hoursLeft} Hours Left`;
-  } else {
-    return `${minutesLeft || 0} Minutes Left`;
+    const hoursLeft = Math.floor((totalSecondsLeft % (60 * 60 * 24)) / (60 * 60));
+    const minutesLeft = Math.floor((totalSecondsLeft % (60 * 60)) / 60);
+    const secondsLeft = totalSecondsLeft % 60;
+    if (daysLeft > 1) {
+      return `${daysLeft} Days Left`;
+    } else if (daysLeft === 1) {
+      return `${hoursLeft} Hours Left`;
+    } else if (hoursLeft >= 1) {
+      return `${hoursLeft} Hours Left`;
+    } else if (minutesLeft >= 1) {
+      return `${minutesLeft} Minutes Left`;
+    } else {
+      return `${secondsLeft<0?0:secondsLeft} Seconds Left`;
+    }
   }
-  }
-
+  return 'Invalid end date';
 };

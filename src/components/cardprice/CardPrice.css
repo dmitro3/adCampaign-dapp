@@ -5,3 +5,13 @@
     border-radius: 100vw;
     padding: 10px;
 }
+.card-price-container{
+
+    .info-icon{
+        position: absolute;
+        top: 172px;
+    }
+}
+.amount-margin{
+    margin-top: 22px;
+}

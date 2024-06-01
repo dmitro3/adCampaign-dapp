@@ -12,6 +12,11 @@ export const createAffiliate = async (contents: any) => {
      }),
   }
   const response = await fetch(`${API_URL}/ad/affiliate/create`, config);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Something went wrong');
+  }
+
   const data = await response.json();
   return data;
 }
@@ -126,7 +131,7 @@ export const addSupporters = async (contents: any) => {
     await fetch(`${API_URL}/ad/supporters/create`, config);
 }
 
-export const fetchCampaigns = async () => {
+export const fetchCampaigns = async ({page,limit,category,sortBy}: any) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -134,7 +139,7 @@ export const fetchCampaigns = async () => {
     },
     method: "GET",
   }
-  const response = await fetch(`${API_URL}/ad/campaigns`, config)
+  const response = await fetch(`${API_URL}/ad/campaigns?page=${page}&limit=${limit}&category=${category}&sortBy=${sortBy}`, config);
   const data = response.json();
   return data;
 }
@@ -145,7 +150,6 @@ export const uploadImage = async (image: any) => {
     body: image
   })
   const imageData = await response.json() as any;
-  console.log('imageData.url---->',imageData);
   const imageURL = imageData.url.toString();
   return imageURL;
 }

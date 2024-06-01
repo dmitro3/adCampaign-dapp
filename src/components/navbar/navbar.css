@@ -1,59 +1,91 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  .navbar {
-    background-color: #1a1a1a;
-    color: white;
-    padding: 16px;
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .nav-links, .nav-actions {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-  }
-  
-  .nav-links a, .nav-actions a {
-      text-decoration: none;
-    }
-    
-    .nav-links a:hover, .nav-actions a:hover {
-      color: #1e90ff;
-    }
-    
-  
-  
-  @media screen and (max-width: 768px) {
-      .container{
-        justify-content: end;
-      }
-      
-    }
-  
-    .Button_buttonVariants_variant_primary__x1s81q1{
-      font-family: 'mulish';
-      background-color: #006AFF !important;
-      color: white !important;
-      border: none !important;
-      padding: 8px 16px !important;
-      border-radius: 9999px !important; 
-      cursor: pointer   ;
-      transition: background-color 0.3s ease;
-    }
-  }
-  
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  
-    
+.mx10{
+  margin: 0px 28px;
+}
 
-  
+.navbar {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 16px;
+}
+.logo{
+  width: 50px;
+
+}
+.navbar .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links, .nav-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.nav-links a, .nav-actions a {
+  text-decoration: none;
+}
+
+.nav-links a:hover, .nav-actions a:hover {
+  color: #1e90ff;
+}
+
+.Button_buttonVariants_variant_primary__x1s81q1 {
+  font-family: 'mulish';
+  background-color: #006AFF !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 9999px !important; 
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+      justify-content: end !important;
+  }
+}
+
+
+
+.my-earning {
+  cursor: pointer;
+}
+
+.ad-campaign-list {
+  visibility: hidden;
+  transition: visibility 0s, opacity 0.3s linear;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  color: black;
+  margin-top: 10px; 
+}
+
+.earning-container:hover .ad-campaign-list,
+.ad-campaign-list:hover {
+  visibility: visible;
+}
+
+.earning-container {
+  position: relative;
+}
+
+

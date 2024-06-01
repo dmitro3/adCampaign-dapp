@@ -1,5 +1,6 @@
 import CreateCampaignFormik from '../../components/CreateCampaignForm/CreateCampaignForm';
-import Navbar from '../../components/Navbar/navbar';
+import Navbar from '../../components/navbar/navbar';
+import Footer from '../../components/footer/footer';
 import './CreateCampaign.scss'
 
 //todo - refactor it
@@ -10,7 +11,7 @@ const CreateCampaign = () => {
             <section className="sub-container">
                 <section>
                     <p className="heading"> Start your own campaign </p>
-                    <p className="sub-heading"> Lorem Ipsum dior random content about ads etc that can be pushed over here and tells the story about our product to be added here </p>
+                    <p className="sub-heading"> Launch your advertising campaign today and reach your target audience with transparency and efficiency. Enter your details below to mint your Campaign and manage with real-time analytics and secure transactions </p>
                 </section>
                 <div className='preview-container flex justify-space-around'>
                 <div className='createform'>
@@ -21,6 +22,7 @@ const CreateCampaign = () => {
                 </div>
                 </div>
             </section>
+            <Footer />
         </main>
     )
 }

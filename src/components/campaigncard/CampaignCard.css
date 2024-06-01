@@ -9,13 +9,17 @@
   height: 24px;
   margin: 5px 0;
 }
-
+.view-more-container button{
+  text-decoration: underline !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+}
 .card {
-  min-height: 490px;
   border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-height: 490px;
+  cursor: default !important;
   overflow: hidden;
-  position: relative;
 }
 
 .card-label {
@@ -39,20 +43,14 @@ width: min-content !important;
   z-index: 1;
 }
 
-.add-money{
-  cursor: pointer;
-  width: 124px;
-  justify-content: end;
-  margin-bottom: 10px;
+.add-money button{
   position: absolute;
-  bottom: 90%;
-  border-radius: 50px;
-  border: 1px solid #E4E6E8;
-  padding: 6px 3px ;
+  top: -16px;
+  
 }
 
 .add-money button{
-  padding: 0px;
+  padding: 7px;
   margin-right: 14px;
   border:none;
   cursor: pointer;
@@ -68,6 +66,7 @@ width: min-content !important;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  cursor:  pointer;
 }
 
 .card-label {
@@ -94,12 +93,11 @@ width: min-content !important;
 }
 
 .card-stats {
-  width: 80%;
   justify-content: end;
   margin-bottom: 10px;
   position: absolute;
   bottom: 90%;
-  margin-left: 14%;
+  margin-left: 218px;
 }
 
 .card-content h3 {
@@ -116,6 +114,12 @@ width: min-content !important;
   padding: 11px 24px;
 }
 
+.expired-styles{
+  color: var(--clr-white);
+  background-color: var( --clr-gray-500);
+  padding: 2px;
+}
+
 .no-of-clicks{
   border-radius: 50px;
   width: 40%;
@@ -129,4 +133,8 @@ width: min-content !important;
   *{
     margin: 3px 10px;
   }
+}
+
+.w-240{
+  width: 240px;
 }

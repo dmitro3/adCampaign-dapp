@@ -1,11 +1,16 @@
 @import "../../styles/mixin.scss";
 .campaign-list-container{
-
+    background-color: var(--clr-cultured);
+    height: 100vh;
+    position: relative;
+    margin: auto;
     .campaign-list {
+        margin: 30px auto;
+        justify-content: center;
         @include grid-container-cards(3, 50px, 0.2fr);
         
     }
-
+    
     .card-width-392{
         width: 392px;
     }
@@ -28,7 +33,7 @@
         .card{
             width: 470px;
             height: 480px;
-        }
+        }   
         .campaign-header{
             display: block !important;
         }
@@ -41,31 +46,27 @@
             margin-top: 20px;
         }
         .campaign-subtext{
-            display: flex;
-            justify-content: center;
+            width: fit-content !important;
+        }
+        .card-stats{
+            margin-left: 300px;
         }
     }
-    @media  screen and (max-width: 410px){
     
-        
-    }
+
     .campaign-start-text{
         width: 48%;
     }
     
    
     .campaign-subtext{
-        margin-right:150px;
+        width: 44%;
+        margin-left: 7px;
     }
     .card-container{
         max-width:1500px;
     }
 
-    .campaign-list {
-        width: 80%;
-        margin: 30px auto;
-        
-    }
     button:hover{
         cursor: pointer;
     }
