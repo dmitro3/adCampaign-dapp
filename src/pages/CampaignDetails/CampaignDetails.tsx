@@ -1,6 +1,7 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import ShareLink from "../../components/ShareLink/ShareLink.tsx";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { useParams } from "react-router-dom";
 import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, fetchSupportersByCampaignId } from "../../common/services/api.services.ts";
@@ -13,6 +14,7 @@ import './CampaignDetails.scss'
 
 const CampaignDetails = () => {
     const account  = useCurrentAccount() as {address: string};
+    const [campaignUrl, setCampaignUrl] = useState('');
     const { id : campaignInfoAddress} = useParams();  
     const [campaign, setCampaign] = useState() as any;
     const [activePopUp, setActivePopUp] = useState<string | null>(null);
@@ -66,6 +68,11 @@ const CampaignDetails = () => {
         setMetrics({totalClicks: totalClicks, totalEarnings: 0 })
     }
 
+    const toggleShareLink = (url: string) => {
+        setCampaignUrl(url);
+    };
+
+
     useEffect(()=>{
         getSupportersByCampaignId()
         getCampaignIdByDetails()
@@ -103,8 +110,10 @@ const CampaignDetails = () => {
                         campaignInfoAddress={campaign.campaignInfoAddress}
                         togglePopUp={() => togglePopUp(campaign.title)}
                         popUp={activePopUp === campaign.title}
+                        handleShareUrl={toggleShareLink}
                     />
                 </article>
+                {campaignUrl && <ShareLink url={campaignUrl} handleToggle={toggleShareLink} />}
                 <article className="grid-row">
                     <CardTable title="Affilates Leaderboard" contents={affiliates} />
                     <CardTable title="Campaign Supporters" contents={supporters}/>

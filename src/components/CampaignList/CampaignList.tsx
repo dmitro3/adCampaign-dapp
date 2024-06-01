@@ -1,15 +1,16 @@
-import moment from 'moment';
 import  { useState, useEffect } from 'react';
+import moment from 'moment';
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchCampaigns } from "../../common/services/api.services";
 import Navbar from '../navbar/navbar';
-import CampaignCard from '../campaigncard/CampaignCard';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import Filters from '../filters/Filters';
 import Pagination from '../pagination/Pagination';
-import './CampaignList.scss';
 import { currencyConverter, currencyConverterIntoSUI } from '../../common/helpers';
+import ShareLink from '../ShareLink/ShareLink';
+import CampaignCard from '../campaigncard/CampaignCard';
+import './CampaignList.scss';
 
 type Campaign = {
     imageSrc: string;
@@ -38,6 +39,7 @@ const formatDate = (epoch: number) => {
 
 export default function CampaignList() {
     const account  = useCurrentAccount() as {address: string};
+    const [campaignUrl, setCampaignUrl] = useState('');
     const [data, setData] = useState<Campaign[]>([]);
     const [activePopUp, setActivePopUp] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -105,6 +107,10 @@ export default function CampaignList() {
         setActivePopUp(prevPopUp => prevPopUp === campaignId ? null : campaignId);
     };
 
+    const toggleShareLink = (url: string) => {
+        setCampaignUrl(url);
+    };
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -156,9 +162,11 @@ export default function CampaignList() {
                                 togglePopUp={() => togglePopUp(campaign.title)}
                                 popUp={activePopUp === campaign.title}
                                 viewMoreToggle={false}
+                                handleShareUrl={toggleShareLink}
                             />
                         ))}
                     </div>
+                    {campaignUrl && <ShareLink url={campaignUrl} handleToggle={toggleShareLink} />}
                     <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
                 </div>
             </div>

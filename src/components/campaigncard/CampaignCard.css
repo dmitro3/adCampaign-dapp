@@ -15,12 +15,11 @@
   font-weight: 400 !important;
 }
 .card {
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   min-height: 490px;
   cursor: default !important;
-  border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  position: relative;
 }
 
 .card-label {

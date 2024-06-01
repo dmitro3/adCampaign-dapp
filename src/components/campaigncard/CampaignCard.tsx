@@ -15,11 +15,8 @@ import CardPrice from '../cardprice/CardPrice';
 import moment from 'moment';
 import CustomButton from '../CustomButton/CustomButton';
 import InfoCard from '../InfoCard/InfoCard';
-import ShareLink from '../ShareLink/ShareLink';
 import { addSupporters } from '../../common/services/api.services';
 import './CampaignCard.css';
-
-
 
 interface CampaignCardProps {
     imageSrc: string;
@@ -41,6 +38,7 @@ interface CampaignCardProps {
     popUp: boolean;
     viewMoreToggle?:boolean;
     width?: string,
+    handleShareUrl:(url: string)=>void;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
@@ -61,12 +59,12 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         popUp,
         width,
         viewMoreToggle = true,
+        handleShareUrl,
     } = campaign;
     const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [campaignUrl, setCampaignUrl] = useState('');
     const maxCoinValueAddress = useCoinAddress();
     const [addCoinPayload, setAddCoinPayload] = useState({
         coins: '',
@@ -89,9 +87,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
 
     const toggleViewMore = () => {
         setViewMore(!viewMore);
-    };
-    const toggleShareLink = () => {
-        setCampaignUrl('');
     };
 
 
@@ -232,7 +227,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     profileAddress: affiliateProfile,
                     expirationTime: endDate,
                 });
-                setCampaignUrl(response?.campaignUrl || '');
+                handleShareUrl(response?.campaignUrl || '');
                 setLoading(false);
                 toast.dismiss();
                 toast.success('Campaign created successfully!');
@@ -283,25 +278,24 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 <div className="card-meta flex justify-between font-size-14 text-gray">
                     <CardIconLabel src="/duration.png" text={<span>{ `${daysLeft}`}</span>} alt="duration" />
                     <CardIconLabel src="/user.png" text={<span>{`SUI${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
-                    
                 </div>
                 <div className='flex'>
-      <div>
-        {viewMore ? (
-          <p className='text-gray'>Description: {description}</p>
-        ) : (
-          <p className='text-gray'>Description: {description.substring(0, 19)}{description.length > 19 ? '...' : ''}</p>
-        )}
-      </div>
-      {description.length > 19 && (
-        <div className='view-more-container'>
-          <InfoCard
-            type="text"
-            toolkitContent={description}
-          />
-        </div>
-      )}
-    </div>
+                <div>
+                    {viewMore ? (
+                    <p className='text-gray'>Description: {description}</p>
+                    ) : (
+                    <p className='text-gray'>Description: {description.substring(0, 19)}{description.length > 19 ? '...' : ''}</p>
+                    )}
+                </div>
+                {description.length > 19 && (
+                    <div className='view-more-container'>
+                    <InfoCard
+                        type="text"
+                        toolkitContent={description}
+                    />
+                    </div>
+                )}
+                </div>
                 <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading}/>
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
@@ -320,11 +314,6 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                             handleclose={togglePopUp}
                         />
                     </div>
-            )}
-            {campaignUrl && (
-                <div className='popup-wrapper'>
-                    <ShareLink url={campaignUrl} handleClose={toggleShareLink} />
-                </div>
             )}
         </div>
     );
