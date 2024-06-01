@@ -1,5 +1,4 @@
 import { ConnectButton } from '@mysten/dapp-kit';
-import HoverCard from '../HoverCard/HoverCard';
 import './Navbar.css';
 
 export default function Navbar({ color, page, textColor }: { color: string, page: string, textColor: string }) {

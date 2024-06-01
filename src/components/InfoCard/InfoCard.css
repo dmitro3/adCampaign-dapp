@@ -1,12 +1,8 @@
-.info-icon-container {
-  margin-bottom: 12px;
-    position: relative;
-    display: inline-block;
-  }
+
   
   .info-icon {
-    width: 20px;
-    height: 20px;
+    margin-bottom: 15px;
+    width: 15px;
     cursor: pointer;
   }
   .viewmore-text{
@@ -14,43 +10,28 @@
     text-decoration-line: underline;
 
   }
-  .toolkit-content {
-    visibility: hidden;
-    font-size: 10px;
-    max-height: 50px;
-    background-color: #f9f9f9;
-    color: #000;
-    text-align: center;
-    border-radius: 5px;
-    position: absolute;
-    z-index: 1;
-    right: -90px;
-    top: -38px;
-    padding: 5px;
-    transform: translateX(-50%);
-    border: 1px solid #ccc;
-  }
+  
   .toolkit-text {
     visibility: hidden;
     font-size: 14px;
     width: 338px;
-    min-height: 250px;
+    min-height: 130px;
+    max-height: 130px;
     background-color: #f9f9f9;
     color: #000;
     text-align: center;
     border-radius: 5px;
     position: absolute;
     z-index: 1;
-    right: -192px;
-    top: -200px;
+    right: -150px;
+    top: -26px;
+    overflow-y: auto;  
     padding: 5px;
     transform: translateX(-50%);
     border: 1px solid #ccc;
   }
   
-  .info-icon-container:hover .toolkit-content {
-    visibility: visible;
-  }
+
   .info-icon-container:hover .toolkit-text {
     visibility: visible;
   }

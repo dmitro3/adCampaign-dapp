@@ -6,6 +6,7 @@ import Navbar from '../navbar/navbar';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import Filters from '../filters/Filters';
+import Footer from '../footer/footer';
 import Pagination from '../pagination/Pagination';
 import { currencyConverter, currencyConverterIntoSUI } from '../../common/helpers';
 import ShareLink from '../ShareLink/ShareLink';
@@ -30,6 +31,7 @@ type Campaign = {
     url: string;
     validClicks: number;
     campaignInfoAddress: string;
+
 };
 
 const formatDate = (epoch: number) => {
@@ -148,7 +150,6 @@ export default function CampaignList() {
                                 category={campaign.category}
                                 clicks={campaign.validClicks}
                                 title={campaign.title}
-                                daysLeft={campaign.daysLeft}
                                 costPerClick={currencyConverterIntoSUI(campaign.costPerClick)}
                                 totalPrice={currencyConverterIntoSUI(campaign.totalPrice)}
                                 likes={campaign.likes}
@@ -162,6 +163,7 @@ export default function CampaignList() {
                                 togglePopUp={() => togglePopUp(campaign.title)}
                                 popUp={activePopUp === campaign.title}
                                 viewMoreToggle={false}
+                                index={index}
                                 handleShareUrl={toggleShareLink}
                             />
                         ))}
@@ -169,6 +171,7 @@ export default function CampaignList() {
                     {campaignUrl && <ShareLink url={campaignUrl} handleToggle={toggleShareLink} />}
                     <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
                 </div>
+                <Footer />
             </div>
         </div>
     );

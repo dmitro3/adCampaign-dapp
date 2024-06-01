@@ -1,5 +1,6 @@
 import CreateCampaignFormik from '../../components/CreateCampaignForm/CreateCampaignForm';
 import Navbar from '../../components/navbar/navbar';
+import Footer from '../../components/footer/footer';
 import './CreateCampaign.scss'
 
 //todo - refactor it
@@ -21,6 +22,7 @@ const CreateCampaign = () => {
                 </div>
                 </div>
             </section>
+            <Footer />
         </main>
     )
 }

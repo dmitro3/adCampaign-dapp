@@ -24,6 +24,7 @@ const CampaignDetailsCardWrapper = ({totalClicks, totalAffiliates}: {totalClicks
                         <CardIconLabel 
                             alt={alt}
                             src={imageUrl}
+                            toolkitname=""
                             extraStyles="flex-reverse"
                             width="300px"
                             height="100px"

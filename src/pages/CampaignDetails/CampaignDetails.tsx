@@ -1,4 +1,3 @@
-import moment from "moment";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ShareLink from "../../components/ShareLink/ShareLink.tsx";
@@ -96,7 +95,6 @@ const CampaignDetails = () => {
                         category={campaign.category}
                         clicks={(campaign?.validClicks + campaign?.invalidClicks) || 0}
                         title={campaign.campaignName}
-                        daysLeft={`${Math.ceil((campaign?.endDate - moment().unix()) / (60 * 60 * 24))} days left`}
                         costPerClick={campaign.cpc}
                         totalPrice={campaign.campaignBudget}
                         likes={0}

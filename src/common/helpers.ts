@@ -56,17 +56,12 @@ export const getTimeLeft = (endDate: any) => {
   if (endDate) {
     const endMoment = endDate;
     const currentMoment = moment().unix();
-
-    const totalSecondsLeft = endMoment.diff(currentMoment, 'seconds');
-
-    console.log('totalSecondsLeft---->', totalSecondsLeft)
-
-
+    const totalSecondsLeft = endMoment - currentMoment;
     const daysLeft = Math.floor(totalSecondsLeft / (60 * 60 * 24));
+
     const hoursLeft = Math.floor((totalSecondsLeft % (60 * 60 * 24)) / (60 * 60));
     const minutesLeft = Math.floor((totalSecondsLeft % (60 * 60)) / 60);
     const secondsLeft = totalSecondsLeft % 60;
-
     if (daysLeft > 1) {
       return `${daysLeft} Days Left`;
     } else if (daysLeft === 1) {
@@ -76,7 +71,7 @@ export const getTimeLeft = (endDate: any) => {
     } else if (minutesLeft >= 1) {
       return `${minutesLeft} Minutes Left`;
     } else {
-      return `${secondsLeft} Seconds Left`;
+      return `${secondsLeft<0?0:secondsLeft} Seconds Left`;
     }
   }
   return 'Invalid end date';
