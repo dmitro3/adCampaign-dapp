@@ -52,7 +52,6 @@ export const currencyConverterIntoSUI = (value: number, title: string = 'SUI'):n
 
 
 export const getTimeLeft = (endDate: any) => {
-  console.log('--->', endDate)
   if (endDate) {
     const endMoment = endDate;
     const currentMoment = moment().unix();

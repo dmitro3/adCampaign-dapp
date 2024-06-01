@@ -44,7 +44,6 @@ const LegacyCreateCampaign = () => {
     const create = () => {
       try{
           formInputs.campaignUrl = generateCampaignUrl();
-         console.log('formInputs--->',formInputs);
         const txb = new TransactionBlock();
         txb.moveCall({
           arguments: [
@@ -86,11 +85,6 @@ const LegacyCreateCampaign = () => {
             },
             onError:(error)=>{
                 console.log('error--->',error)
-            },
-            onSettled:(data)=>{
-                
-                console.log('data--->', data)
-               
             }
           },
         );

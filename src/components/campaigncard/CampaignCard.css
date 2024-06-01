@@ -114,6 +114,12 @@ width: min-content !important;
   padding: 11px 24px;
 }
 
+.expired-styles{
+  color: var(--clr-white);
+  background-color: var( --clr-gray-500);
+  padding: 2px;
+}
+
 .no-of-clicks{
   border-radius: 50px;
   width: 40%;
@@ -132,5 +138,3 @@ width: min-content !important;
 .w-240{
   width: 240px;
 }
-
-

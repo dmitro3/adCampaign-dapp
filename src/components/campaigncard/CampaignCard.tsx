@@ -89,11 +89,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     const toggleViewMore = () => {
         setViewMore(!viewMore);
     };
-    // const toggleShareLink = () => {
-    //     setCampaignUrl('');
-    // };
   
-
     const daysleft= getTimeLeft(endDate);
 
     const handleAddCoins = () => {
@@ -209,13 +205,13 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
 
     const validateCampaignLive = (endDate: any) => {
         const currentTime = moment().unix();
-        return endDate > currentTime;
+        return endDate < currentTime;
     }
 
     const handleAffiliateCreationURL = async () => {
         if(walletAddress){
             try {
-                if(!validateCampaignLive(endDate)){
+                if(validateCampaignLive(endDate)){
                     toast.error('Campaign already expired')
                     return;
                 };
@@ -258,6 +254,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             {loading}
             {error}
             <Toaster />
+            {  validateCampaignLive(campaign.endDate) && <p className='text-align-center expired-styles font-size-11'>Campaign Expired</p>}
             <div className="card-image" onClick={()=>navigate(`/campaign/${campaignInfoAddress}`)}>
                 <img src={imageSrc || '/journey.png'} alt="Card Image" />
                 <div className="card-label bg-white flex ff-tertiary font-color-yellow-orange font-weight-700 justify-center">

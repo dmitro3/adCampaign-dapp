@@ -150,7 +150,6 @@ export const uploadImage = async (image: any) => {
     body: image
   })
   const imageData = await response.json() as any;
-  console.log('imageData.url---->',imageData);
   const imageURL = imageData.url.toString();
   return imageURL;
 }
