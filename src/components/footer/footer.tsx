@@ -11,9 +11,6 @@ function Footer() {
                     <a href="https://gmail.com" target="_blank" rel="noopener noreferrer">
                         <img src="/gmail.png" alt="Instagram" className="social-icon" />
                     </a>
-                    {/* <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-                        <img src="/linkedin.png" alt="LinkedIn" className="social-icon" />
-                    </a> */}
                 </div>
                 <div className="contact-info flex align-center">
                     <img src='/contact.png' alt='contact'></img>
