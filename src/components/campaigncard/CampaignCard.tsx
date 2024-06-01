@@ -14,6 +14,7 @@ import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
 import moment from 'moment';
 import CustomButton from '../CustomButton/CustomButton';
+import InfoCard from '../InfoCard/InfoCard';
 import ShareLink from '../ShareLink/ShareLink';
 import { addSupporters } from '../../common/services/api.services';
 import './CampaignCard.css';
@@ -284,28 +285,26 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     <CardIconLabel src="/user.png" text={<span>{`SUI${currencyConverter(costPerClick)} per click`}</span>} alt="user"/>
                     
                 </div>
+                <div className='flex'>
+      <div>
+        {viewMore ? (
+          <p className='text-gray'>Description: {description}</p>
+        ) : (
+          <p className='text-gray'>Description: {description.substring(0, 19)}{description.length > 19 ? '...' : ''}</p>
+        )}
+      </div>
+      {description.length > 19 && (
+        <div className='view-more-container'>
+          <InfoCard
+            type="text"
+            toolkitContent={description}
+          />
+        </div>
+      )}
+    </div>
                 <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading}/>
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
-                </div>
-                { viewMore && (
-                    <div>
-                        {description.length > 100 ? (
-                            <>
-                                <p className='text-gray'>Description: {description.substring(0, 100)}........</p>
-                                <div className='flex justify-end' >
-                                </div>
-                            </>
-                        ) : (
-
-                               <p className='text-gray'>Description: {description}</p>
-                       
-                        )}
-                    </div>
-                )}
-                <div className='view-more-container'>
-                    
-                <CustomButton border="none" backgroundColor="white" color='black' extraStyles='text-gray' title={viewMore ? 'View Less' : 'View More'} onClick={toggleViewMore}/>
                 </div>
             </div>
             {popUp && (

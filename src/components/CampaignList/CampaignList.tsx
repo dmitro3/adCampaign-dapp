@@ -45,7 +45,11 @@ export default function CampaignList() {
     const [filterOption, setFilterOption] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
-    
+    const sortOptions = ['Rates Per Click', 'Time Left', 'Budget Left'];
+    const categoryOptions = [
+        'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin',
+        'Dev Tooling', 'Wallets', 'DAO’s', 'Gaming', 'Bridge', 'DEX', 'Others'
+    ];
     const handleSort = (sortKey: string) => {
         setSortOption(sortKey);
     };
@@ -61,7 +65,6 @@ export default function CampaignList() {
             if(campaigns.length === 0){
                 toast.dismiss();
                 toast.error('No campaigns found');
-                return;
             } 
             setTotalPages(totalPages);
             const transformedData = campaigns.map((campaign: any) => ({
@@ -121,14 +124,14 @@ export default function CampaignList() {
                         </div>
                         <StartCampaignBtn line1='Start your' line2='campaign now' />
                     </div>
-                    <div className='mt-68 campaign-header flex justify-space-around align-center'>
+                    <div className='mt-68 campaign-header flex justify-space-around '>
                         <div className='campaign-subtext'>
                             <div>
                                 <h1 className='text-black font-weight-700 font-size-52'>All Campaigns</h1>
                                 <p className='text-gray font-size-20'>Join campaigns below and earn rewards for each valid click. Share your referral links and start earning</p>
                             </div>
                         </div>
-                        <Filters onSort={handleSort} onFilter={handleFilter} />
+                        <Filters onSort={handleSort} onFilter={handleFilter} sortOptions={sortOptions} categoryOptions={categoryOptions} />
                     </div>
                     <div className="campaign-list">
                         {campaigns.map((campaign, index) => (

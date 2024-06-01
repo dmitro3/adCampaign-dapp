@@ -14,11 +14,13 @@
         font-weight: 500;
         font-family: 'Manrope', sans-serif;
     }
+    
     button:hover, select:hover {
         background: #d0d0d0;
     }
     select option{
         border-radius: 50px;
+        background-color: white;
     }
 }
 
