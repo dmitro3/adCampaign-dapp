@@ -88,18 +88,17 @@ const CreateCampaignForm = () => {
 
             toast.loading('Creating...');
 
-            const {address} = await splitCoin({budget: totalBudgetInSUI, receiverAddress: account?.address})
-            console.log('address--->', address)
+            const splittedCoinAddress = await splitCoin({budget: totalBudgetInSUI, receiverAddress: account?.address}) 
+            const mainCoinAddress = splittedCoinAddress?.address || maxCoinValueAddress;
 
-            const txb = new TransactionBlock();
-            console.log('maxcoinvalueaddress-->', maxCoinValueAddress)
+            const txb = new TransactionBlock();           
             txb.moveCall({
                 arguments: [
                     txb.object(CAMPAIGN_CONFIG),
                     txb.pure.string(formInputs.companyName),
                     txb.pure.string(formInputs.category),
                     txb.pure.string(formInputs.originalUrl),
-                    txb.object(address),
+                    txb.object(mainCoinAddress),
                     txb.pure.u64(campaignBudgetInSUI),
                     txb.pure.u64(cpc),
                     txb.pure.u64(parseInt(formInputs.startDate)),
