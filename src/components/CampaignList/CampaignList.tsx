@@ -2,15 +2,15 @@ import  { useState, useEffect } from 'react';
 import moment from 'moment';
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchCampaigns } from "../../common/services/api.services";
-import Navbar from '../navbar/navbar';
+import Navbar from  '../Navbar/navbar'
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import Filters from '../filters/Filters';
-import Footer from '../footer/footer';
+import Footer from '../Footer/footer';
 import Pagination from '../pagination/Pagination';
 import { currencyConverter, currencyConverterIntoSUI } from '../../common/helpers';
 import ShareLink from '../ShareLink/ShareLink';
-import CampaignCard from '../campaigncard/CampaignCard';
+import CampaignCard from '../CampaignCard/CampaignCard'
 import './CampaignList.scss';
 
 type Campaign = {
@@ -31,6 +31,7 @@ type Campaign = {
     url: string;
     validClicks: number;
     campaignInfoAddress: string;
+    validclicks: number;
 
 };
 
@@ -74,8 +75,8 @@ export default function CampaignList() {
             const transformedData = campaigns.map((campaign: any) => ({
                 imageSrc: campaign?.banner,
                 category: campaign?.category,
-                clicks: 0,
-                validClicks: campaign.validClicks,
+                clicks: campaign.validClicks+campaign.invalidClicks,
+                validclicks: campaign.validClicks,
                 title: campaign?.companyName,
                 daysLeft: `${Math.ceil((campaign?.endDate - moment().unix()) / (60 * 60 * 24))} days left`,
                 costPerClick: currencyConverter(campaign?.cpc),
@@ -123,7 +124,7 @@ export default function CampaignList() {
             <div className='campaign-list-container text-black'>
                 <Navbar page='campaign' color='white' textColor='black' />
                 <div className='card-container'>
-                    <div className='mt-68 flex justify-space-around align-center'>
+                    <div className='mt-68 flex justify-between align-center mt-l-r-30'>
                         <div className='campaign-start-text '>
                             <h1 className='campaign-title'>Start Your Campaign Now</h1>
                             <p className='campaign-subtitle'>
@@ -132,7 +133,7 @@ export default function CampaignList() {
                         </div>
                         <StartCampaignBtn line1='Start your' line2='campaign now' />
                     </div>
-                    <div className='mt-68 campaign-header flex justify-space-around '>
+                    <div className='mt-68 campaign-header flex justify-between mt-l-r-30'>
                         <div className='campaign-subtext'>
                             <div>
                                 <h1 className='text-black font-weight-700 font-size-52'>All Campaigns</h1>
@@ -148,7 +149,8 @@ export default function CampaignList() {
                                 width={'card-width-392'}
                                 imageSrc={campaign.imageSrc}
                                 category={campaign.category}
-                                clicks={campaign.validClicks}
+                                clicks={campaign.clicks}
+                                validclicks={campaign.validclicks}
                                 title={campaign.title}
                                 costPerClick={currencyConverterIntoSUI(campaign.costPerClick)}
                                 totalPrice={currencyConverterIntoSUI(campaign.totalPrice)}

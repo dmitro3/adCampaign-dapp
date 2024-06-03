@@ -7,6 +7,7 @@ import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, 
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
 import CardTable from "../../components/CardTable/CardTable.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
+import Footer from "../../components/footer/footer.tsx";
 import Navbar from "../../components/navbar/navbar.tsx";
 import './CampaignDetails.scss'
 
@@ -94,6 +95,7 @@ const CampaignDetails = () => {
                         imageSrc={campaign.banner}
                         category={campaign.category}
                         clicks={(campaign?.validClicks + campaign?.invalidClicks) || 0}
+                        validclicks={campaign.validClicks}
                         title={campaign.campaignName}
                         costPerClick={campaign.cpc}
                         totalPrice={campaign.campaignBudget}
@@ -116,6 +118,9 @@ const CampaignDetails = () => {
                     <CardTable title="Campaign Supporters" contents={supporters}/>
                 </article>
             </section>
+        <div >
+            <Footer />
+        </div>
         </section>}
         </ main>
     )

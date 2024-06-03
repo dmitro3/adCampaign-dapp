@@ -22,7 +22,10 @@ const CreateCampaign = () => {
                 </div>
                 </div>
             </section>
+            <div>
+
             <Footer />
+            </div>
         </main>
     )
 }

@@ -10,6 +10,7 @@ interface CardPriceProps {
 }
 
 export default function CardPrice({ totalPrice, onClick, loading,currentPrice,toolkitname }: CardPriceProps) {
+
     return (
         <div className="card-price-container">
             <div className="card-price flex font-size-16 justify-between align-center">
@@ -20,15 +21,15 @@ export default function CardPrice({ totalPrice, onClick, loading,currentPrice,to
                          <div className='flex'>
 
                         <p className="pool-amount font-size-10">Pool amount in $SUI</p>
-                        <div>
+                        <div className='info-pool-amount'>
 
-                            <InfoCard toolkitname={toolkitname} types='img' toolkitContent="The campaign's remaning funds/Campaign Budget" />
+                        <InfoCard  toolkitname={toolkitname} types="img" toolkitContent="Amount affiliates earn/click in Campaign Currency" />
                         </div>
 
                          </div>
                     </div>
                 </div>
-                <button onClick={onClick} className='flex align-center text-black bg-white font-weight-700 share-btn' disabled={loading}>
+                <button onClick={onClick} className='share-earn-btn flex align-center text-black bg-white font-weight-700 share-btn' disabled={loading}>
                     <p>Share & Earn</p>
                     <img src="/share.png" alt="share" />
                 </button>

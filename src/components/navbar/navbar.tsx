@@ -10,6 +10,7 @@ export default function Navbar({ color, page, textColor }: any) {
     const walletAddress = account ? account.address : '';
     const [profileAddress, setProfileAddress] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<any[]>([]);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const getAffiliateProfile = async () => {
         try {
@@ -41,18 +42,30 @@ export default function Navbar({ color, page, textColor }: any) {
         }
     }, [walletAddress]);
 
+    const handleMenuToggle = () => {
+        setMenuOpen(!menuOpen);
+    };
+
     return (
         <nav className={`navbar py-4 bg-${color}`}>
             <Toaster />
-            <div className="container flex align-center main-container">
-                <div className="nav-links flex gap-16 mobdisplay-none align-center">
-                <a href="/" className={`hover:text-blue font-weight-400 font-size-16 mx10 text-${textColor}`}>
-                {page === 'navbar' && <img className='logo' src="/logowhite.png" alt="logo" />}
-                {page === 'campaign' && <img className='logo' src="/logoblack.png" alt="logo" />}
-                </a>
+            <div className="container align-center main-container">
+                <div className='flex justify-between'>
+                <div>
+                {page === 'navbar' && !menuOpen && <img className="ham-burg-img" src="/hamburger-white.svg" alt="menu" onClick={handleMenuToggle} />}
+               {page=='campaign' && !menuOpen && <img className="ham-burg-img" src="/hamburger-black.svg" alt="menu" onClick={handleMenuToggle} />}
+                {page === 'navbar' && menuOpen && <img className="ham-burg-img" src="/close-white.svg" alt="menu" onClick={handleMenuToggle} />}
+               {page=='campaign' && menuOpen && <img className="ham-burg-img" src="/close-black.svg" alt="menu" onClick={handleMenuToggle} />}
+                <div className={`nav-links flex gap-16 align-center ${menuOpen ? 'open' : 'mobdisplay-none'}`}>
+                    <a href="/" className={`hover:text-blue font-weight-400 font-size-16 mx10 text-${textColor}`}>
+                        {page === 'navbar' && <img className='logo' src="/logowhite.png" alt="logo" />}
+                        {page === 'campaign' && <img className='logo' src="/logoblack.png" alt="logo" />}
+                    </a>
+                    <a href="/" className={`home-text hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Home</a>
                     <a href="/campaigns" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Become an Affiliate</a>
                     <a href="/campaign/create" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Start a campaign</a>
                 </div>
+            </div>
                 <div className="nav-actions flex gap-16 align-center">
                     {page === 'navbar' && profileAddress && (
                         <div className="earning-container">
@@ -69,6 +82,8 @@ export default function Navbar({ color, page, textColor }: any) {
                             </div>
                         </div>
                     )}
+                </div>
+
                 </div>
             </div>
         </nav>

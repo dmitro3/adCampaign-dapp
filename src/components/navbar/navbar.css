@@ -12,15 +12,19 @@
   background-color: #1a1a1a;
   color: white;
   padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 9999999;
 }
 .logo{
   width: 50px;
 
 }
+
 .navbar .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  display: flex;
+  display: block;
   justify-content: space-between;
   align-items: center;
 }
@@ -56,7 +60,9 @@
   }
 }
 
-
+.nav-actions{
+  margin-right: 110px;
+}
 
 .my-earning {
   cursor: pointer;
@@ -88,4 +94,55 @@
   position: relative;
 }
 
+.ham-burg-img {
+  margin-top: 4px;
+  width: 25px;
+  height: 25px;
+}
+.ham-burg-img {
+  cursor: pointer;
+  display: none;
+}
 
+@media (max-width: 768px) {
+  .main-container {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .ham-burg-img {
+      display: block;
+  }
+
+  .nav-links {
+      flex-direction: column;
+      width: 100%;
+  }
+
+  .nav-links.open {
+      display: flex;
+  }
+
+  .nav-actions {
+      flex-direction: column;
+      align-items: center;
+  }
+  .logo{
+    display: none;
+  }
+  .home-text{
+    display: block;
+    text-align: start;
+  }
+  .nav-links
+  {
+    align-items: start !important;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .nav-actions{
+      margin-right: 0px !important;
+  }
+  
+}

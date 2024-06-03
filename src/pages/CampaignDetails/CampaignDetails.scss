@@ -2,7 +2,7 @@
 
 .campaign-details-container{
     background-color: var(--clr-cultured);
-
+    
     .title{
         font-weight: var(--fw-700);
         font-size: var(--fs-32);
@@ -29,6 +29,8 @@
     @media screen and (max-width: 638px){
         .card-stats{
             margin-left: 60% !important;
+            margin-bottom: 19px;
+
         }
     }
     .grid-row{
@@ -38,4 +40,27 @@
     .card-stats{
         margin-left: 500px;
     }
+
+    @media  (max-width: 480px) {
+  
+        .card {
+          width: 361px !important;
+          margin: auto;
+          margin-bottom: 35px;
+         
+      }
+     .card-stats {
+        margin-left: 168px !important;
+        margin-bottom: 40px;
+      }
+      
+      .info-pool-amount  {
+           .info-icon-container {
+            .info-icon{
+                top: 171px;
+            }
+           }
+      }
+
+}    
 }
