@@ -66,7 +66,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const maxCoinValueAddress = useCoinAddress();
+    const {maxCoinValueAddress} = useCoinAddress();
     const [addCoinPayload, setAddCoinPayload] = useState({
         coins: '',
         message: ''

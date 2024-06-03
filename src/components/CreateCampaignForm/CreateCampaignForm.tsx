@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 import { Formik } from 'formik';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { useCurrentAccount, useSignAndExecuteTransactionBlock, useSuiClientQuery } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSignAndExecuteTransactionBlock } from '@mysten/dapp-kit';
 import OvalInputBox from "../ovalInputBox/OvalInputBox";
 import CustomButton from '../CustomButton/CustomButton';
-import { createCampaign, uploadImage } from '../../common/services/api.services';
-import { currencyConverterIntoSUI, getMaxBalanceObjectAddress } from '../../common/helpers';
+import useCoinAddress from '../../common/customHooks/coinAddress/useCoinAddress';
+import { createCampaign, splitCoin, uploadImage } from '../../common/services/api.services';
+import { currencyConverterIntoSUI } from '../../common/helpers';
 import { CAMPAIGN_STATUS, createCampaignInitialValues, createCampaignInputFields } from "../../common/constants";
 import CustomImageUploader from '../CustomImageUploader/CustomImageUploader';
 import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID, CLOUDINARY_CLOUD_NAME, UPLOAD_PRESET } from '../../common/config';
@@ -30,12 +31,7 @@ const CreateCampaignForm = () => {
     const account = useCurrentAccount() as { address: string };
     const [transactionFinished, setTransactionFinished] = useState(false);
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
-    const [maxCoinValueAddress, setMaxCoinValueAddress] = useState('');
-
-    const suiObject = useSuiClientQuery('getCoins', {
-        owner: account?.address as string,
-        coinType: '0x2::sui::SUI'
-    }) as { data: { data: any[] } };
+    const {maxCoinValueAddress, maxCoinValue} = useCoinAddress();
 
     const handleImage = async (imageBanner: any) => {
         try{
@@ -53,7 +49,7 @@ const CreateCampaignForm = () => {
         }
     }
 
-    const createCampaignInSUI = (formInputs: any) => {
+    const createCampaignInSUI = async (formInputs: any) => {
         try {
             if(!account?.address){
                 toast.error('Please connect your wallet address')
@@ -78,19 +74,33 @@ const CreateCampaignForm = () => {
                 return;
             }
 
+            const fees = parseFloat(formInputs.campaignBudget) * (10/100)
+
+            const feesInSUI = currencyConverterIntoSUI(fees)
+            const campaignBudgetInSUI = currencyConverterIntoSUI(parseFloat(formInputs.campaignBudget))
+            const cpc = currencyConverterIntoSUI(parseFloat(formInputs.cpc))
+
+            const totalBudgetInSUI = campaignBudgetInSUI + feesInSUI;
+            if(maxCoinValue < totalBudgetInSUI ){
+                toast.error('Insufficient balance');
+                return;
+            }
+
             toast.loading('Creating...');
 
-            const campaignBudget = currencyConverterIntoSUI(parseFloat(formInputs.campaignBudget))
-            const cpc = currencyConverterIntoSUI(parseFloat(formInputs.cpc))
+            const {address} = await splitCoin({budget: totalBudgetInSUI, receiverAddress: account?.address})
+            console.log('address--->', address)
+
             const txb = new TransactionBlock();
+            console.log('maxcoinvalueaddress-->', maxCoinValueAddress)
             txb.moveCall({
                 arguments: [
                     txb.object(CAMPAIGN_CONFIG),
                     txb.pure.string(formInputs.companyName),
                     txb.pure.string(formInputs.category),
                     txb.pure.string(formInputs.originalUrl),
-                    txb.object(maxCoinValueAddress),
-                    txb.pure.u64(campaignBudget),
+                    txb.object(address),
+                    txb.pure.u64(campaignBudgetInSUI),
                     txb.pure.u64(cpc),
                     txb.pure.u64(parseInt(formInputs.startDate)),
                     txb.pure.u64(parseInt(unixEndDate)),
@@ -111,7 +121,7 @@ const CreateCampaignForm = () => {
                     onSuccess: (tx) => {
                         createCampaign({
                             ...formInputs,
-                            campaignBudget,
+                            campaignBudget: campaignBudgetInSUI,
                             cpc,
                             endDate: unixEndDate,
                             coinObjectAddress: maxCoinValueAddress,
@@ -139,7 +149,8 @@ const CreateCampaignForm = () => {
                     }
                 },
             );
-        } catch (err) {
+        } catch (err:any) {
+            toast.error(err.message)
             console.log('err--->', err)
         }
     }
@@ -151,13 +162,6 @@ const CreateCampaignForm = () => {
             }
         }
     }
-
-    useEffect(() => {
-        if (suiObject?.data?.data?.length > 0) {
-            const address = getMaxBalanceObjectAddress(suiObject?.data?.data);
-            setMaxCoinValueAddress(address);
-        }
-    }, [suiObject?.data?.data]);
 
     const handleSubmit = (values: any) => {
         createCampaignInSUI(values);
