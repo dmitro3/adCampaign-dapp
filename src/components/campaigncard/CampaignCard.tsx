@@ -68,7 +68,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const maxCoinValueAddress = useCoinAddress();
+    const {maxCoinValueAddress} = useCoinAddress();
     const [addCoinPayload, setAddCoinPayload] = useState({
         coins: '',
         message: ''
@@ -238,7 +238,12 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 setLoading(false);
                 setError(true);
                 toast.dismiss();
-                toast.error(error.message);
+                if(error?.message?.length>300){
+                    toast.error('We are facing very high traffic, please try after sometime or please connect to us for activation');
+                }else{
+                    toast.error(error.message);
+                }
+               
                 console.error('Error in handleSubmit', error);
             }
         }else{
