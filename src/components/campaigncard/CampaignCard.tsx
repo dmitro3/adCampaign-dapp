@@ -236,7 +236,12 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 setLoading(false);
                 setError(true);
                 toast.dismiss();
-                toast.error(error.message);
+                if(error?.message?.length>300){
+                    toast.error('We are facing very high traffic, please try after sometime');
+                }else{
+                    toast.error(error.message);
+                }
+               
                 console.error('Error in handleSubmit', error);
             }
         }else{
