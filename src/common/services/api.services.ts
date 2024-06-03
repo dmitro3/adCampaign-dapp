@@ -153,3 +153,19 @@ export const uploadImage = async (image: any) => {
   const imageURL = imageData.url.toString();
   return imageURL;
 }
+
+export const splitCoin = async (contents:any) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    //   Authorization: token,
+    },
+    method: "POST",
+    body: JSON.stringify({ 
+        ...contents
+     }),
+  };
+  const response = await fetch(`${API_URL}/ad/split-coin`, config);
+  const data = response.json();
+  return data;
+}

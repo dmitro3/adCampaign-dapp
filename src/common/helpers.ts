@@ -20,17 +20,6 @@ export const generateCampaignUrl = () => {
   }
 
 
-export const getMaxBalanceObjectAddress = (balanceArr:any[]) => {
-    let highestBalance = '0000000000';
-    let highestBalanaceAddress = '';
-    balanceArr.forEach(({coinObjectId, balance}:{coinObjectId:string, balance:string})=>{
-        if(parseInt(balance) > parseInt(highestBalance)){
-            highestBalance = balance;
-            highestBalanaceAddress = coinObjectId
-        }
-    })
-    return highestBalanaceAddress
-}
 
 export const shortnerAddress = (address: string): string => {
   return address.slice(0, 4) + '...' + address.slice(-3);
@@ -43,7 +32,7 @@ export const currencyConverter = (value: number, title: string = 'SUI'):number =
   return value;
 }
 
-export const currencyConverterIntoSUI = (value: number, title: string = 'SUI'):number => {
+export const currencyConverterIntoSUI = (value: number, title: string = 'SUI'): number => {
   if(title ==='SUI'){
     return value*1e9
   }
