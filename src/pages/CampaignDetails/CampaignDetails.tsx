@@ -5,10 +5,10 @@ import { useCurrentAccount } from "@mysten/dapp-kit";
 import { useParams } from "react-router-dom";
 import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, fetchSupportersByCampaignId } from "../../common/services/api.services.ts";
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
-import CardTable from "../../components/CardTable/CardTable.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
-import Footer from "../../components/footer/footer.tsx";
 import Navbar from "../../components/navbar/navbar.tsx";
+import Footer from "../../components/footer/footer.tsx";
+import CardTable from "../../components/CardTable/CardTable.tsx";
 import './CampaignDetails.scss'
 
 const CampaignDetails = () => {

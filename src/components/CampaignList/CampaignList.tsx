@@ -2,15 +2,15 @@ import  { useState, useEffect } from 'react';
 import moment from 'moment';
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchCampaigns } from "../../common/services/api.services";
-import Navbar from  '../Navbar/navbar'
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import Filters from '../filters/Filters';
-import Footer from '../Footer/footer';
 import Pagination from '../pagination/Pagination';
 import { currencyConverter, currencyConverterIntoSUI } from '../../common/helpers';
 import ShareLink from '../ShareLink/ShareLink';
-import CampaignCard from '../CampaignCard/CampaignCard'
+import Navbar from '../navbar/navbar';
+import CampaignCard from '../campaigncard/CampaignCard';
+import Footer from '../footer/footer';
 import './CampaignList.scss';
 
 type Campaign = {
