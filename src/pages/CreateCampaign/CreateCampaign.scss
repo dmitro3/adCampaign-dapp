@@ -1,0 +1,55 @@
+.create-campaign-container{
+    background-color: var(--clr-cultured);
+    height: 120vh;
+    .heading{
+        font-size: var(--fs-32);
+        font-weight: var(--fw-800);
+    }
+    .preview-container{
+       margin-top: 20px;
+    }
+    .sub-heading{
+        font-size: var(--fs-16);
+        line-height: var(--lh-24);
+    }
+    .card{
+        margin-top: 50px;
+    }
+    .sub-container{
+        padding: 16px;
+    }
+    @media screen and (max-width: 768px){
+        .preview-container{
+            display: block;
+        }
+        .createform{
+            display: flex;  
+            justify-content: center;
+        }
+        .previewcard{
+            display: flex;
+            justify-content: center;
+        }
+    }
+    @media screen and (max-width: 410px){
+        .input-container .oval-input-box-container {
+           
+            width: 330px !important;
+           
+        }
+        .dropzone-container{
+            width: 330px;
+        }
+        .createform select {
+            width: 330px;
+        }
+        .note{
+            width: 330px;
+            margin: auto;
+        }
+        article{
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+}

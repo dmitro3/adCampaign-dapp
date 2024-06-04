@@ -1,0 +1,13 @@
+@mixin grid-container($columns, $gap) {
+    display: grid;
+    grid-template-columns: repeat($columns, 1fr);
+    gap: $gap;
+  }
+@mixin grid-container-cards($columns, $gap, $fr) {
+    display: grid;
+    grid-template-columns: repeat($columns, $fr);
+    gap: $gap;
+  }
+
+
+

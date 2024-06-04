@@ -1,0 +1,23 @@
+.preview-container {
+    margin-bottom: 20px;
+  }
+  
+  .image-preview {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: contain;
+    margin: auto;
+  }
+  
+  .dropzone-container {
+    border: 2px dashed var(--clr-light-gray);
+    border-radius: 4px;
+    padding: 20px;
+    width: 370px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .remove-button{
+    margin: 10px 0px;
+  }

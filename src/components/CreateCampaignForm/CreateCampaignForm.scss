@@ -1,0 +1,23 @@
+.currency {
+    padding: 0px 14px;
+}
+
+.uploader-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.note{
+    width: 367px;
+}
+
+.createform select{
+    display: flex;
+    border: 1px solid var(--clr-crayola);
+    border-radius: 100vw;
+    height: 48px;
+    width: 367px;
+    background-color: var(--clr-white);
+    margin: 10px 0;
+    padding-left: 12px;
+}

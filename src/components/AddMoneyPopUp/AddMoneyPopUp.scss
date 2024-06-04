@@ -1,0 +1,23 @@
+.add-money-popup{
+    .add-money-component {
+        display: block;
+        border: 1px solid #d5d1d1;
+        padding: 20px;
+        border-radius: 30px;
+      }
+      .input-container {
+        margin:25px;
+      }
+      .close-button{
+        justify-content: flex-end;  
+      }
+      .campaign-image {
+        width: 110px;
+        height: 110px;
+        margin-bottom: 20px;
+      }
+      
+      h2 {
+        margin-bottom: 20px;
+      }
+}

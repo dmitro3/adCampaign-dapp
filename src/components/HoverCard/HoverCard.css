@@ -1,0 +1,32 @@
+.ad-campaign-list {
+  margin-top: 15px;
+  width: 230px;
+  max-height: 200px; 
+  overflow-y: auto;
+}
+
+.ad-campaign-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ad-campaign-item:last-child {
+  margin-bottom: 0;
+}
+
+.dollar-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.campaign-name {
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+}
+
+.campaign-name:hover {
+  text-decoration: underline;
+}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const useCoinAddress = () => {
     const [maxCoinValueAddress, setMaxCoinValueAddress] = useState('');
+    const [maxCoinValue, setMaxCoinValue] = useState(0);
     const account  = useCurrentAccount() as {address: string};
     const suiObject = useSuiClientQuery('getCoins', 
     {
@@ -19,18 +20,19 @@ const useCoinAddress = () => {
                 highestBalanaceAddress = coinObjectId
             }
         })
-        return highestBalanaceAddress
+        return {highestBalanaceAddress, highestBalance}
     }
 
 
     useEffect(()=>{
         if(suiObject?.data?.data?.length>0){
-            const address = getMaxBalanceObjectAddress(suiObject?.data?.data)
-            setMaxCoinValueAddress(address)
+            const {highestBalanaceAddress, highestBalance} = getMaxBalanceObjectAddress(suiObject?.data?.data)
+            setMaxCoinValueAddress(highestBalanaceAddress)
+            setMaxCoinValue(parseInt(highestBalance));
         }
       },[suiObject?.data?.data])
 
-    return maxCoinValueAddress;
+    return {maxCoinValueAddress, maxCoinValue};
 }
 
 export default useCoinAddress;

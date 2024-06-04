@@ -1,0 +1,66 @@
+@import "../../styles/mixin.scss";
+
+.campaign-details-container{
+    background-color: var(--clr-cultured);
+    
+    .title{
+        font-weight: var(--fw-700);
+        font-size: var(--fs-32);
+        line-height: var(--lh-44px);
+        margin: 10px 0px;
+    }
+
+    .campaign-details-section{
+        height: 100vh;
+        max-width: 1200px;
+        margin: auto;
+    
+        .grid-container{
+            @include grid-container(2, 1.5rem);
+        }
+    
+        @media (max-width: 50em) {
+            .grid-container{
+                @include grid-container(1, 1rem);
+            }
+           
+        }
+    }
+    @media screen and (max-width: 638px){
+        .card-stats{
+            margin-left: 60% !important;
+            margin-bottom: 19px;
+
+        }
+    }
+    .grid-row{
+        display: grid;
+        gap: 1rem;
+    }
+    .card-stats{
+        margin-left: 500px;
+    }
+
+    @media  (max-width: 480px) {
+  
+        .card {
+          width: 361px !important;
+          margin: auto;
+          margin-bottom: 35px;
+         
+      }
+     .card-stats {
+        margin-left: 168px !important;
+        margin-bottom: 40px;
+      }
+      
+      .info-pool-amount  {
+           .info-icon-container {
+            .info-icon{
+                top: 171px;
+            }
+           }
+      }
+
+}    
+}

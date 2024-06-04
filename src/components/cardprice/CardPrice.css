@@ -1,0 +1,22 @@
+.share-btn{
+    width: 104px;
+    background-color: var(--clr-gray-100) !important;
+    border: 1px solid var(--clr-gray-300);
+    border-radius: 100vw;
+    padding: 10px;
+}
+.card-price-container{
+
+    .info-icon{
+        position: absolute;
+        top: 172px;
+    }
+}
+.amount-margin{
+    margin-top: 22px;
+}
+
+.share-earn-btn{
+    background-color: #dfdfdf !important;
+    padding: 4px !important;
+}

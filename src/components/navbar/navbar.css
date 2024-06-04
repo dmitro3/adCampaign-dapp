@@ -1,0 +1,148 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.mx10{
+  margin: 0px 28px;
+}
+
+.navbar {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 9999999;
+}
+.logo{
+  width: 50px;
+
+}
+
+.navbar .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links, .nav-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.nav-links a, .nav-actions a {
+  text-decoration: none;
+}
+
+.nav-links a:hover, .nav-actions a:hover {
+  color: #1e90ff;
+}
+
+.Button_buttonVariants_variant_primary__x1s81q1 {
+  font-family: 'mulish';
+  background-color: #006AFF !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 9999px !important; 
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+      justify-content: end !important;
+  }
+}
+
+.nav-actions{
+  margin-right: 110px;
+}
+
+.my-earning {
+  cursor: pointer;
+}
+
+.ad-campaign-list {
+  visibility: hidden;
+  transition: visibility 0s, opacity 0.3s linear;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  color: black;
+  margin-top: 10px; 
+}
+
+.earning-container:hover .ad-campaign-list,
+.ad-campaign-list:hover {
+  visibility: visible;
+}
+
+.earning-container {
+  position: relative;
+}
+
+.ham-burg-img {
+  margin-top: 4px;
+  width: 25px;
+  height: 25px;
+}
+.ham-burg-img {
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .ham-burg-img {
+      display: block;
+  }
+
+  .nav-links {
+      flex-direction: column;
+      width: 100%;
+  }
+
+  .nav-links.open {
+      display: flex;
+  }
+
+  .nav-actions {
+      flex-direction: column;
+      align-items: center;
+  }
+  .logo{
+    display: none;
+  }
+  .home-text{
+    display: block;
+    text-align: start;
+  }
+  .nav-links
+  {
+    align-items: start !important;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .nav-actions{
+      margin-right: 0px !important;
+  }
+  
+}

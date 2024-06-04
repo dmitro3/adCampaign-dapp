@@ -1,0 +1,65 @@
+
+.search-bar {
+    padding: 10px 20px;
+    .search-icon-container {
+        position: relative;
+    }
+    
+    .search-input {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        width: 250px;
+    }
+    
+    .search-input::placeholder {
+        padding-left: 20px; }
+    
+    .search-icon {
+        position: absolute;
+        left: 10px;
+        width: 16px;
+        height: 16px;
+    }
+    
+    .profile-pic {
+        display: flex;
+        align-items: center;
+    }
+    .Button_buttonVariants_variant_primary__x1s81q1{
+        font-family: 'mulish';
+        background-color: #006AFF !important;
+        color: white !important;
+        border: none !important;
+        padding: 8px 16px !important;
+        border-radius: 9999px !important; 
+        cursor: pointer   ;
+        transition: background-color 0.3s ease;
+      }
+    .profile-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .profile-name {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0;
+    }
+    
+    .profile-role {
+        font-size: 14px;
+        color: #6c757d;
+        margin: 0;
+    }
+}
+
