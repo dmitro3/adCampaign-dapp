@@ -23,6 +23,10 @@ npm run build
 
 - A decentralized, transparent advertising solution on the Sui network 
 
+- Where bussiness partner can creator campaign and affiliate can generate link to earn
+
+- Analytics - About campaign status and affiliate earnings 
+
 ## Frontend stack 
 
 - React
@@ -41,4 +45,5 @@ npm run build
 - Instant shortURL creation
 - Add money
 - Share link
+- Analytics
 
