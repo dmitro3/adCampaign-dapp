@@ -21,7 +21,7 @@ npm run build
 ```
 # About adCampaign-dapp
 
-- A decentralized, transparent advertising solution on the Sui network 
+- Decentralized, transparent advertising solution on the Sui network 
 
 - Where bussiness partner can creator campaign and affiliate can generate link to earn
 
