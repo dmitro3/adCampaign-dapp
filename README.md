@@ -1,29 +1,15 @@
-# Sui dApp Starter Template
-
-This dApp was created using `@mysten/create-dapp` that sets up a basic React
-Client dApp using the following tools:
-
-- [React](https://react.dev/) as the UI framework
-- [TypeScript](https://www.typescriptlang.org/) for type checking
-- [Vite](https://vitejs.dev/) for build tooling
-- [Radix UI](https://www.radix-ui.com/) for pre-built UI components
-- [ESLint](https://eslint.org/)
-- [`@mysten/dapp-kit`](https://sdk.mystenlabs.com/dapp-kit) for connecting to
-  wallets and loading data
-- [pnpm](https://pnpm.io/) for package management
-
-## Starting your dApp
+# Sui dApp
 
 To install dependencies you can run
 
 ```bash
-pnpm install
+npm install
 ```
 
 To start your dApp in development mode run
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 ## Building
@@ -31,6 +17,28 @@ pnpm dev
 To build your app for deployment you can run
 
 ```bash
-pnpm build
+npm run build
 ```
-# adCampaign-dapp
+# About adCampaign-dapp
+
+- A decentralized, transparent advertising solution on the Sui network 
+
+## Frontend stack 
+
+- React
+- Vite
+- Typescript
+- NPM
+- @mysten/dapp-kit
+
+## Hosted on Domain 
+
+- Adtoken - [adtoken.co](http://adtoken.co)
+
+
+# Features
+
+- Instant shortURL creation
+- Add money
+- Share link
+
