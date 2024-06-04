@@ -40,6 +40,7 @@ interface CampaignCardProps {
     width?: string,
     index?: number;
     handleShareUrl:(url: string)=>void;
+    validclicks: number;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
@@ -61,6 +62,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         viewMoreToggle = true,
         index,
         handleShareUrl,
+        validclicks,
     } = campaign;
     const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
@@ -250,7 +252,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
     };
     const Url = "https://" + url;
     const calculateCurrentPrice = () =>{
-        return totalPrice - (clicks * costPerClick);
+        return totalPrice - (validclicks * costPerClick);
     }
 
     return (
@@ -305,7 +307,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     </div>
                 )}
                 </div>
-                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading} toolkitname={''}/>
+                <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading} toolkitname={`${index}info3`}/>
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                 </div>
