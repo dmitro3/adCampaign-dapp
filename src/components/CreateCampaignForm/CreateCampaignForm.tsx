@@ -22,7 +22,7 @@ interface ImageFile {
 
 const categoryOptions = [
     'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin', 'Dev Tooling',
-    'Wallets', 'DAO', 'Gaming', 'Bridge', 'DEX', 'Others'
+    'Wallets','SUI Overflow', 'DAO', 'Gaming', 'Bridge', 'DEX', 'Others'
 ];
 
 const CreateCampaignForm = () => {
@@ -128,7 +128,7 @@ const CreateCampaignForm = () => {
                             campaignInfoAddress: getCampaignObjectAddress(tx.effects?.created || []) || '',
                             packageAddress: CAMPAIGN_PACKAGE_ID,
                             campaignConfig: CAMPAIGN_CONFIG,
-                            status: CAMPAIGN_STATUS.ONGOING,
+                            status: CAMPAIGN_STATUS.ONGOING,                          
                         });
                         toast.dismiss();
                         toast.success("success")
@@ -174,7 +174,7 @@ const CreateCampaignForm = () => {
                     const keys = Object.keys(values)
                     const errors = {} as any;
                     for(const key of keys){
-                        if ( key!=='banner' && !values[key]) {
+                        if (key !== 'companyXProfile'&& key!=='banner' && !values[key]) {
                             errors[key] = 'Required';
                         }
                     }

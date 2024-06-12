@@ -5,6 +5,7 @@ export const createCampaignInitialValues = {
     description: '',
     originalUrl:'',
     endDate: '',
+    companyXProfile: '',
     campaignBudget: '',
     cpc: ''
 }
@@ -16,6 +17,7 @@ export const createCampaignInputFields = [
     { placeholder: "Click to Upload Image Banner", name: "banner", type: "image"},
     { placeholder: "Description", name: "description", type:"text"  },
     { placeholder: "CTA link", name: "originalUrl", type:"text"  },
+    { placeholder: "Company’s X Profile", name: "companyXProfile", type:"text"},
     { placeholder: "Expiration Date", name: "endDate", type:"date" },
     { placeholder: "Budget", name: "campaignBudget", endIcon: '<p>$SUI</p>', type:"text"  },
     { placeholder: "Cost per click", name: "cpc", type:"text"  },

@@ -5,11 +5,11 @@ function Footer() {
         <footer className="footer-container py-4">
             <div className="footer-content flex  align-center">
                 <div className="social-handles">
-                    <a href="https://x.com/ad_token84520" target="_blank" rel="noopener noreferrer">
-                        <img src="/twitterx.png" alt="Facebook" className="social-icon" />
+                    <a href=" https://x.com/ad_token_" target="_blank" rel="noopener noreferrer">
+                        <img src="/twitterx.png" alt="Twitterx" className="social-icon" />
                     </a>
-                    <a href="https://zoro@adtoken.co" target="_blank" rel="noopener noreferrer">
-                        <img src="/gmail.png" alt="Instagram" className="social-icon" />
+                    <a href="mailto:zoro@adtoken.co"target="_blank" rel="noopener noreferrer">
+                        <img src="/gmail.png" alt="Gmail" className="social-icon" />
                     </a>
                 </div>
                 <div className="contact-info flex align-center">

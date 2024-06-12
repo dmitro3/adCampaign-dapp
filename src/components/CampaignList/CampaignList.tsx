@@ -6,6 +6,7 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import StartCampaignBtn from '../startcampaignbtn/StartCampaignBtn';
 import Filters from '../filters/Filters';
 import Pagination from '../pagination/Pagination';
+import { LikesProvider } from '../LikeDislikeContext/LikeDislikeContext';
 import { currencyConverter, currencyConverterIntoSUI } from '../../common/helpers';
 import ShareLink from '../ShareLink/ShareLink';
 import Navbar from '../navbar/navbar';
@@ -32,7 +33,7 @@ type Campaign = {
     validClicks: number;
     campaignInfoAddress: string;
     validclicks: number;
-
+    companyXProfile: string;
 };
 
 const formatDate = (epoch: number) => {
@@ -53,7 +54,7 @@ export default function CampaignList() {
     const sortOptions = ['Rates Per Click', 'Time Left', 'Budget Left'];
     const categoryOptions = [
         'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin',
-        'Dev Tooling', 'Wallets', 'DAO’s', 'Gaming', 'Bridge', 'DEX', 'Others'
+        'Dev Tooling', 'Wallets', 'DAO’s', 'Gaming', 'Bridge', 'DEX','SUI Overflow', 'Others'
     ];
     const handleSort = (sortKey: string) => {
         setSortOption(sortKey);
@@ -82,14 +83,15 @@ export default function CampaignList() {
                 costPerClick: currencyConverter(campaign?.cpc),
                 currentPrice: 0,
                 totalPrice: currencyConverter(campaign?.campaignBudget),
-                likes: 0,
-                dislikes: 0,
+                likes: campaign?.likes?.length,
+                dislikes: campaign?.dislikes?.length,
                 startDate: formatDate(campaign?.startDate),
                 endDate: campaign?.endDate,
                 walletAddress: campaign?.campaignWalletAddress,
                 description: campaign?.description || 'No description available',
                 url: campaign?.originalUrl,
                 campaignInfoAddress: campaign?.campaignInfoAddress,
+                companyXProfile: campaign?.companyXProfile,
             }));
             toast.dismiss();
             setData(transformedData);
@@ -117,7 +119,7 @@ export default function CampaignList() {
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
-
+ 
     return (
         <div className='campaign-list-container'>
             <Toaster />
@@ -144,6 +146,7 @@ export default function CampaignList() {
                     </div>
                     <div className="campaign-list">
                         {campaigns.map((campaign, index) => (
+                            <LikesProvider>
                             <CampaignCard
                                 key={index}
                                 width={'card-width-392'}
@@ -154,8 +157,8 @@ export default function CampaignList() {
                                 title={campaign.title}
                                 costPerClick={currencyConverterIntoSUI(campaign.costPerClick)}
                                 totalPrice={currencyConverterIntoSUI(campaign.totalPrice)}
-                                likes={campaign.likes}
-                                dislikes={campaign.dislikes}
+                                likes={campaign?.likes}
+                                dislikes={campaign?.dislikes}
                                 startDate={campaign.startDate}
                                 endDate={campaign.endDate}
                                 walletAddress={account?.address}
@@ -167,7 +170,9 @@ export default function CampaignList() {
                                 viewMoreToggle={false}
                                 index={index}
                                 handleShareUrl={toggleShareLink}
-                            />
+                                companyXProfile={campaign?.companyXProfile}
+                                />
+                                </LikesProvider>
                         ))}
                     </div>
                     {campaignUrl && <ShareLink url={campaignUrl} handleToggle={toggleShareLink} />}

@@ -117,6 +117,22 @@ export const createCampaign = async (contents: any) => {
     const data = await response.json();
     console.log('data====>', data);
 }
+
+export const updateLike = async (campaignId: string, userId: string,type:string) => {
+  const config = {
+      headers: {
+          "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ campaignId, userId,type }),
+  };
+  const response = await fetch(`${API_URL}/ad/update-likes`, config);
+  if (!response.ok) {
+      throw new Error('Failed to update likes');
+  }
+  return response.json();
+};
+
 export const addSupporters = async (contents: any) => {
     const config = {
         headers: {

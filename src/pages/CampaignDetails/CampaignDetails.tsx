@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import ShareLink from "../../components/ShareLink/ShareLink.tsx";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { useParams } from "react-router-dom";
+import { LikesProvider } from "../../components/LikeDislikeContext/LikeDislikeContext.tsx";
 import { fetchAffiliateMetrics, fetchAffiliatesByCampaignId, fetchCampaignById, fetchSupportersByCampaignId } from "../../common/services/api.services.ts";
 import CampaignDetailsCardWrapper from "../../components/CampaignDetailsCardWrapper/CampaignDetailsCardWrapper.tsx";
 import CampaignCard from "../../components/campaigncard/CampaignCard.tsx";
@@ -85,11 +86,13 @@ const CampaignDetails = () => {
         <main className="campaign-details-container">
            <Navbar page='campaign' color='white' textColor='black'/>
         {campaign && <section className="campaign-details-section"> 
-            <p className="title ff-tertiary text-transform-capitalize"> { campaign.companyName.length > 20  ? `${campaign.companyName.substring(0,20)}......... Ad Campaign` : campaign.companyName} </p>
+            <p className="title ff-tertiary text-transform-capitalize"> { campaign.companyName.length > 20  ? `${campaign.companyName.substring(0,20)}......... Ad Campaign` : campaign.companyName}'s AdToken Campaign </p>
             <section className="grid-container">
                 <article className="grid-row">
                    <CampaignDetailsCardWrapper totalAffiliates={affiliates?.length} totalClicks={metrics.totalClicks}/>
                    {/* todo - current price and campaign budget */}
+                   <LikesProvider>
+
                     <CampaignCard
                         key={1}
                         imageSrc={campaign.banner}
@@ -99,8 +102,8 @@ const CampaignDetails = () => {
                         title={campaign.campaignName}
                         costPerClick={campaign.cpc}
                         totalPrice={campaign.campaignBudget}
-                        likes={0}
-                        dislikes={0}
+                        likes={campaign?.likes?.length}
+                        dislikes={campaign?.dislikes?.length}
                         startDate={campaign.startDate}
                         endDate={campaign.endDate}
                         walletAddress={account?.address}
@@ -110,7 +113,9 @@ const CampaignDetails = () => {
                         togglePopUp={() => togglePopUp(campaign.title)}
                         popUp={activePopUp === campaign.title}
                         handleShareUrl={toggleShareLink}
-                    />
+                        companyXProfile={campaign?.companyXProfile}
+                       />
+                        </LikesProvider>
                 </article>
                 {campaignUrl && <ShareLink url={campaignUrl} handleToggle={toggleShareLink} />}
                 <article className="grid-row">

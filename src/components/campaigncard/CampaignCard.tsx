@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { TransactionBlock } from "@mysten/sui.js/transactions";
@@ -12,12 +12,14 @@ import useCoinAddress from "../../common/customHooks/coinAddress/useCoinAddress"
 import MetricsOverview from '../MetricsOverview/MetricsOverview';
 import CardIconLabel from '../CardIconLabel/CardIconLabel';
 import CardPrice from '../cardprice/CardPrice';
+import CardReaction from '../cardreaction/CardReaction';
 import moment from 'moment';
 import CustomButton from '../CustomButton/CustomButton';
 import InfoCard from '../InfoCard/InfoCard';
 import { addSupporters } from '../../common/services/api.services';
 import { getTimeLeft } from '../../common/helpers';
 import './CampaignCard.css';
+import { useLikes } from '../LikeDislikeContext/LikeDislikeContext';
 
 interface CampaignCardProps {
     imageSrc: string;
@@ -41,6 +43,7 @@ interface CampaignCardProps {
     index?: number;
     handleShareUrl:(url: string)=>void;
     validclicks: number;
+    companyXProfile: string;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
@@ -59,10 +62,13 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         togglePopUp,
         popUp,
         width,
+        likes,
+        dislikes,
         viewMoreToggle = true,
         index,
         handleShareUrl,
         validclicks,
+        companyXProfile
     } = campaign;
     const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
@@ -73,8 +79,17 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         coins: '',
         message: ''
     });
-    const [viewMore, setViewMore] = useState(viewMoreToggle );
-;
+    const [viewMore, setViewMore] = useState(viewMoreToggle);
+    const [currentLikes, setCurrentLikes] = useState(likes);
+    const [currentDislikes, setCurrentDislikes] = useState(dislikes);
+
+    const { updateLikes, updateDislikes } = useLikes(); 
+
+    useEffect(() => {
+        setCurrentLikes(likes);
+        setCurrentDislikes(dislikes);
+    }, [likes, dislikes]);
+
     const handleInputCoins = (e: any) => {
         setAddCoinPayload({
             ...addCoinPayload,
@@ -255,16 +270,32 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         return totalPrice - (validclicks * costPerClick);
     }
 
+    const handleLikeClick = async () => {
+        const data=await updateLikes(campaignInfoAddress,walletAddress) ;
+        setCurrentLikes(data?.likes);
+        setCurrentDislikes(data?.dislikes);
+        };
+        
+        const handleDislikeClick = async () => {
+            const data=await updateDislikes(campaignInfoAddress, walletAddress);
+            setCurrentLikes(data?.likes);
+        setCurrentDislikes(data?.dislikes);
+    };
+
     return (
         <div className={`card bg-white  ff-tertiary cursor-pointer ${width} ${viewMore ? 'View-more' : ''}`}>
             {loading}
             {error}
             <Toaster />
             {  validateCampaignLive(campaign.endDate) && <p className='text-align-center expired-styles font-size-11'>Campaign Expired</p>}
-            <div className="card-image" onClick={()=>navigate(`/campaign/${campaignInfoAddress}`)}>
-                <img src={imageSrc || '/journey.png'} alt="Card Image" />
-                <div className="card-label bg-white flex ff-tertiary font-color-yellow-orange font-weight-700 justify-center">
+            <div className="card-image" >
+                <img src={imageSrc || '/journey.png'} alt="Card Image" onClick={()=>navigate(`/campaign/${campaignInfoAddress}`)} />
+                <div className="card-label bg-white flex ff-tertiary font-size-14 font-color-yellow-orange font-weight-700 justify-center">
                     {category}
+                </div>
+                <div className='card-reactions'>
+                    {walletAddress && <CardReaction src='/like.png' alt='like' count={currentLikes} onClick={handleLikeClick}/>}
+                    {walletAddress && <CardReaction src='/dislike.png' alt='dislike' count={currentDislikes} onClick={handleDislikeClick}/>}
                 </div>
             </div>
             <div className="card-content bg-white">
@@ -273,14 +304,14 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     
                     <MetricsOverview>
                         <img src={'/star.png'} alt={'star'} />
-                        <span>{clicks} Clicks</span>
+                        <span className='font-size-14'>{clicks} Clicks</span>
                     </MetricsOverview>
                 </div>
                 <div className='titleStyles'>
                 {title.length > 30 ? (
                         <h3 className='ff-tertiary font-weight-800 w-240'>{title.substring(0, 30)}...</h3>
                     ) : (
-                        <h3 className='ff-tertiary font-weight-800'>{title}</h3>
+                        <h3 className='ff-tertiary font-size-24 font-weight-800'>{title}</h3>
                     )}
                     <AddressURL type={'object'} address={campaignInfoAddress}  />
                 </div>
@@ -310,6 +341,9 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                 <CardPrice onClick={handleAffiliateCreationURL} currentPrice={currencyConverter(calculateCurrentPrice())} totalPrice={currencyConverter(totalPrice)}  loading={loading} toolkitname={`${index}info3`}/>
                 <div className="card-extra-info font-size-14 text-gray">
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
+                    {companyXProfile && <a href={companyXProfile}>
+                    <img className='company-x-profile' src='/twitterx.png' alt="x-profile-logo"></img>
+                    </a>}
                 </div>
             </div>
             {popUp && (
