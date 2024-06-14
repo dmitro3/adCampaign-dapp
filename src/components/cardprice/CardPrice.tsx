@@ -29,8 +29,8 @@ export default function CardPrice({ totalPrice, onClick, loading,currentPrice,to
                          </div>
                     </div>
                 </div>
-                <button onClick={onClick} className='share-earn-btn flex align-center text-black bg-white font-weight-700 share-btn' disabled={loading}>
-                    <p>Share & Earn</p>
+                <button onClick={onClick} className='share-earn-btn flex align-center text-black bg-white font-weight-700 font-size-16 share-btn' disabled={loading}>
+                    <p className='font-size-16'>Share & Earn</p>
                     <img src="/share.png" alt="share" />
                 </button>
             </div>

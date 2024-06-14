@@ -2,6 +2,14 @@ import AddressURL from '../AddressURL/AddressURL';
 import './HoverCard.css';
 
 const HoverCard = ({ campaigns }: any) => {
+  if (campaigns.length == 0) {
+    return (
+      <div className="ad-campaign-list empty flex justify-center">
+        <p className="empty-message ">Connect Wallet <br /> Become an Affiliate and <br />Start Earning!</p>
+      </div>
+    );
+  }
+  
   return (
     <div className="ad-campaign-list">
       {campaigns.map((campaign: any, index: any) => (

@@ -1,7 +1,6 @@
 .card-extra-info {
   margin: 10px 0px;
   display: flex;
-  justify-content: space-between;
 }
 
 .card-reaction img {
@@ -17,15 +16,16 @@
 .card {
   border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  min-height: 490px;
+  height: 486px;
   cursor: default !important;
   overflow: hidden;
 }
 
-.card-label {
-width: min-content !important;
+.company-x-profile{
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
 }
-
 .campaign-card-container {
   position: relative;
 }
@@ -50,9 +50,11 @@ width: min-content !important;
 }
 
 .add-money button{
+  font-size: 14px;
   padding: 7px;
   margin-right: 14px;
-  border:none;
+  border: 1px solid #E4E6E8;
+  box-shadow: 0 4px 6px rgb(177 164 164 / 70%);
   cursor: pointer;
 }
 .card-image {
@@ -73,9 +75,8 @@ width: min-content !important;
   position: absolute;
   top: 10px;
   left: 10px;
-  padding: 5px 10px;
+  padding: 5px 12px;
   border-radius: 50px;
-  width: 30%;
 }
 
 .card-reactions {
@@ -101,7 +102,6 @@ width: min-content !important;
 }
 
 .card-content h3 {
-  font-size: 18px;
   color: #333;
   margin: 10px 0;
 }

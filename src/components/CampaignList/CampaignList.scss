@@ -65,6 +65,7 @@
     }
     .card-container{
         max-width:1500px;
+        margin: auto;
     }
 
     button:hover{
@@ -101,5 +102,15 @@
         margin-right: 0px;
     }
     
+}
+
+.nav-actions {
+    margin-right: 0px
+}
+.navbar .container {
+    margin: 0px;
+}
+.mx10 {
+    margin: 0px 13px;
 }
 }

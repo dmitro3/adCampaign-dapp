@@ -13,7 +13,7 @@ interface CardIconLabelProps {
 
 export default function CardIconLabel({ src, alt, text, width, height, extraStyles,toolkitname}: CardIconLabelProps) {
     return (
-        <div className={`card-icon-label-container flex align-center justify-between text-gray font-size-14 ${extraStyles}`} style={{width, height}}>
+        <div className={`card-icon-label-container flex align-center justify-between text-gray font-size-16 ${extraStyles}`} style={{width, height}}>
             <img src={src} alt={alt} />
             {text}
             <div className='user-icon'>

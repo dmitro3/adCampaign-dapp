@@ -1,6 +1,16 @@
 .create-campaign-container{
     background-color: var(--clr-cultured);
     height: 120vh;
+
+    .sub-container{
+        margin: auto;
+    }
+    @media screen and (max-width: 768px){
+        .sub-container{
+            margin-left: 0px !important;
+        }
+        
+    }
     .heading{
         font-size: var(--fs-32);
         font-weight: var(--fw-800);
