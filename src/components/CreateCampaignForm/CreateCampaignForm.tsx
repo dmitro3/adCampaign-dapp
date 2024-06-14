@@ -12,7 +12,7 @@ import { createCampaign, splitCoin, uploadImage } from '../../common/services/ap
 import { currencyConverterIntoSUI } from '../../common/helpers';
 import { CAMPAIGN_STATUS, createCampaignInitialValues, createCampaignInputFields } from "../../common/constants";
 import CustomImageUploader from '../CustomImageUploader/CustomImageUploader';
-import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID, CLOUDINARY_CLOUD_NAME, UPLOAD_PRESET } from '../../common/config';
+import { CAMPAIGN_CONFIG, CAMPAIGN_PACKAGE_ID, CLOUDINARY_CLOUD_NAME, SUI_EXPLORER, UPLOAD_PRESET } from '../../common/config';
 import './CreateCampaignForm.scss'
 
 interface ImageFile {
@@ -82,7 +82,7 @@ const CreateCampaignForm = () => {
 
             const totalBudgetInSUI = campaignBudgetInSUI + feesInSUI;
             if(maxCoinValue < totalBudgetInSUI ){
-                toast.error('Insufficient balance');
+                toast.error(`Please ensure that at least one token object in your wallet has enough fund to cover the campaign creation budget. You can check your wallet balance on ${SUI_EXPLORER}`);
                 return;
             }
 
@@ -143,7 +143,7 @@ const CreateCampaignForm = () => {
                             toast.error('Rejected from user');
                             return;
                         }
-                        toast.error(`Insufficient Gas tokens, Please Add More Gas tokens`);
+                        toast.error(`Insufficient Gas tokens, Please Add More Gas tokens, Need help connect with us in telegram channel`);
                         console.log('error--->', error.message)
                     }
                 },

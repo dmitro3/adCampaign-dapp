@@ -42,7 +42,6 @@ const LegacyCreateCampaign = () => {
 
     const create = () => {
       try{
-          formInputs.campaignUrl = generateCampaignUrl();
         const txb = new TransactionBlock();
         txb.moveCall({
           arguments: [

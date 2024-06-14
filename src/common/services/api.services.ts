@@ -114,8 +114,7 @@ export const createCampaign = async (contents: any) => {
          }),
       };
     const response = await fetch(`${API_URL}/ad/campaign/create`, config);
-    const data = await response.json();
-    console.log('data====>', data);
+    await response.json();
 }
 
 export const updateLike = async (campaignId: string, userId: string,type:string) => {

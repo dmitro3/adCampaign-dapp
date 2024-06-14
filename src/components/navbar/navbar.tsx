@@ -8,7 +8,6 @@ import './Navbar.css';
 export default function Navbar({ color, page, textColor }: any) {
     const account = useCurrentAccount();
     const walletAddress = account ? account.address : '';
-    const [profileAddress, setProfileAddress] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<any[]>([]);
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -18,14 +17,12 @@ export default function Navbar({ color, page, textColor }: any) {
             const profileDetails = await fetchAffiliateProfile({ walletAddress });
             toast.dismiss();
             if (profileDetails.length) {
-                setProfileAddress(profileDetails[0].profileAddress);
                 const formattedCampaigns = profileDetails.map((campaign: any) => ({
                     price: campaign.cpc * campaign.validClicks,
                     name: campaign.campaignInfoAddress,
                 }));
                 setCampaigns(formattedCampaigns);
             } else {
-                setProfileAddress(null);
                 setCampaigns([]);
             }
         } catch (error) {
@@ -57,11 +54,11 @@ export default function Navbar({ color, page, textColor }: any) {
                 {page === 'navbar' && menuOpen && <img className="ham-burg-img" src="/close-white.svg" alt="menu" onClick={handleMenuToggle} />}
                {page=='campaign' && menuOpen && <img className="ham-burg-img" src="/close-black.svg" alt="menu" onClick={handleMenuToggle} />}
                 <div className={`nav-links flex gap-16 align-center ${menuOpen ? 'open' : 'mobdisplay-none'}`}>
-                    <a href="/" className={`hover:text-blue font-weight-400 font-size-16 mx10 text-${textColor}`}>
+                    <a href="/home" className={`hover:text-blue font-weight-400 font-size-16 mx10 text-${textColor}`}>
                         {page === 'navbar' && <img className='logo' src="/logo.png" alt="logo" />}
                         {page === 'campaign' && <img className='logo' src="/logo.png" alt="logo" />}
                     </a>
-                    <a href="/" className={`home-text hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Home</a>
+                    <a href="/home" className={`home-text hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Home</a>
                     <a href="/campaigns" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Become an Affiliate</a>
                     <a href="/campaign/create" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Start a campaign</a>
                     <a href="https://docs.google.com/document/d/1Sw7LHKA212hwJXeanBH0ow3nqUn_ZSKVSoVMy7Essfw/edit?usp=sharing" className={`hover:text-blue font-weight-400 font-size-16 text-${textColor}`}>Docs</a>
@@ -81,8 +78,6 @@ export default function Navbar({ color, page, textColor }: any) {
                             <div className="my-earning text-black mr-16">My Earning</div>
                             <HoverCard className="hover-card" campaigns={campaigns} />
                         </div>
-                            {/* todo when we get the profile image */}
-                            {/* <img src="/profile.png" alt="profile" className="profile-image" /> */}
                             <div className="profile-info">
                                 <ConnectButton />
                             </div>
