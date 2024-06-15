@@ -44,6 +44,7 @@ interface CampaignCardProps {
     handleShareUrl:(url: string)=>void;
     validclicks: number;
     companyXProfile: string;
+    campaignvideolink: string;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
@@ -68,7 +69,8 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
         index,
         handleShareUrl,
         validclicks,
-        companyXProfile
+        companyXProfile,
+        campaignvideolink
     } = campaign;
     const navigate = useNavigate();
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
@@ -294,8 +296,8 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     {category}
                 </div>
                 <div className='card-reactions'>
-                    {walletAddress && <CardReaction src='/like.png' alt='like' count={currentLikes} onClick={handleLikeClick}/>}
-                    {walletAddress && <CardReaction src='/dislike.png' alt='dislike' count={currentDislikes} onClick={handleDislikeClick}/>}
+                    {walletAddress && <CardReaction src='/like.png' alt='like' count={currentLikes || 0} onClick={handleLikeClick}/>}
+                    {walletAddress && <CardReaction src='/dislike.png' alt='dislike' count={currentDislikes || 0} onClick={handleDislikeClick}/>}
                 </div>
             </div>
             <div className="card-content bg-white">
@@ -343,6 +345,9 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
                     <a href={Url} target="_blank" rel="noopener noreferrer">Visit Campaign</a>
                     {companyXProfile && <a href={companyXProfile}>
                     <img className='company-x-profile' src='/twitterx.png' alt="x-profile-logo"></img>
+                    </a>}
+                    {campaignvideolink && <a href={campaignvideolink}> 
+                    <img className='campaign-video-link' src='/video.svg' alt="video-logo"></img>
                     </a>}
                 </div>
             </div>

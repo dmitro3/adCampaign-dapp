@@ -34,6 +34,7 @@ type Campaign = {
     campaignInfoAddress: string;
     validclicks: number;
     companyXProfile: string;
+    campaignvideolink: string;
 };
 
 const formatDate = (epoch: number) => {
@@ -51,9 +52,9 @@ export default function CampaignList() {
     const [filterOption, setFilterOption] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
-    const sortOptions = ['Rates Per Click', 'Time Left', 'Budget Left'];
+    const sortOptions = ['Rates Per Click', 'Time Left', 'Budget Left','Likes Count'];
     const categoryOptions = [
-        'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin',
+       'All', 'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin',
         'Dev Tooling', 'Wallets', 'DAO’s', 'Gaming', 'Bridge', 'DEX','SUI Overflow', 'Others'
     ];
     const handleSort = (sortKey: string) => {
@@ -92,6 +93,7 @@ export default function CampaignList() {
                 url: campaign?.originalUrl,
                 campaignInfoAddress: campaign?.campaignInfoAddress,
                 companyXProfile: campaign?.companyXProfile,
+                campaignvideolink: campaign?.campaignvideolink,
             }));
             toast.dismiss();
             setData(transformedData);
@@ -130,7 +132,7 @@ export default function CampaignList() {
                         <div className='campaign-start-text '>
                             <h1 className='campaign-title'>Start Your Campaign Now</h1>
                             <p className='campaign-subtitle'>
-                            Launch your campaign and reach Global audience easily. Get started with real-time data and secure transactions
+                            Launch your campaign and reach Global audience easily. <br /> Get started with real-time payments and secure transactions.
                             </p>
                         </div>
                         <StartCampaignBtn line1='Start your' line2='campaign now' />
@@ -171,6 +173,7 @@ export default function CampaignList() {
                                 index={index}
                                 handleShareUrl={toggleShareLink}
                                 companyXProfile={campaign?.companyXProfile}
+                                campaignvideolink={campaign?.campaignvideolink}
                                 />
                                 </LikesProvider>
                         ))}

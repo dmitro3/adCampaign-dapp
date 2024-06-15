@@ -114,6 +114,7 @@ const CampaignDetails = () => {
                         popUp={activePopUp === campaign.title}
                         handleShareUrl={toggleShareLink}
                         companyXProfile={campaign?.companyXProfile}
+                        campaignvideolink={campaign?.campaignvideolink}
                        />
                         </LikesProvider>
                 </article>
