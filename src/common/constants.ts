@@ -7,7 +7,8 @@ export const createCampaignInitialValues = {
     endDate: '',
     companyXProfile: '',
     campaignBudget: '',
-    cpc: ''
+    cpc: '',
+    campaignvideolink: ''
 }
 
 export const createCampaignInputFields = [
@@ -18,6 +19,7 @@ export const createCampaignInputFields = [
     { placeholder: "Description", name: "description", type:"text"  },
     { placeholder: "CTA link", name: "originalUrl", type:"text"  },
     { placeholder: "Company’s X Profile", name: "companyXProfile", type:"text"},
+    { placeholder: "Campaign's video link", name: "campaignvideolink", type:"text"},
     { placeholder: "Expiration Date", name: "endDate", type:"date" },
     { placeholder: "Budget", name: "campaignBudget", endIcon: '<p>$SUI</p>', type:"text"  },
     { placeholder: "Cost per click", name: "cpc", type:"text"  },

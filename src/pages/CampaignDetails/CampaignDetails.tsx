@@ -95,8 +95,8 @@ const CampaignDetails = () => {
 
                     <CampaignCard
                         key={1}
-                        imageSrc={campaign.banner}
-                        category={campaign.category}
+                        imageSrc={campaign?.banner}
+                        category={campaign?.category}
                         clicks={(campaign?.validClicks + campaign?.invalidClicks) || 0}
                         validclicks={campaign.validClicks}
                         title={campaign.campaignName}
@@ -110,10 +110,11 @@ const CampaignDetails = () => {
                         description={campaign.description}
                         url={campaign.originalUrl}
                         campaignInfoAddress={campaign.campaignInfoAddress}
-                        togglePopUp={() => togglePopUp(campaign.title)}
-                        popUp={activePopUp === campaign.title}
+                        togglePopUp={() => togglePopUp(campaign?.title)}
+                        popUp={activePopUp === campaign?.title}
                         handleShareUrl={toggleShareLink}
                         companyXProfile={campaign?.companyXProfile}
+                        campaignvideolink={campaign?.campaignvideolink}
                        />
                         </LikesProvider>
                 </article>

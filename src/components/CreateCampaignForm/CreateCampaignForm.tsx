@@ -1,4 +1,4 @@
-import {useState } from 'react';
+import { useState } from 'react';
 import { Formik } from 'formik';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ interface ImageFile {
 
 const categoryOptions = [
     'Defi', 'NFT', 'Social', 'Marketplace', 'Meme Coin', 'Dev Tooling',
-    'Wallets','SUI Overflow', 'DAO', 'Gaming', 'Bridge', 'DEX', 'Others'
+    'Wallets', 'SUI Overflow', 'DAO', 'Gaming', 'Bridge', 'DEX', 'Others'
 ];
 
 const CreateCampaignForm = () => {
@@ -31,10 +31,11 @@ const CreateCampaignForm = () => {
     const account = useCurrentAccount() as { address: string };
     const [transactionFinished, setTransactionFinished] = useState(false);
     const { mutate: signAndExecute } = useSignAndExecuteTransactionBlock();
-    const {maxCoinValueAddress, maxCoinValue} = useCoinAddress();
+    const { maxCoinValueAddress, maxCoinValue } = useCoinAddress();
+    const [otherCategory, setOtherCategory] = useState<string>('');
 
     const handleImage = async (imageBanner: any) => {
-        try{
+        try {
             toast.loading('Uploading...');
             const image = new FormData();
             image.append("file", imageBanner.file);
@@ -44,22 +45,22 @@ const CreateCampaignForm = () => {
             setImageUrl(imageUrl as any)
             toast.dismiss();
             toast.success('Successfully uploaded')
-        }catch(err){
+        } catch (err) {
             toast.error('Error in uploading');
         }
     }
 
     const createCampaignInSUI = async (formInputs: any) => {
         try {
-            if(!account?.address){
+            if (!account?.address) {
                 toast.error('Please connect your wallet address')
                 return;
             }
-            if(parseFloat(formInputs.campaignBudget) < 5){
+            if (parseFloat(formInputs.campaignBudget) < 0.3) {
                 toast.error('Minimim budget for the campaign should be 5 SUI')
                 return;
             }
-            if(parseFloat(formInputs.cpc) < 0.05){
+            if (parseFloat(formInputs.cpc) < 0.03) {
                 toast.error('Minimim cost per click should be 0.05 SUI')
                 return;
             }
@@ -69,29 +70,29 @@ const CreateCampaignForm = () => {
             const unixEndDate = momentObjEndDate.unix() as any;
             formInputs.banner = imageUrl;
 
-            if(unixEndDate < formInputs.startDate){
+            if (unixEndDate < formInputs.startDate) {
                 toast.error('Expiration date should be future date')
                 return;
             }
 
-            const fees = parseFloat(formInputs.campaignBudget) * (10/100)
+            const fees = parseFloat(formInputs.campaignBudget) * (10 / 100)
 
             const feesInSUI = currencyConverterIntoSUI(fees)
             const campaignBudgetInSUI = currencyConverterIntoSUI(parseFloat(formInputs.campaignBudget))
             const cpc = currencyConverterIntoSUI(parseFloat(formInputs.cpc))
 
             const totalBudgetInSUI = campaignBudgetInSUI + feesInSUI;
-            if(maxCoinValue < totalBudgetInSUI ){
+            if (maxCoinValue < totalBudgetInSUI) {
                 toast.error(`Please ensure that at least one token object in your wallet has enough fund to cover the campaign creation budget. You can check your wallet balance on ${SUI_EXPLORER}`);
                 return;
             }
 
             toast.loading('Creating...');
 
-            const splittedCoinAddress = await splitCoin({budget: totalBudgetInSUI, receiverAddress: account?.address}) 
+            const splittedCoinAddress = await splitCoin({ budget: totalBudgetInSUI, receiverAddress: account?.address })
             const mainCoinAddress = splittedCoinAddress?.address || maxCoinValueAddress;
 
-            const txb = new TransactionBlock();           
+            const txb = new TransactionBlock();
             txb.moveCall({
                 arguments: [
                     txb.object(CAMPAIGN_CONFIG),
@@ -128,18 +129,18 @@ const CreateCampaignForm = () => {
                             campaignInfoAddress: getCampaignObjectAddress(tx.effects?.created || []) || '',
                             packageAddress: CAMPAIGN_PACKAGE_ID,
                             campaignConfig: CAMPAIGN_CONFIG,
-                            status: CAMPAIGN_STATUS.ONGOING,                          
+                            status: CAMPAIGN_STATUS.ONGOING,
                         });
                         toast.dismiss();
                         toast.success("success")
                         setTransactionFinished(true)
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             navigate('/campaigns')
-                        },3000)
+                        }, 3000)
                     },
                     onError: (error) => {
                         toast.dismiss();
-                        if(error.message == 'Rejected from user'){
+                        if (error.message == 'Rejected from user') {
                             toast.error('Rejected from user');
                             return;
                         }
@@ -148,7 +149,7 @@ const CreateCampaignForm = () => {
                     }
                 },
             );
-        } catch (err:any) {
+        } catch (err: any) {
             toast.error(err.message)
             console.log('err--->', err)
         }
@@ -163,6 +164,9 @@ const CreateCampaignForm = () => {
     }
 
     const handleSubmit = (values: any) => {
+        if (values.category === 'Others') {
+            values.category = otherCategory;
+        }
         createCampaignInSUI(values);
     }
 
@@ -173,8 +177,8 @@ const CreateCampaignForm = () => {
                 validate={(values: any) => {
                     const keys = Object.keys(values)
                     const errors = {} as any;
-                    for(const key of keys){
-                        if (key !== 'companyXProfile'&& key!=='banner' && !values[key]) {
+                    for (const key of keys) {
+                        if (key !== 'campaignvideolink' && key !== 'companyXProfile' && key !== 'banner' && !values[key]) {
                             errors[key] = 'Required';
                         }
                     }
@@ -200,13 +204,16 @@ const CreateCampaignForm = () => {
                             <Toaster />
                             {createCampaignInputFields.map((field, index) => (
                                 <article key={`formik-${index}`}>
-                                    {field.name === 'category'? (
+                                    {field.name === 'category' ? (
                                         <section>
                                             <select
                                                 name="category"
                                                 value={values.category}
                                                 onChange={(e) => {
                                                     handleChange(e);
+                                                    if (e.target.value === 'Others') {
+                                                        setOtherCategory('');
+                                                    }
                                                 }}
                                                 onBlur={handleBlur}
                                             >
@@ -216,6 +223,15 @@ const CreateCampaignForm = () => {
                                                     </option>
                                                 ))}
                                             </select>
+                                            {values.category === 'Others' && (
+                                                <OvalInputBox
+                                                placeholder="Enter category"
+                                                name="otherCategory"
+                                                handleChange={(e:any) => setOtherCategory(e.target.value)}
+                                                onBlur={() => {}}
+                                                value={otherCategory}
+                                            />
+                                            )}
                                         </section>
                                     ) : field.type == 'image' ? (
                                         <section>
