@@ -267,7 +267,7 @@ const CampaignCard: React.FC<CampaignCardProps> = (campaign) => {
             toast.error('Please connect to your wallet address')
         }
     };
-    const Url = "https://" + url;
+    const Url = url;
     const calculateCurrentPrice = () =>{
         return totalPrice - (validclicks * costPerClick);
     }
